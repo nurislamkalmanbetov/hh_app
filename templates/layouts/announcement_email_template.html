@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock  %} title</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <p>{{ content }}</p>
+
+    {% if photo_url %}
+        <img src="{{ photo_url }}" alt="" style="max-width: 400px;">
+    {% endif %}
+
+    {% if video_url %}
+        <video width="400" controls>
+            <source src="{{ video_url }}" type="video/mp4">
+        </video>
+    {% endif %}
+    {% block content %}
+    {% endblock  %}
+</body>
+</html>
