@@ -27,10 +27,25 @@ class ContractAdmin(admin.ModelAdmin):
         return obj.full_name
     full_name.short_description = 'ФИО'
 
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display =  [
+        'id', 'name',
+    ]
+
+
+@admin.register(Subcategory)
+class SubcategoryAdmin(admin.ModelAdmin):
+    list_display =  [
+        'id', 'name', 'category',
+    ]
+
+
 @admin.register(Vacancy)
 class VacancyAdmin(admin.ModelAdmin):
     list_display =  [
-        'id', 'name', 'language', 'user', 'employer_company', 'required_positions', 'salary', 'city', 'destination_point','is_vacancy_confirmed','created_date',
+        'id', 'name', 'category', 'subcategory', 'language', 'user', 'employer_company', 'required_positions', 'salary', 'city', 'destination_point','is_vacancy_confirmed','created_date',
     ]
     list_editable =('is_vacancy_confirmed',)
     date_hierarchy = 'created_date'

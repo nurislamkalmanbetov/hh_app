@@ -26,7 +26,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 User = get_user_model()
 
 
-class UserAdmin(ImportExportModelAdmin, BaseUserAdmin):
+class UserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     # fields = ['email', 'phone', 'whatsapp_phone', 'password','is_staff','is_employer', 'is_student', 'is_delete', 'is_active', 'is_superuser', ]
     fieldsets = (
         (None, {'fields': ('email', 'phone', 'whatsapp_phone', 'password','is_staff','is_employer', 'is_student', 'is_delete', 'is_active', 'is_superuser',)}),
