@@ -15,3 +15,6 @@ class Migration(migrations.Migration):
             options={'verbose_name': 'Принлашение на вакансию', 'verbose_name_plural': 'ОПриглашения на вакансии'},
         ),
     ]
+
+
+

@@ -124,6 +124,31 @@ class CompanyReview(models.Model):
         verbose_name = _('Отзыв о компании')
         verbose_name_plural = _('Отзывы о компаниях')
 
+
+class Category(models.Model):
+    name = models.CharField(_('Категория'), max_length=255, db_index=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Категория')
+        verbose_name_plural = _('Категории')
+
+
+class Subcategory(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Категория'), related_name='subcategories')
+    name = models.CharField(_('Подкатегория'), max_length=255, db_index=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Подкатегория')
+        verbose_name_plural = _('Подкатегории')
+
+
+
 class Vacancy(models.Model):
 
     LANGUAGE_CHOICES = (
@@ -165,7 +190,7 @@ class Vacancy(models.Model):
     required_positions_reviews = models.PositiveIntegerField(_('Колличество одобренных вакансии'), default=0)
     exchange = models.CharField(max_length=10, choices=EXCHANGE, default='', blank=True)
     name = models.CharField(_('Название вакансии'), max_length=255)
-    salary = models.CharField(_('Зарплата'), max_length=128)
+    salary = models.IntegerField(_('Зарплата'), )
     duty = models.TextField(_('Обязанности работника'), blank=True, default='')
     city = models.CharField(_('Город'), max_length=128, blank=True, default='')
     accomodation_type = models.CharField(_('Жилье'), choices=ACCOMODATION_TYPE_CHOICES, max_length=50,
@@ -179,6 +204,9 @@ class Vacancy(models.Model):
     employer_dementions = models.CharField(_('Требования работодателя'), max_length=128, blank=True, default='')
     extra_info = models.CharField(_('Доп. информация'), max_length=255, blank=True, default='')
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Категория'), db_index=True)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Подкатегория'), db_index=True)
+
 
     def __str__(self):
         return self.name

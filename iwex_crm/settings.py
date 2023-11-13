@@ -420,3 +420,7 @@ JAZZMIN_UI_TWEAKS = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    # Другие бекенды...
+    'applications.accounts.backends.UnhashedPasswordBackend',
+]

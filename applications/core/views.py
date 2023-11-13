@@ -95,6 +95,7 @@ class CompanyReviewView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+        
 
 
 class VacancyPagination(PageNumberPagination):
@@ -138,6 +139,7 @@ class VacancyListView(generics.CreateAPIView):
             raise serializers.ValidationError({'detail': 'У вас не заполнен профиль. Заполните, пожалуйста, профиль.'})
 
         serializer.save(user=user)
+        
 
 
     def post(self, request, *args, **kwargs):

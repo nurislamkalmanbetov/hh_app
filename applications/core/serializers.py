@@ -121,13 +121,27 @@ class CompanyReviewSerializer(serializers.ModelSerializer):
         user = User.objects.get(email=user_email)
         company_review= CompanyReview.objects.create(user=user, **validated_data)  # Используем **validated_data
         return company_review
-    
+
+
+class SubcategorySerializers(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name')
+
+    class Meta:
+        model = Subcategory
+        fields = ['id', 'name', 'category_name']
+
+class CategorySerializers(serializers.ModelSerializer):
+    subcategories = SubcategorySerializers(many=True)
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'subcategories']
 
 
 class VacancySerializers(serializers.ModelSerializer):
-    # employer_company = EmployerCompanySerialzers(read_only=True)
     user = serializers.EmailField(source='employer_company.user.email')
-
+    category = serializers.CharField(source='category.name', required=False)
+    subcategory = serializers.CharField(source='subcategory.name', required=False)
 
     class Meta:
         model = Vacancy
@@ -136,6 +150,8 @@ class VacancySerializers(serializers.ModelSerializer):
             'user',
             'picture',
             'name', 
+            'category',
+            'subcategory',
             'salary', 
             'exchange',
             'duty', 
@@ -157,7 +173,25 @@ class VacancySerializers(serializers.ModelSerializer):
     def create(self, validated_data):
         user_email = validated_data.pop('employer_company').get('user').get('email')
         user = EmployerCompany.objects.get(user__email=user_email)
-        vacancy = Vacancy.objects.create(employer_company=user, **validated_data)
+
+        category_data = validated_data.pop('category', None)
+        subcategory_data = validated_data.pop('subcategory', None)
+
+        category_instance = None
+        if category_data:
+            category_instance, created = Category.objects.get_or_create(**category_data)
+
+        subcategory_instance = None
+        if subcategory_data:
+            subcategory_data['category'] = category_instance
+            subcategory_instance, created = Subcategory.objects.get_or_create(**subcategory_data)
+
+        # Check if subcategory_instance is a dictionary (indicating an error)
+        if isinstance(subcategory_instance, dict):
+            raise serializers.ValidationError({'subcategory': ['Invalid subcategory data']})
+
+        # Create the Vacancy object after obtaining the necessary category_instance
+        vacancy = Vacancy.objects.create(employer_company=user, category=category_instance, subcategory=subcategory_instance, **validated_data)
         return vacancy
     
 

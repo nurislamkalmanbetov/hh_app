@@ -13,6 +13,11 @@ urlpatterns = [
     path('new-vacancy/', NewVacancyView.as_view(), name='new-vacancy'),
     path('vacancies-filter/', VacancyListCreateAPIView.as_view(), name='vacancies-filter'),
     path('vacancies-list/', VacancyListApiView.as_view(), name='vacancies-list'),
+    
+    # category-subcategory
+    # path('categories/', CategoryView.as_view(), name='category-list'),                      
+    # path('subcategories/', SubcategoryView.as_view(), name='subcategory-list'),
+
     #Review
     path('company-review-create/', CompanyReviewView.as_view(), name='company-review'),
     path('review-create', ReviewVacancyCreateView.as_view(), name='review-create'),
