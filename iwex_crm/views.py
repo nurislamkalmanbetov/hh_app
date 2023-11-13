@@ -18,12 +18,12 @@ from .utils import get_documents_list
 from .forms import RegistrationDocumentsForm, EmbassyDocumentsForm
 
 
-# def main_page(request):
-#     return render(request, 'pages/index.html', locals())
-
 def main_page(request):
-    # Перенаправление на "Iwex.com"
-    return redirect("https://vacancies.iwex.kg/")
+    return render(request, 'pages/index.html', locals())
+
+# def main_page(request):
+#     # Перенаправление на "Iwex.com"
+#     return redirect("https://vacancies.iwex.kg/")
 
 @login_required
 @superuser_access_forbidden

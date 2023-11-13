@@ -41,7 +41,7 @@ if not DEBUG:
         integrations=[DjangoIntegration()]
     )
 
-ALLOWED_HOSTS = ['crm.iwex.kg']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -126,27 +126,28 @@ WSGI_APPLICATION = 'iwex_crm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'crm4',
-#        'USER': 'postgres',
-#        'PASSWORD':  '123',
-#        'HOST': 'localhost',
-#        'PORT':5432,
-#    }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_DB'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD':  env('POSTGRES_PASSWORD'),
-        'HOST': env('POSTGRES_HOST'),
-        'PORT': env('POSTGRES_PORT'),
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'iwex_1',
+       'USER': 'postgres',
+       'PASSWORD':  '8244',
+       'HOST': 'localhost',
+       'PORT':'5432',
+   }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('POSTGRES_DB'),
+#         'USER': env('POSTGRES_USER'),
+#         'PASSWORD':  env('POSTGRES_PASSWORD'),
+#         'HOST': env('POSTGRES_HOST'),
+#         'PORT': env('POSTGRES_PORT'),
+#     }
+# }
 
 
 # Password validation
