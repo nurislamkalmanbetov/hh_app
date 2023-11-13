@@ -107,11 +107,13 @@ class ProfilePagination(PageNumberPagination):
     max_page_size = 10000
 
 class ProfileListView(ListAPIView):
-    queryset = Profile.objects.all()
     serializer_class = ProfileListSerializer
     pagination_class = ProfilePagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['user__email', 'german', 'english', 'turkish', 'russian', 'chinese','university__name_ru','faculty__name_ru', 'driver_license', 'driving_experience',]
+    filterset_fields = ['user__email', 'german', 'english', 'turkish', 'russian', 'chinese', 'university__name_ru', 'faculty__name_ru', 'driver_license', 'driving_experience']
+
+    def get_queryset(self):
+        return Profile.objects.select_related('user', 'university', 'faculty').all()
 
 
 class ProfileListViewSet(mixins.CreateModelMixin,
@@ -120,10 +122,10 @@ class ProfileListViewSet(mixins.CreateModelMixin,
                    mixins.DestroyModelMixin,
                    mixins.ListModelMixin,
                    GenericViewSet):
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.select_related('user', 'university', 'faculty')
     serializer_class = ProfileListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['user__email', 'german', 'english', 'turkish', 'russian', 'chinese','university__name_ru','faculty__name_ru', 'driver_license', 'driving_experience',]
+    filterset_fields = ['user__email', 'german', 'english', 'turkish', 'russian', 'chinese', 'university__name_ru', 'faculty__name_ru', 'driver_license', 'driving_experience']
 
 
 
@@ -141,8 +143,9 @@ class UserListView(viewsets.ModelViewSet):
 
 
 class SupportRequestListCreateView(generics.ListCreateAPIView):
-    queryset = SupportRequest.objects.all()
+    queryset = SupportRequest.objects.select_related('user').all()
     serializer_class = SupportRequestSerializer
+
 
   
     
