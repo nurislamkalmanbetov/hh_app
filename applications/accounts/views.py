@@ -21,7 +21,31 @@ from django.template.loader import render_to_string
 
 User = get_user_model()
 
+class RegistrationAPIView(generics.CreateAPIView):
+    serializer_class = RegistrationSerializer
+    queryset = User.objects.all()  
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = User.objects.filter(email=serializer.data['email']).first()
+            if user is not None:
+                return Response({"error": "Пользователь уже существует"}, status=status.HTTP_400_BAD_REQUEST)
+            user = User.objects.create_user(
+                email=serializer.data['email'],
+                password=serializer.data['password']
+            )
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "messsage": "Успешная регистрация",
+                "user": user.email,
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+        
 
 class UserLoginView(generics.CreateAPIView):
     serializer_class = UserLoginSerializer
@@ -39,16 +63,22 @@ class UserLoginView(generics.CreateAPIView):
             return Response({
                 'message': 'Вход успешно выполнен',
                 'email': user.email,
+                'is_employer': user.is_employer,
+                'is_student': user.is_student,
 
                 'refresh_token': str(refresh),
                 'access_token': str(refresh.access_token)
+                
             })
         else:
             return Response({'message': 'Неверный логин или пароль'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+
+
 
 
 class AdminCreateUserView(generics.CreateAPIView):
-    serializer_class = UserSerializer  # Замените на свой сериализатор пользователя
+    serializer_class = UserSerializer  
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -74,11 +104,12 @@ class AdminCreateUserView(generics.CreateAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    
 
 
 class ProfileView(generics.CreateAPIView):
     serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()  # предположим, что модель называется Profile
+    queryset = Profile.objects.all()  
     parser_classes = (MultiPartParser, FormParser)
 
     def perform_create(self, serializer):
@@ -221,3 +252,4 @@ class ConnectionRequestListCreateView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Создание новой заявки на подключение"""
         return self.create(request, *args, **kwargs)
+

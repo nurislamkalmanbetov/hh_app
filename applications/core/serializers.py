@@ -4,12 +4,40 @@ from rest_framework import serializers
 from applications.accounts.serializers import ProfileListSerializer
 from .models import *
 from django.contrib.auth import get_user_model
-
+# from schedule.models import Event
 
 
 
 User = get_user_model()
 
+
+# class EventSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Event
+#         fields = ['id', 'calendar','title', 'start', 'end', 'description', 'creator']
+
+# class EventSerializer(serializers.ModelSerializer):
+#     user_email = serializers.EmailField(write_only=True)
+
+#     class Meta:
+#         model = Event
+#         fields = ['id', 'title', 'description', 'start_time', 'end_time', 'user_email']
+
+#     def create(self, validated_data):
+#         user_email = validated_data.pop('user_email')
+#         user = User.objects.get(email=user_email)
+#         event = Event.objects.create(user=user, **validated_data)
+#         return event
+
+#     def update(self, instance, validated_data):
+#         user_email = validated_data.pop('user_email', None)
+#         if user_email:
+#             user = User.objects.get(email=user_email)
+#             instance.user = user
+#         for attr, value in validated_data.items():
+#             setattr(instance, attr, value)
+#         instance.save()
+#         return instance
 
 class InvitationSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(write_only=True)
@@ -140,6 +168,7 @@ class CategorySerializers(serializers.ModelSerializer):
 
 class VacancySerializers(serializers.ModelSerializer):
     user = serializers.EmailField(source='employer_company.user.email')
+    employer_company = serializers.CharField(source='employer_company.name')
     category = serializers.CharField(source='category.name', required=False)
     subcategory = serializers.CharField(source='subcategory.name', required=False)
 
@@ -148,6 +177,7 @@ class VacancySerializers(serializers.ModelSerializer):
         fields = [
             'id',
             'user',
+            'employer_company',
             'picture',
             'name', 
             'category',
@@ -201,7 +231,6 @@ class VacancySerializers(serializers.ModelSerializer):
         vacancy = Vacancy.objects.update(employer_company=user.employer_company, **validated_data)
         return vacancy
 
-
 class VacancyFilterSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -211,12 +240,26 @@ class VacancyFilterSerializer(serializers.ModelSerializer):
 
 class VacancyChangeSerializer(serializers.ModelSerializer):
     user = serializers.EmailField(source='employer_company.user.email', read_only=True)
+    category_name = serializers.SerializerMethodField()
+    subcategory_name = serializers.SerializerMethodField()
+    employer_company_name = serializers.SerializerMethodField()
+
+    def get_category_name(self, obj):
+        return obj.category.name if obj.category else None
+
+    def get_subcategory_name(self, obj):
+        return obj.subcategory.name if obj.subcategory else None
+
+    def get_employer_company_name(self, obj):
+        return obj.employer_company.name if obj.employer_company else None
 
     class Meta:
         model = Vacancy
-        fields = ['id', 'picture','user', 'name', 'salary','exchange', 'city', 'accomodation_cost', 'insurance', 'transport',
-                  'contact_info', 'destination_point', 'employer_dementions', 'extra_info', 'duty', 'language','required_positions',
-                  'proficiency', 'accomodation_type',
+        fields = [
+            'id', 'picture', 'user', 'name', 'category_name',
+            'subcategory_name', 'salary', 'exchange', 'city', 'accomodation_cost', 'insurance',
+            'transport', 'contact_info', 'destination_point', 'employer_dementions', 'extra_info', 'duty',
+            'language', 'required_positions', 'proficiency', 'accomodation_type', 'employer_company_name'
         ]
 
 

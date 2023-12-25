@@ -22,6 +22,7 @@
 #   #     - 443:443
 #   #     - 80:80
 
+<<<<<<< HEAD
 #   app:
 #     build: . 
 #     restart: always
@@ -35,6 +36,21 @@
 #       - db 
 #     volumes:
 #       - medias:/app/media
+=======
+  app:
+    build: . 
+    restart: always
+    command: >
+          bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py makemessages -l de && python manage.py compilemessages && python  manage.py runserver 0.0.0.0:8005"
+    ports:
+          - "8005:8005"
+    env_file:
+      - .env
+    depends_on:
+      - db 
+    volumes:
+      - /home/iwex-crm-master/media:/app/media
+>>>>>>> 1ad07d1c (registrations)
 
 
 # volumes:
