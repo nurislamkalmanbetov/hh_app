@@ -14,7 +14,6 @@ urlpatterns = [
     path('profiles-list-detail/<int:pk>/', ProfileListViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='profile-list-detail'),
     # User
     path('user-lists/', UserView.as_view(), name='user-list'),
-    path('user-list/<int:pk>/', UserListView.as_view({'patch': 'partial_update','put': 'update',})),
     #requests
     # path('support-request/', SupportRequestListCreateView.as_view(), name='support-request'),
     # path('support-response/', SupportResponseCreateView.as_view(), name='support-response'),

@@ -34,7 +34,6 @@ from ckeditor.fields import RichTextField
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    avatar = models.ImageField(upload_to='user_avatar/', null=True, blank=True)
     email = models.EmailField(_('Email адрес'), unique=True, db_index=True)
     phone = models.CharField(_('Номер телефона'), max_length=50, blank=True, db_index=True)
     whatsapp_phone = models.CharField(_('Номер Whatsapp'), max_length=50, blank=True, db_index=True)

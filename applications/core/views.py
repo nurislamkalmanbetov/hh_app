@@ -11,6 +11,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
 from rest_framework import viewsets
 # from schedule.models import Event
 from .models import *
@@ -132,6 +134,7 @@ class VacancyListApiView(ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['employer_company__name', 'city', 'employer_company__user__email', 'category__name', 'subcategory__name']
     search_fields = ['name', 'extra_info', 'employer_company__name']
+    # permission_classes = [IsAuthenticated]
     pagination_class = VacancyPagination
 
     def get_queryset(self):

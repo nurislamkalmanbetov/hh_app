@@ -17,6 +17,7 @@ from django.core.mail import send_mail
 from .models import Profile, SupportRequest, SupportResponse
 from .serializers import *
 from django.template.loader import render_to_string
+from random import randint
 
 
 User = get_user_model()
@@ -35,15 +36,57 @@ class RegistrationAPIView(generics.CreateAPIView):
                 email=serializer.data['email'],
                 password=serializer.data['password']
             )
-            refresh = RefreshToken.for_user(user)
+            
+            verification_code = randint(1000, 9999)
+            user.verification_code = verification_code
+            user.save()
+            context = {
+                'verification_code': verification_code,
+                
+            }
+          
+            html_message = render_to_string('email_template.html', context)
+            
+          
+            subject = 'Подтверждение регистрации'
+            recipient_list = [user.email]  
+            send_mail(subject, None, 'kalmanbetovnurislam19@gmail.com', recipient_list, html_message=html_message, fail_silently=False)
+            print("ok")
+
             return Response({
                 "messsage": "Успешная регистрация",
+                "user": user.email,
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class VerifyEmailAPIView(APIView):
+    serializer_class = VerifyEmailSerializer
+    queryset = User.objects.all()  
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            email = serializer.data['email']
+            verification_code = serializer.data['verification_code']
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+            if user.verification_code != verification_code:
+                return Response({"error": "Неверный код"}, status=status.HTTP_400_BAD_REQUEST)
+            user.is_active = True
+            user.is_verified_email = True
+            user.verification_code = None
+            user.save()
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "messsage": "Почта подтверждена",
                 "user": user.email,
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
         
 
@@ -167,11 +210,6 @@ class UserView(ListAPIView):
     filterset_fields = ['email']
 
     
-class UserListView(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserListPutchSerializer
-    parser_classes = (MultiPartParser, FormParser)
-
 
 class SupportRequestListCreateView(generics.ListCreateAPIView):
     queryset = SupportRequest.objects.select_related('user').all()

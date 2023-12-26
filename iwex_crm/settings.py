@@ -140,14 +140,13 @@ DATABASES = {
        'ENGINE': 'django.db.backends.postgresql',
        'NAME': 'iwex_1',
        'USER': 'postgres',
-       'PASSWORD':  '8244',
-       'HOST': 'localhost',
-       'PORT':'5432',
+       'PASSWORD':  '123',
+       'HOST': '127.0.0.1',
+       'PORT':'5433',
    }
 }
 
 
-<<<<<<< HEAD
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -158,7 +157,7 @@ DATABASES = {
 #         'PORT': env('POSTGRES_PORT'),
 #     }
 # }
-=======
+
 # CKeditor Config
 CKEDITOR_CONFIGS = {
     'default': {
@@ -167,7 +166,6 @@ CKEDITOR_CONFIGS = {
 
     }
 }
->>>>>>> 1ad07d1c (registrations)
 
 
 # Password validation
