@@ -1,6 +1,7 @@
 from applications.accounts.admin_utils.inlines import VacancyInline
 from django.contrib import admin, messages
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from .models import *
 
 
@@ -154,3 +155,60 @@ class InvitationAdmin(admin.ModelAdmin):
     short_message.short_description = 'Message Preview'
 
 
+
+def func():
+
+
+    # Create a list of companies and vacancies with more detailed information
+    companies = [
+        {"name": "MacDonald's", "country": "USA", "description": "Fast food restaurant chain"},
+        {"name": "Hotel", "country": "France", "description": "Luxury hotel with international presence"},
+        {"name": "Burger King", "country": "USA", "description": "Global chain of hamburger fast food restaurants"}
+    ]
+
+    vacancies = [
+        {"name": "Официант", "employer_company": 0, "salary": 10000, "city": "New York", "duty": "Serving customers"},
+        {"name": "Ресепшн", "employer_company": 1, "salary": 15000, "city": "Paris", "duty": "Managing guest check-ins"},
+        {"name": "Кассир", "employer_company": 2, "salary": 12000, "city": "Los Angeles", "duty": "Handling transactions"}
+    ]
+
+    # Assume you have at least one user, category, and subcategory in your database.
+    default_user = User.objects.first()  # Replace with a specific user if necessary
+    default_category = Category.objects.first()  # Replace with a specific category if necessary
+    default_subcategory = Subcategory.objects.first()  # Replace with a specific subcategory if necessary
+
+    # Create and save the companies with more detailed information
+    created_companies = []
+    for company in companies:
+        new_company = EmployerCompany(
+            user=default_user,
+            name=company['name'],
+            country=company['country'],
+            description=company['description']
+            # Add more fields as necessary
+        )
+        new_company.save()
+        created_companies.append(new_company)
+
+    # Create and save the vacancies with more detailed information
+    for vacancy in vacancies:
+        new_vacancy = Vacancy(
+            user=default_user,
+            employer_company=created_companies[vacancy['employer_company']],
+            name=vacancy['name'],
+            salary=vacancy['salary'],
+            city=vacancy['city'],
+            duty=vacancy['duty'],
+            category=default_category,
+            subcategory=default_subcategory,
+            language="en",  # Example: replace with actual language code
+            proficiency="A1",  # Example: replace with actual proficiency level
+            accomodation_type="yes",  # Example: replace with actual accommodation info
+            # Add more fields as necessary
+        )
+        new_vacancy.save()
+
+    print("Companies and vacancies with detailed information have been added successfully.")
+
+
+func()

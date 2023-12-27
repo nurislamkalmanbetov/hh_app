@@ -54,8 +54,8 @@ class RegistrationAPIView(generics.CreateAPIView):
             print("ok")
 
             return Response({
-                "messsage": "Успешная регистрация",
                 "user": user.email,
+                "status": status.HTTP_201_CREATED,
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -81,7 +81,7 @@ class VerifyEmailAPIView(APIView):
             user.save()
             refresh = RefreshToken.for_user(user)
             return Response({
-                "messsage": "Почта подтверждена",
+                "message": "Почта подтверждена",
                 "user": user.email,
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
