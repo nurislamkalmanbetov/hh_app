@@ -78,8 +78,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'import_export',
-    'user_visit',
-    'ckeditor',
+    
 ]
 
 REST_FRAMEWORK = {
@@ -105,7 +104,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'user_visit.middleware.UserVisitMiddleware',
+    
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -138,11 +137,11 @@ WSGI_APPLICATION = 'iwex_crm.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'iwex_1',
+       'NAME': 'iwex_new',
        'USER': 'postgres',
        'PASSWORD':  '123',
        'HOST': '127.0.0.1',
-       'PORT':'5433',
+       'PORT':'5432',
    }
 }
 
@@ -158,14 +157,7 @@ DATABASES = {
 #     }
 # }
 
-# CKeditor Config
-CKEDITOR_CONFIGS = {
-    'default': {
-        'width': '100%',
-        'tabSpaces': 4,
 
-    }
-}
 
 
 # Password validation
@@ -286,8 +278,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
 
-AUTHENTICATION_BACKENDS = [
-    # Другие бекенды...
-    'applications.accounts.backends.UnhashedPasswordBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]

@@ -21,7 +21,7 @@ charset-normalizer==3.2.0
 click==8.1.6
 click-didyoumean==0.3.0
 click-plugins==1.1.1
-click-repl==0.3.0
+
 constantly==15.1.0
 coreapi==2.3.3
 coreschema==0.0.4
@@ -72,13 +72,12 @@ idna==3.4
 import-export==0.3.1
 incremental==22.10.0
 inflection==0.5.1
-ipython==8.12.2
+
 ipython-genutils==0.2.0
 isort==5.12.0
 itypes==1.2.0
 jedi==0.19.0
-jet-bridge-base==1.8.10
-jet-django==1.8.10
+
 Jinja2==3.1.2
 jmespath==1.0.1
 kombu==5.3.1
@@ -98,7 +97,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==10.0.0
 promise==2.3
-prompt-toolkit==2.0.9
+
 psutil==5.9.7
 psycopg2-binary==2.9.7
 ptyprocess==0.7.0
@@ -147,5 +146,3 @@ vine==5.0.0
 wcwidth==0.1.7
 xlrd==2.0.1
 xlwt==1.3.0
-zope.event==5.0
-zope.interface==6.1

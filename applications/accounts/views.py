@@ -14,75 +14,81 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.core.mail import send_mail
-from .models import Profile, SupportRequest, SupportResponse
 from .serializers import *
 from django.template.loader import render_to_string
 from random import randint
+from django.contrib.auth import authenticate, login
 
 
 User = get_user_model()
 
+def send_custom_email(email, subject, template_name, context):
+    html_message = render_to_string(template_name, context)
+    send_mail(
+        subject,
+        None,
+        'kalmanbetovnurislam19@gmail.com', 
+        [email],
+        html_message=html_message,
+        fail_silently=False,
+    )
+    print("Письмо отправлено")
 
 class RegistrationAPIView(generics.CreateAPIView):
+    serializer_class = RegistrationSerializer  # Используйте свой сериализатор
+
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         user = User.objects.filter(email=email).first()
-        
+
         if user is not None and not user.is_verified_email:
-                
-            verification_code = randint(1000, 99999)
+            verification_code = randint(10000, 99999)
             user.verification_code = verification_code
-            verification_code_created_at = timezone.now()
-            user.verification_code_created_at = verification_code_created_at
+            user.verification_code_created_at = timezone.now()
             user.save()
+
             context = {
                 'verification_code': verification_code,
-                
             }
-        
-            html_message = render_to_string('email_template.html', context)
-            
-        
-            subject = 'Подтверждение регистрации'
-            recipient_list = [user.email]  
-            send_mail(subject, None, 'kalmanbetovnurislam19@gmail.com', recipient_list, html_message=html_message, fail_silently=False)
-            print("ok")
+
+            send_custom_email(
+                user.email,
+                'Подтверждение регистрации',
+                'email_template.html',
+                context
+            )
 
             return Response({
                 "user": user.email,
-                "status": status.HTTP_201_CREATED
-                })
-        
-        serializer = RegistrationSerializer(data=request.data)
+                "status": status.HTTP_200_OK
+            })
+
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            user = User.objects.filter(email=serializer.data['email']).first()
-            
+            user = User.objects.filter(email=serializer.validated_data['email']).first()
+
             if user is not None and user.is_verified_email:
                 return Response({"error": "Пользователь уже существует"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            
+
             user = User.objects.create(
-                email=serializer.data['email'],
-                
+                email=serializer.validated_data['email'],
             )
-                    
-            verification_code = randint(1000, 9999)
+
+            verification_code = randint(10000, 99999)
             user.verification_code = verification_code
-            verification_code_created_at = timezone.now()
-            user.verification_code_created_at = verification_code_created_at
+            user.verification_code_created_at = timezone.now()
             user.save()
+
             context = {
                 'verification_code': verification_code,
-                
             }
-          
-            html_message = render_to_string('email_template.html', context)
-            
-          
-            subject = 'Подтверждение регистрации'
-            recipient_list = [user.email]  
-            send_mail(subject, None, 'kalmanbetovnurislam19@gmail.com', recipient_list, html_message=html_message, fail_silently=False)
-            print("ok")
+
+            send_custom_email(
+                user.email,
+                'Подтверждение регистрации',
+                'email_template.html',
+                context
+            )
 
             return Response({
                 "user": user.email,
@@ -90,13 +96,38 @@ class RegistrationAPIView(generics.CreateAPIView):
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ResetPasswordAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        user = User.objects.filter(email=email).first()
 
+        if user is None:
+            return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
 
+        verification_code = randint(10000, 99999)
+        user.verification_code = verification_code
+        user.verification_code_created_at = timezone.now()
+        user.save()
+        context = {
+            'verification_code': verification_code,
+        }
 
+        send_custom_email(
+            user.email,
+            'Сброс пароля',
+            'email_template.html',
+            context
+        )
+
+        return Response({
+            "user": user.email,
+            "status": status.HTTP_200_OK
+        })
+
+        
 class VerifyEmailAPIView(APIView):
     serializer_class = VerifyEmailSerializer
-    queryset = User.objects.all()  
-
+    
     @swagger_auto_schema(request_body=VerifyEmailSerializer)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -112,7 +143,7 @@ class VerifyEmailAPIView(APIView):
                 return Response({"error": "Код истек"}, status=status.HTTP_400_BAD_REQUEST)
             
             user.is_active = True
-            user.is_verified_email = True
+            
             user.verification_code = None
             user.save()
             return Response({
@@ -120,7 +151,8 @@ class VerifyEmailAPIView(APIView):
                 "user": user.email,
 
             })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.error, status=status.HTTP_404_NOT_FOUND)
+    
 
         
 class SetPasswordAPIView(APIView):
@@ -129,6 +161,7 @@ class SetPasswordAPIView(APIView):
     @swagger_auto_schema(request_body=SetPasswordSerializer)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
+        
         if serializer.is_valid():
             email = serializer.data['email']
             password = serializer.data['password']
@@ -139,220 +172,48 @@ class SetPasswordAPIView(APIView):
             user = User.objects.filter(email=serializer.data['email']).first()
             if user is None:
                 return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
-            if not user.is_verified_email:
-                return Response({"error": "Почта не подтверждена"}, status=status.HTTP_400_BAD_REQUEST)
+
             
             user.set_password(password)
+            user.is_verified_email = True
             user.save()
             refresh = RefreshToken.for_user(user)
             return Response({
                 "status": status.HTTP_200_OK,
+                "id": user.id,
                 "user": user.email,
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
             })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class UserLoginView(generics.CreateAPIView):
+class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            user = User.objects.get(email=serializer.validated_data['email'],password=serializer.validated_data['password'])
-        except User.DoesNotExist:
-            user = None
-        if user is not None:
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
+        
+        user = authenticate(request, username=email, password=password)
+        if user:  
+            if not user.is_verified_email:
+                return Response({"error": "Почта не подтверждена"}, status=status.HTTP_400_BAD_REQUEST)
+            
             refresh = RefreshToken.for_user(user)
             return Response({
-                'message': 'Вход успешно выполнен',
+                'id': user.id,
                 'email': user.email,
                 'is_employer': user.is_employer,
                 'is_student': user.is_student,
-
-                'refresh_token': str(refresh),
-                'access_token': str(refresh.access_token)
-                
-                
-            })
+                'refresh': str(refresh),
+                'access': str(refresh.access_token)
+            }, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Неверный логин или пароль'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+            return Response({"error": "Неправильный Email или пароль"}, status=status.HTTP_401_UNAUTHORIZED)
 
-
-
-
-class AdminCreateUserView(generics.CreateAPIView):
-    serializer_class = UserSerializer  
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-
-            # Отправка пароля на почту
-            password = request.data.get('password')
-            subject = 'Пароль для входа в систему'
-            message = f'Ваш пароль: {password}'
-            from_email = 'admin@example.com'  # Замените на адрес администратора
-
-            recipient_list = [user.email]
-
-            try:
-                send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-            except Exception as e:
-                return Response({'message': 'Ошибка при отправке почты'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-            return Response({'message': 'Пользователь успешно создан и пароль отправлен на почту'}, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-    
-
-
-class ProfileView(generics.CreateAPIView):
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()  
-    parser_classes = (MultiPartParser, FormParser)
-
-    def perform_create(self, serializer):
-        user_data = self.request.data.get('user')
-        try:
-            user = User.objects.get(email=user_data)
-        except User.DoesNotExist:
-            raise serializers.ValidationError({'detail': 'Вы не зарегистрированы'})
-        
-        if not user.is_student:
-            raise serializers.ValidationError({'detail': 'Вы не студент'})
-        
-        serializer.save(user=user)
-
-        # Устанавливаем поле is_active пользователя в значение True
-        user.is_active = True
-        user.save()
-            
-    def post(self, request, *args, **kwargs):
-        
-        return self.create(request, *args, **kwargs)
-
-class ProfilePagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 10000
-
-class ProfileListView(ListAPIView):
-    serializer_class = ProfileListSerializer
-    pagination_class = ProfilePagination
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['user__email', 'german', 'english', 'turkish', 'russian', 'chinese', 'university__name_ru', 'faculty__name_ru', 'driver_license', 'driving_experience']
-
-    def get_queryset(self):
-        return Profile.objects.select_related('user', 'university', 'faculty').all()
-
-
-class ProfileListViewSet(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   GenericViewSet):
-    queryset = Profile.objects.select_related('user', 'university', 'faculty')
-    serializer_class = ProfileListSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['user__email', 'german', 'english', 'turkish', 'russian', 'chinese', 'university__name_ru', 'faculty__name_ru', 'driver_license', 'driving_experience']
-
-
-
-class UserView(ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserListSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['email']
-
-    
-
-class SupportRequestListCreateView(generics.ListCreateAPIView):
-    queryset = SupportRequest.objects.select_related('user').all()
-    serializer_class = SupportRequestSerializer
-
-
-  
-    
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-
-class SupportResponseCreateView(generics.CreateAPIView):
-    queryset = SupportResponse.objects.all()
-    serializer_class = SupportResponseSerializer
-
-    def perform_create(self, serializer):
-        serializer.save()
-        response = serializer.instance
-        user_email = response.support_request.user.email
-        send_mail(
-            'Ответ на ваш запрос на поддержку',
-            response.message,
-            'admin@example.com',  # ваш email
-            [user_email],
-            fail_silently=False,
-        )
-
-class PasswordResetRequestView(CreateAPIView):
-    serializer_class = PasswordResetRequestSerializer
-
-    def create(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        user = User.objects.filter(email=email).first()
-        if user:
-            token = uuid.uuid4()
-            user.password_reset_token = str(token)
-            user.save()
-
-            # Подготовка и отправка письма
-            context = {
-                'reset_link': f'http://127.0.0.1:8005/password_reset_confirm/{token}/',
-                'token': token  # передаем токен в контекст для шаблона
-            }
-            html_content = render_to_string('password_reset_email.html', context)
-            send_mail(
-                'Сброс пароля',
-                '',  # пустое тело для текстовой версии
-                'from@example.com',
-                [email],
-                fail_silently=False,
-                html_message=html_content
-            )
-        return Response({'detail': 'Если адрес электронной почты существует, ссылка для сброса пароля была отправлена.'})
-    
-
-class PasswordResetConfirmView(CreateAPIView):
-    serializer_class = PasswordResetConfirmSerializer
-
-    def create(self, request, *args, **kwargs):
-        token = kwargs.get('token')
-        password = request.data.get('password')
-        user = User.objects.filter(password_reset_token=token).first()
-        if user:
-            user.set_password(password)
-            user.password_reset_token = None  # очистить токен после его использования
-            user.save()
-            return Response({'detail': 'Пароль успешно обновлен.'})
-        return Response({'error': 'Неверный токен или он истек.'})
-
-class ConnectionRequestListCreateView(generics.ListCreateAPIView):
-    queryset = ConnectionRequest.objects.all()
-    serializer_class = ConnectionRequestSerializer
-
-    def post(self, request, *args, **kwargs):
-        """Создание новой заявки на подключение"""
-        return self.create(request, *args, **kwargs)
 
