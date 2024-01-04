@@ -12,5 +12,7 @@ class EmployerCompanyAdmin(admin.ModelAdmin):
     class Meta:
         model = EmployerCompany
 
+admin.site.register(City)
+admin.site.register(Branch)
 
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)

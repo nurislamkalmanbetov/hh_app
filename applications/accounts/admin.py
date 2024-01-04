@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 
-class UserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+class UserAdmin(ImportExportModelAdmin, BaseUserAdmin):
     # fields = ['email', 'phone', 'whatsapp_phone', 'password','is_staff','is_employer', 'is_student', 'is_delete', 'is_active', 'is_superuser', ]
     fieldsets = (
         (None, {'fields': ('email', 'phone', 'verification_code', 'password','role', 'is_delete',)}),
@@ -25,7 +25,7 @@ class UserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'phone','whatsapp_phone', 'password1','password2', 'is_delete', 'is_active', 'is_superuser', ),
+            'fields': ('email', 'phone', 'password1','password2', 'is_delete', 'is_active', 'is_superuser', ),
         }),
     )
     list_display = ['id','email','verification_code', 'phone',  'is_staff', 'is_delete', 'is_active','role', 'is_superuser', ]

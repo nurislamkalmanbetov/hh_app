@@ -34,10 +34,8 @@ class City(models.Model):
         verbose_name_plural = _('Города')
 
 class Branch(models.Model):
-
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name=_('Город'))
     company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Компания'))
-    city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name=_('Город'))
     name = models.CharField(_('Название филлиала'), max_length=255)
     address = models.CharField(_('Текстовый адрес'), max_length=255, blank=True, default='')
     link_address = models.CharField(_('Ссылка на адрес'), max_length=255, blank=True, default='')    

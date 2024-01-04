@@ -34,6 +34,7 @@ def send_custom_email(email, subject, template_name, context):
     )
     print("Письмо отправлено")
 
+
 class RegistrationAPIView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer  # Используйте свой сериализатор
 

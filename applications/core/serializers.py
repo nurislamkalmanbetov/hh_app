@@ -24,40 +24,79 @@ class EmployerCompanySerialzers(serializers.ModelSerializer):
             'icon',
         ]
 
-    # def create(self, validated_data):
-    #     user_email = validated_data.pop('user', None)  # Обратите внимание на изменение 'user.email' на 'user'
-    #     user = User.objects.get(email=user_email)
-    #     employercompany = EmployerCompany.objects.create(user=user, **validated_data)
-    #     return employercompany
-
-    # def update(self, instance, validated_data):
-    #     user_email = validated_data.pop('user', None)  # Извлекаем email, если он передан
-
-    #     if user_email:  # Если email был передан, обновляем пользователя
-    #         user = User.objects.get(email=user_email)
-    #         instance.user = user
-
-    #     # Обновление остальных полей
-    #     for attr, value in validated_data.items():
-    #         setattr(instance, attr, value)
-
-    #     instance.save()  # Сохраняем изменения
-    #     return instance
+class EmployerUpdateSerialzers(serializers.ModelSerializer):
+        first_name = serializers.CharField(required=False)
+        last_name = serializers.CharField(required=False)
+        name = serializers.CharField(required=False)
+        iin = serializers.CharField(required=False, allow_blank=True)
+        description = serializers.CharField(required=False, allow_blank=True)
+        icon = serializers.ImageField(required=False, allow_null=True)
 
 
+    
+        class Meta:
+            model = EmployerCompany
+            fields = [
+                'id',
+                'first_name',
+                'last_name',
+                'name',
+                'iin',
+                'description',
+                'icon',
+            ]
+
+
+class CitySerializers(serializers.ModelSerializer):
+    
+    class Meta:
+        model = City
+        fields = [
+            'id',
+            'name',
+        ]
 
 class BranchSerializers(serializers.ModelSerializer):
+    city = serializers.CharField(source='city.name')
+    
 
     class Meta:
         model = Branch
         fields = [
             'id',
+            'city',
             'company',
             'name',
             'address',
             'link_address',
             'description',
-        ]   
+        ]
+    #если iin 
+    def create(self, validated_data):
+        city = validated_data.pop('city')
+        city = City.objects.get(name=city['name'])
+        branch = Branch.objects.create(city=city, **validated_data)
+        return branch
+    
+    def update(self, instance, validated_data):
+        city = validated_data.pop('city')
+        city = City.objects.get(name=city['name'])
+        instance.city = city
+        instance.save()
+        return instance
+    
+
+#серилайзер для гет запроса где только название филиала и город
+class BranchListSerializers(serializers.ModelSerializer):
+    city = serializers.CharField(source='city.name')
+    class Meta:
+        model = Branch
+        fields = [
+            'id',
+            'city',
+            'name',
+        ]
+
     
 
 class ReviewBranchSerializers(serializers.ModelSerializer):
