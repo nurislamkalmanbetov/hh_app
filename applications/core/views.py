@@ -23,7 +23,7 @@ class EmployerProfileListAPIView(ListAPIView):
     #сделаем по int pk user id
     serializer_class = EmployerProfileSerializers
     def get_queryset(self, *args, **kwargs):
-        user_id = kwargs['pk']
+        user_id = self.kwargs['pk']
         queryset = EmployerCompany.objects.filter(user__id=user_id) 
         return queryset
 
@@ -138,7 +138,7 @@ class BranchListAPIView(ListAPIView):
 class BranchDetailListAPIView(ListAPIView):
     serializer_class = BranchSerializers
     def get_queryset(self, *args, **kwargs):
-        branch_id = kwargs['pk']
+        branch_id = self.kwargs['pk']
         queryset = Branch.objects.filter(id=branch_id)
         return queryset
     
