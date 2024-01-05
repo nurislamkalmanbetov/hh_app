@@ -17,7 +17,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 import django.conf.locale
 from django.conf import global_settings
-
+from datetime import timedelta
 import environ
 
 from .juzmin import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
@@ -278,3 +278,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}

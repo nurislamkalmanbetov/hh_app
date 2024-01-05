@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter
 # router.register(r'events', EventViewSet)
 
 urlpatterns = [ 
+    path('employerprofile/<int:pk>/', EmployerProfileListAPIView.as_view(), name='employerprofile'),
     path('employercompany/', EmployerCompanyAPIView.as_view(), name='employercompany'),
     path('employercompany-update/<int:pk>/', EmployerCompanyUpdateView.as_view(), name='employercompany'),
 

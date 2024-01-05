@@ -19,6 +19,15 @@ from .models import *
 from .serializers import *
 
 
+class EmployerProfileListAPIView(ListAPIView):
+    #сделаем по int pk user id
+    serializer_class = EmployerProfileSerializers
+    def get_queryset(self, *args, **kwargs):
+        user_id = kwargs['pk']
+        queryset = EmployerCompany.objects.filter(user__id=user_id) 
+        return queryset
+
+
 class EmployerCompanyAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     # permission_classes = (IsAuthenticated,)
@@ -60,10 +69,10 @@ class EmployerCompanyUpdateView(APIView):
             return Response({'error': 'User is not employer'}, status=status.HTTP_400_BAD_REQUEST)
         employer_company = EmployerCompany.objects.get(user=user)
         serializer = EmployerUpdateSerialzers(employer_company, data=request.data, partial=True)
+        
         if serializer.is_valid():
             
             serializer.save()
-            print(serializer.data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -129,7 +138,7 @@ class BranchListAPIView(ListAPIView):
 class BranchDetailListAPIView(ListAPIView):
     serializer_class = BranchSerializers
     def get_queryset(self, *args, **kwargs):
-        branch_id = self.kwargs['pk']
+        branch_id = kwargs['pk']
         queryset = Branch.objects.filter(id=branch_id)
         return queryset
     

@@ -9,8 +9,20 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class EmployerCompanySerialzers(serializers.ModelSerializer):
 
+class EmployerProfileSerializers(serializers.ModelSerializer):
+    
+    class Meta:
+        model = EmployerCompany
+        fields = [
+            'id',
+            'icon',
+            'first_name',
+            'last_name',
+        ]
+
+class EmployerCompanySerialzers(serializers.ModelSerializer):
+    iin = serializers.CharField(required=False, allow_blank=True)
     class Meta:
         model = EmployerCompany
         fields = [
@@ -172,4 +184,4 @@ class ClothingFormSerializers(serializers.ModelSerializer):
         ]
 
 
-
+    

@@ -207,10 +207,10 @@ class UserLoginView(generics.GenericAPIView):
             
             refresh = RefreshToken.for_user(user)
             return Response({
+                
                 'id': user.id,
                 'email': user.email,
-                'is_employer': user.is_employer,
-                'is_student': user.is_student,
+                'role': user.role,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token)
             }, status=status.HTTP_200_OK)
