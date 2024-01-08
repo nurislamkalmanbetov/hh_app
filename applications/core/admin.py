@@ -12,7 +12,26 @@ class EmployerCompanyAdmin(admin.ModelAdmin):
     class Meta:
         model = EmployerCompany
 
+class BranchAdmin(admin.ModelAdmin):
+    list_display = ['id','city','company','name','address','link_address','description',]
+    search_fields = ['city','company','name','address','link_address','description',]
+
+    ordering = ('id',)
+    class Meta:
+        model = Branch
+
+class PositionEmployeeAdmin(admin.ModelAdmin):
+    list_display = ['id','employer','name',]
+    search_fields = ['name',]
+
+    ordering = ('id',)
+    class Meta:
+        model = PositionEmployee
+
+
 admin.site.register(City)
-admin.site.register(Branch)
+admin.site.register(Branch, BranchAdmin)
+admin.site.register(ReviewBranch)
+admin.site.register(PositionEmployee, PositionEmployeeAdmin)
 
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)

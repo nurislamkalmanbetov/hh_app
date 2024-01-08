@@ -14,7 +14,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','role',)
 
 class VerifyEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)

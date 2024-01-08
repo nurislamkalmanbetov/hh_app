@@ -8,6 +8,7 @@ urlpatterns = [
     path('set-password/', SetPasswordAPIView.as_view(), name='set-password'),
     path('signin/', UserLoginView.as_view(), name='signin'),
     path('reset-password/', ResetPasswordAPIView.as_view(), name='reset-password'),
+    path('token/', AccessTokenView.as_view(), name='token_refresh'),
 ]
 
 
