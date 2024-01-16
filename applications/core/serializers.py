@@ -169,31 +169,8 @@ class PositionEmployeeSerializers(serializers.ModelSerializer):
         ]
 
 
-class DutyEmployeeSerializers(serializers.ModelSerializer):
     
-    class Meta:
-        model = DutyEmployee
-        fields = [
-            'id',
-            'employer',
-            'name',
-            'description',
 
-        ]
-
-class ClothingFormSerializers(serializers.ModelSerializer):
-    
-    class Meta:
-        model = ClothingForm
-        fields = [
-            'id',
-            'name',
-            'description',
-
-        ]
-
-
-    
 
 class VacancySerializers(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='employer_company.user.id')
@@ -201,7 +178,7 @@ class VacancySerializers(serializers.ModelSerializer):
         model = Vacancy
         fields = [
             'user_id', 
-            'name', 
+      
             'branch',
             'position', 
             'duty', 
@@ -223,5 +200,25 @@ class VacancySerializers(serializers.ModelSerializer):
         employer_company = EmployerCompany.objects.get(user=user)
         vacancy = Vacancy.objects.create(employer_company=employer_company, **validated_data)
         return vacancy
-        
 
+
+class VacancyListSerializers(serializers.ModelSerializer):
+    branch = serializers.CharField(source='branch.name')
+    position = serializers.CharField(source='position.name')
+    employer_company_icon = serializers.ImageField(source='employer_company.icon')
+
+    class Meta:
+        model = Vacancy
+        fields = [
+            'id',
+            'employer_company_icon',
+            'branch',
+            'position', 
+            'experience', 
+            'employee_count',
+            'time_start', 
+            'time_end', 
+            'salary', 
+            'views_vacancy',
+            ]
+        

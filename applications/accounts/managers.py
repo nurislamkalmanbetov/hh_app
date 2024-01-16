@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email=None, phone=None, password=None, is_staff=False, is_superuser=False, **extra_fields):
+    def create_user(self, email=None, password=None, is_staff=False, is_superuser=False, **extra_fields):
         if not password:
             raise ValueError('User must have a password.')
 
@@ -18,8 +18,6 @@ class UserManager(BaseUserManager):
         if email:
             model_data['email'] = self.normalize_email(email)
 
-        if phone:
-            model_data['phone'] = phone
 
         user = self.create(**model_data, **extra_fields)
         user.set_password(password)  # Здесь пароль захеширован
@@ -27,21 +25,22 @@ class UserManager(BaseUserManager):
         return user
 
     
-    def create_superuser(self, email=None, phone=None, password=None, **extra_fields):
+    def create_superuser(self, email=None,  password=None, **extra_fields):
+        from applications.accounts.models import Profile
 
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
-
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True')
 
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True')
-        if extra_fields.get('is_active') is not True:
-            raise ValueError('Superuser must have is_active=True')
 
-        user = self.create_user(email, phone, password, **extra_fields)
+        user = self.create_user(email, password, **extra_fields)
 
-  
+        Profile.objects.create(user=user)
         return user
+
+
+

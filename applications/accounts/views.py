@@ -102,7 +102,9 @@ class RegistrationAPIView(generics.CreateAPIView):
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ResetPasswordAPIView(APIView):
+    
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         user = User.objects.filter(email=email).first()
@@ -121,7 +123,7 @@ class ResetPasswordAPIView(APIView):
         send_custom_email(
             user.email,
             'Сброс пароля',
-            'email_template.html',
+            'password_reset_email.html',
             context
         )
 
@@ -161,7 +163,6 @@ class VerifyEmailAPIView(APIView):
             })
         return Response(serializer.error, status=status.HTTP_404_NOT_FOUND)
     
-
         
 class SetPasswordAPIView(APIView):
     serializer_class = SetPasswordSerializer
@@ -226,6 +227,9 @@ class UserLoginView(generics.GenericAPIView):
             return Response({"error": "Неправильный Email или пароль"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+
+
+
 class AccessTokenView(ObtainAuthToken):
     permission_classes = [IsAuthenticated]
 
@@ -235,4 +239,107 @@ class AccessTokenView(ObtainAuthToken):
             "status": status.HTTP_200_OK,
             "id": user.id,
             "email": user.email, 
+            "role": user.role,
         })
+
+
+class ProfileView(generics.CreateAPIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()  
+    parser_classes = (MultiPartParser, FormParser)
+
+    def perform_create(self, serializer):
+        user_data = self.request.data.get('user')
+        print(user_data)
+        try:
+            user = User.objects.get(id=user_data)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({'detail': 'Вы не зарегистрированы'})
+        
+
+        serializer.save(user=user)
+
+        # Устанавливаем поле is_active пользователя в значение True
+        user.is_active = True
+        user.save()
+            
+    def post(self, request, *args, **kwargs):
+        
+        return self.create(request, *args, **kwargs)
+
+
+class ProfileListView(ListAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['gender', 'nationality', 'language', 'date_of_birth', ]
+
+
+class UserView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    parser_classes = (MultiPartParser, FormParser)
+    filterset_fields = ['email', 'role']
+
+
+class RatingListView(ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    parser_classes = (MultiPartParser, FormParser)
+    filterset_fields = ['value_rating',]
+    
+
+class RatingCreateView(CreateAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+    def post(self, request, *args, **kwargs):
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except ValidationError as e:
+            # Если ошибка валидации связана с дублированием рейтинга
+            if 'Рейтинг от этого работодателя для данного пользователя уже существует' in str(e):
+                return Response({'detail': str(e)}, status=status.HTTP_200_OK)
+            # Все остальные ошибки валидации
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class RatingRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['value_rating', ]
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class ReviewCreateAPIView(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['rating__value_rating', ]
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class WorkExperienceAPIView(generics.ListCreateAPIView):
+    queryset = WorkExperience.objects.all()
+    serializer_class = WorkExperienceSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['type_company', 'company', 'position', 'country', ]
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class WorkScheduleAPIView(generics.ListCreateAPIView):
+    queryset = WorkSchedule.objects.all()
+    serializer_class = WorkScheduleSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['custom',]
+    parser_classes = (MultiPartParser, FormParser)
+

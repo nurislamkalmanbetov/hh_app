@@ -97,32 +97,7 @@ class PositionEmployee(models.Model):
         verbose_name = _('Позиция работника')
         verbose_name_plural = _('Позиция работников')
 
-class DutyEmployee(models.Model):
-    employer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Работодатель'))
-    name = models.CharField(_('Название обязанности'), max_length=255)
-    description = models.TextField(_('Описание обязанности'), blank=True, default='')
 
-    def __str__(self):
-        return self.name
-    
-
-    class Meta:
-        verbose_name = _('Обязанность работника')
-        verbose_name_plural = _('Обязанности работников')
-
-
-
-class ClothingForm(models.Model):
-    employer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Работодатель'))
-    name = models.CharField(_('Название формы одежды'), max_length=255)
-
- 
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = _('Форма одежды')
-        verbose_name_plural = _('Формы одежды')
 
 
 
@@ -140,12 +115,12 @@ class Vacancy(models.Model):
         )
 
     employer_company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
-    name = models.CharField(_('Название вакансии'), max_length=255)
+  
     branch = models.ForeignKey(Branch, on_delete=models.PROTECT, verbose_name=_('Филиал'))
     position = models.ForeignKey(PositionEmployee, on_delete=models.PROTECT, verbose_name=_('Позиция'))
-    duty = models.ForeignKey(DutyEmployee, on_delete=models.PROTECT, verbose_name=_('Обязанности'))
+    duty = models.TextField(_('Обязанности'),)
     experience = models.TextField(_('Опыт работы'),)
-    clothingform = models.ForeignKey(ClothingForm, on_delete=models.PROTECT, verbose_name=_('Форма одежды'))
+    clothingform = models.CharField(max_length=255, verbose_name=_('Форма одежды'))
     employee_count = models.PositiveIntegerField(_('Количество работников'), default=1)
     gender = models.CharField(_('Пол'), max_length=50)
     time_start = models.TimeField(_('Время начала работы'))
@@ -162,8 +137,5 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name = _('Вакансия')
         verbose_name_plural = _('Вакансии')
-
-
-
 
 

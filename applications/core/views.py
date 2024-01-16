@@ -185,7 +185,13 @@ class PositionEmployeeAPIView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+class PositionEmployeeDeleteAPIView(APIView):
+    # permission_classes = [IsAuthenticated]
+    def delete(self, request, *args, **kwargs):
+        position_employee_id = kwargs['pk']
+        position_employee = PositionEmployee.objects.get(id=position_employee_id)
+        position_employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class VacancyCreateAPIView(APIView):
     @swagger_auto_schema(request_body=VacancySerializers)
@@ -221,3 +227,29 @@ class VacancyCreateAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class VacancyListAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = VacancyListSerializers
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['position__name', 'branch__name',]
+
+    def get_queryset(self):
+        queryset = Vacancy.objects.all().select_related('employer_company', 'branch', 'position')
+        return queryset
+
+
+
+class EmployerVacancyListAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = VacancyListSerializers
+
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id', None)
+        if not user_id:
+            return Vacancy.objects.none()
+        
+        user = get_object_or_404(EmployerCompany, user__id=user_id)
+        queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch', 'position')
+        return queryset

@@ -29,9 +29,23 @@ class PositionEmployeeAdmin(admin.ModelAdmin):
         model = PositionEmployee
 
 
+class VacancyAdmin(admin.ModelAdmin):
+    list_display = [
+        'id','employer_company','branch','position','salary',
+        'time_start',
+        ]
+    search_fields = [
+        'employer_company','branch','position',
+        ]
+
+    ordering = ('id',)
+    class Meta:
+        model = Vacancy
+
+
 admin.site.register(City)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(ReviewBranch)
 admin.site.register(PositionEmployee, PositionEmployeeAdmin)
-
+admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)
