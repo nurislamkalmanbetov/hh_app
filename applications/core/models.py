@@ -138,3 +138,21 @@ class Vacancy(models.Model):
         verbose_name_plural = _('Вакансии')
 
 
+# #отклик на вакансию
+# class ResponseVacancy(models.Model):
+#     STATUS_CHOICES = (
+#         ('На рассмотрении', _('На рассмотрении')),
+#         ('Принят', _('Принят')),
+#         ('Отказано', _('Отказано')),
+#     )
+#     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name=_('Вакансия'))
+#     user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name='respone_profile',verbose_name=_('Пользователь'))
+
+#     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+
+#     def __str__(self):
+#         return self.vacancy.employer_company.name
+
+#     class Meta:
+#         verbose_name = _('Отклик на вакансию')
+#         verbose_name_plural = _('Отклики на вакансии')

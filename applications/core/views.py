@@ -229,6 +229,19 @@ class VacancyCreateAPIView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class VacancyUpdateAPIView(APIView):
+    @swagger_auto_schema(request_body=VacancySerializers)
+    def patch(self, request, *args, **kwargs):
+        vacancy_id = kwargs['pk']
+        vacancy = Vacancy.objects.get(id=vacancy_id)
+        
+        serializer = VacancySerializers(vacancy, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VacancyListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]

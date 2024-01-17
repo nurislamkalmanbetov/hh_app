@@ -201,6 +201,21 @@ class VacancySerializers(serializers.ModelSerializer):
         vacancy = Vacancy.objects.create(employer_company=employer_company, **validated_data)
         return vacancy
 
+    def update(self, instance, validated_data):
+        instance.branch = validated_data.get('branch', instance.branch)
+        instance.position = validated_data.get('position', instance.position)
+        instance.duty = validated_data.get('duty', instance.duty)
+        instance.experience = validated_data.get('experience', instance.experience)
+        instance.clothingform = validated_data.get('clothingform', instance.clothingform)
+        instance.employee_count = validated_data.get('employee_count', instance.employee_count)
+        instance.time_start = validated_data.get('time_start', instance.time_start)
+        instance.time_end = validated_data.get('time_end', instance.time_end)
+        instance.salary = validated_data.get('salary', instance.salary)
+        instance.increase_choices = validated_data.get('increase_choices', instance.increase_choices)
+        instance.description = validated_data.get('description', instance.description)
+        instance.save()
+        return instance
+
 
 class VacancyDetailSerializers(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='employer_company.user.id')
