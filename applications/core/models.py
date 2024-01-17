@@ -108,11 +108,7 @@ class Vacancy(models.Model):
         ('Неважно', _('Неважно')),
     
     )
-    #чойсы согласен повысить зарплату если работник согласен да нет
-    INCREASE_CHOICES = (
-        ('Да', _('Да')),
-        ('Нет', _('Нет')),
-        )
+
 
     employer_company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
   
@@ -122,17 +118,20 @@ class Vacancy(models.Model):
     experience = models.TextField(_('Опыт работы'),)
     clothingform = models.CharField(max_length=255, verbose_name=_('Форма одежды'))
     employee_count = models.PositiveIntegerField(_('Количество работников'), default=1)
-    gender = models.CharField(_('Пол'), max_length=50)
+    employee_count_hired = models.PositiveIntegerField(_('Количество нанятых работников'), default=0)
+    gender = models.CharField(_('Пол'),choices=GENDER_CHOICES,max_length=50)
     time_start = models.TimeField(_('Время начала работы'))
     time_end = models.TimeField(_('Время окончания работы'))
     salary = models.PositiveIntegerField(_('Зарплата'))
-    salary_increase = models.CharField(_('Повышение зарплаты'), max_length=5, choices=INCREASE_CHOICES)
     description = models.TextField(_('Коментарий'), blank=True, default='')
     views_vacancy = models.PositiveIntegerField(_('Количество просмотров'), default=0)
-    
-    
+    increase_choices = models.BooleanField(_('Повышение зарплаты'), default=False)
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+    updated_date = models.DateTimeField(auto_now=True, verbose_name=_('Дата обновления'))
+    is_active = models.BooleanField(_('Активный'), default=True)
+
     def __str__(self):
-        return self.name
+        return self.employer_company.name
 
     class Meta:
         verbose_name = _('Вакансия')

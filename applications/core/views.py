@@ -129,7 +129,8 @@ class BranchUpdateAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#пишем гет запрос чтобы вывести филлиал своей компании
+
+
 class BranchListAPIView(ListAPIView):
     serializer_class = BranchListSerializers
     permission_classes = [IsAuthenticated]
@@ -239,6 +240,15 @@ class VacancyListAPIView(ListAPIView):
         queryset = Vacancy.objects.all().select_related('employer_company', 'branch', 'position')
         return queryset
 
+class VacancyDetailAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        vacancy_id = kwargs['pk']
+        vacancy = Vacancy.objects.filter(id=vacancy_id).select_related('employer_company', 'branch', 'position').first()
+        if vacancy is None:
+            return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = VacancyDetailSerializers(vacancy)
+        return Response(serializer.data)
 
 
 class EmployerVacancyListAPIView(ListAPIView):

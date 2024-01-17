@@ -199,6 +199,7 @@ class SetPasswordAPIView(APIView):
         return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
 
 
+
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
 
@@ -308,7 +309,7 @@ class RatingCreateView(CreateAPIView):
             # Если ошибка валидации связана с дублированием рейтинга
             if 'Рейтинг от этого работодателя для данного пользователя уже существует' in str(e):
                 return Response({'detail': str(e)}, status=status.HTTP_200_OK)
-            # Все остальные ошибки валидации
+            
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 

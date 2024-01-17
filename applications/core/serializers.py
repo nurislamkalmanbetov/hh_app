@@ -174,11 +174,11 @@ class PositionEmployeeSerializers(serializers.ModelSerializer):
 
 class VacancySerializers(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='employer_company.user.id')
+
     class Meta:
         model = Vacancy
         fields = [
             'user_id', 
-      
             'branch',
             'position', 
             'duty', 
@@ -188,11 +188,11 @@ class VacancySerializers(serializers.ModelSerializer):
             'time_start', 
             'time_end', 
             'salary', 
-            'salary_increase', 
+            'increase_choices', 
             'description',
-            'views_vacancy',
 
             ]
+    
 
     def create(self, validated_data):
         user_id = validated_data.pop('employer_company')['user']['id']
@@ -202,17 +202,66 @@ class VacancySerializers(serializers.ModelSerializer):
         return vacancy
 
 
-class VacancyListSerializers(serializers.ModelSerializer):
-    branch = serializers.CharField(source='branch.name')
-    position = serializers.CharField(source='position.name')
+class VacancyDetailSerializers(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='employer_company.user.id')
     employer_company_icon = serializers.ImageField(source='employer_company.icon')
+    employer_company_name = serializers.CharField(source='employer_company.name')
+    branch = serializers.CharField(source='branch.name')
+    branch_city = serializers.CharField(source='branch.city.name')
+    branch_address = serializers.CharField(source='branch.address')
+    position = serializers.CharField(source='position.name')
+    created_date = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Vacancy
+        fields = [
+            'user_id', 
+            'employer_company_name',
+            'employer_company_icon',
+            'branch',
+            'branch_city',
+            'branch_address',
+            'position', 
+            'duty', 
+            'experience', 
+            'clothingform', 
+            'employee_count',
+            'time_start', 
+            'time_end', 
+            'salary', 
+            'increase_choices', 
+            'description',
+            'views_vacancy',
+            'created_date',
+
+
+            ]
+    
+    def get_created_date(self, obj):
+        return obj.created_date.strftime("%d.%m.%Y")
+
+
+
+
+class VacancyListSerializers(serializers.ModelSerializer):
+    employer_company_icon = serializers.ImageField(source='employer_company.icon')
+    employer_company_name = serializers.CharField(source='employer_company.name')
+    branch = serializers.CharField(source='branch.name')
+    branch_city = serializers.CharField(source='branch.city.name')
+    branch_address = serializers.CharField(source='branch.address')
+    position = serializers.CharField(source='position.name')
+    created_date = serializers.SerializerMethodField(read_only=True)
+
 
     class Meta:
         model = Vacancy
         fields = [
             'id',
+            'employer_company_name',
             'employer_company_icon',
             'branch',
+            'branch_city',
+            'branch_address',
             'position', 
             'experience', 
             'employee_count',
@@ -220,5 +269,10 @@ class VacancyListSerializers(serializers.ModelSerializer):
             'time_end', 
             'salary', 
             'views_vacancy',
+            'created_date',
             ]
-        
+    
+    
+    def get_created_date(self, obj):
+        return obj.created_date.strftime("%d.%m.%Y")
+
