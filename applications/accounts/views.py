@@ -273,7 +273,7 @@ class ProfileListView(ListAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['gender', 'nationality', 'language', 'date_of_birth', ]
+    filterset_fields = ['gender', 'nationality', 'date_of_birth', ]
 
 
 class UserView(ListAPIView):

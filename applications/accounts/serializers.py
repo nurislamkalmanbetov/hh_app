@@ -58,7 +58,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
 
-
     class Meta:
         model = Profile
         fields = (
@@ -67,10 +66,17 @@ class ProfileSerializer(serializers.ModelSerializer):
 
             'first_name', 'last_name',
             'user','profile_photo','gender','nationality',
-            'date_of_birth','inn','phone','language',
-            'language_level','whatsapp_phone_number',
+            'date_of_birth','inn','phone',
             
+            'language_1', 'language_level_1',
+            'language_2', 'language_level_2',
+            'language_3', 'language_level_3',
+            'language_4', 'language_level_4',
+
+            'whatsapp_phone_number',
         )
+
+
 
 
 
@@ -84,12 +90,16 @@ class ProfileListSerializer(serializers.ModelSerializer):
             'id',
             'user',
 
-
             'first_name', 'last_name',
-            'profile_photo','gender','nationality',
-            'date_of_birth','inn','phone','language',
-            'language_level','whatsapp_phone_number',
-    
+            'user','profile_photo','gender','nationality',
+            'date_of_birth','inn','phone',
+            
+            'language_1', 'language_level_1',
+            'language_2', 'language_level_2',
+            'language_3', 'language_level_3',
+            'language_4', 'language_level_4',
+
+            'whatsapp_phone_number',
         )
 
 

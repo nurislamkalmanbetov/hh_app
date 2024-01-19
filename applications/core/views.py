@@ -17,64 +17,56 @@ from rest_framework import viewsets
 # from schedule.models import Event
 from .models import *
 from .serializers import *
+from .permissions import IsEmployerPermisson
 
 
 class EmployerProfileListAPIView(ListAPIView):
-    #сделаем по int pk user id
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = EmployerProfileSerializers
     def get_queryset(self, *args, **kwargs):
-        user_id = self.kwargs['pk']
+        user_id = self.request.user.id
         queryset = EmployerCompany.objects.filter(user__id=user_id).select_related('user')
         return queryset
 
 
 class EmployerCompanyAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated]
-    def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get('user_id', None)
-        if user_id is not None:
-            employer_company = EmployerCompany.objects.select_related('user').filter(user__id=user_id)
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
 
-            serializer = EmployerCompanySerialzers(employer_company, many=True)
-            return Response(serializer.data)
-        else:
-            
-            return Response({'error': 'User ID parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+
+        employer_company = EmployerCompany.objects.select_related('user').filter(user__id=user_id)
+        serializer = EmployerCompanySerialzers(employer_company, many=True, context={'request': request})
+        return Response(serializer.data)
+
     @swagger_auto_schema(request_body=EmployerCompanySerialzers)
     def post(self, request, *args, **kwargs):
         serializer = EmployerCompanySerialzers(data=request.data)
         if serializer.is_valid():
-         
-            user = User.objects.get(id=request.data['user'])
-            if user.role != 'is_employer':
-                return Response({'error': 'User is not employer'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            serializer.save()
+            user = request.user
+            serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
-class EmployerCompanyUpdateView(APIView):
+
+class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = EmployerUpdateSerialzers
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
     @swagger_auto_schema(request_body=EmployerUpdateSerialzers)
     def patch(self, request, *args, **kwargs):
-        
-        user_id = kwargs['pk']
+        user_id = request.user.id
         user = User.objects.get(id=user_id)
-        if user.role != 'is_employer':
-            return Response({'error': 'User is not employer'}, status=status.HTTP_400_BAD_REQUEST)
+
         employer_company = EmployerCompany.objects.get(user=user)
         serializer = EmployerUpdateSerialzers(employer_company, data=request.data, partial=True)
         
         if serializer.is_valid():
-            
-            serializer.save()
-            return Response(serializer.data)
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
@@ -89,43 +81,31 @@ class CityListAPIView(ListAPIView):
 
 
 class BranchAPIView(APIView):
-    # parser_classes = (MultiPartParser, FormParser)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     @swagger_auto_schema(request_body=BranchSerializers)
     def post(self, request, *args, **kwargs):
         serializer = BranchSerializers(data=request.data)
         if serializer.is_valid():
-            employer_company_id = request.data.get('company')
-            if employer_company_id is None:
-                return Response({'error': 'Employer company ID is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-
-         
-            employer_company = EmployerCompany.objects.get(id=employer_company_id)
-
-            if employer_company.user.role != 'is_employer':
-                return Response({'error': 'User is not employer'}, status=status.HTTP_400_BAD_REQUEST)
+            user_id = request.user.id
+            employer_company = EmployerCompany.objects.get(user__id=user_id)
+            serializer.save(company=employer_company)
             
-            branch = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BranchUpdateAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     @swagger_auto_schema(request_body=BranchSerializers)
     def patch(self, request, *args, **kwargs):
         branch_id = self.kwargs['pk']
         branch = Branch.objects.get(id=branch_id)
-        
+        user = request.user
         serializer = BranchSerializers(branch, data=request.data, partial=True)
         
         if serializer.is_valid():
-            print(serializer)
-            serializer.save()
-            print(serializer)
-
-            # Возвращаем обновленные данные после успешного сохранения
+            serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -133,7 +113,7 @@ class BranchUpdateAPIView(APIView):
 
 class BranchListAPIView(ListAPIView):
     serializer_class = BranchListSerializers
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     def get_queryset(self):
         company_id = self.request.query_params.get('company_id', None)
         if not company_id:
@@ -144,7 +124,7 @@ class BranchListAPIView(ListAPIView):
         return queryset
         
 class BranchDetailListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = BranchSerializers
 
     def get_queryset(self):
@@ -160,34 +140,27 @@ class BranchDetailListAPIView(ListAPIView):
     
 
 class PositionEmployeeAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get('user_id', None)
-        if user_id is not None:
-            position_employee = PositionEmployee.objects.select_related('employer').filter(employer__id=user_id)
+        user_id = request.user.id
+        position_employee = PositionEmployee.objects.select_related('employer').filter(employer__id=user_id)
 
-            serializer = PositionEmployeeSerializers(position_employee, many=True)
-            return Response(serializer.data)
-        else:
-            
-            return Response({'error': 'User ID parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = PositionEmployeeSerializers(position_employee, many=True)
+        return Response(serializer.data)
 
     @swagger_auto_schema(request_body=PositionEmployeeSerializers)
     def post(self, request, *args, **kwargs):
         serializer = PositionEmployeeSerializers(data=request.data)
         if serializer.is_valid():
-            user_id = request.data.get('employer')
-            user = User.objects.get(id=user_id)
-            if user.role != 'is_employer':
-                return Response({'error': 'User is not employer'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            serializer.save()
+            user = request.user
+            serializer.save(employer=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PositionEmployeeDeleteAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
     def delete(self, request, *args, **kwargs):
         position_employee_id = kwargs['pk']
         position_employee = PositionEmployee.objects.get(id=position_employee_id)
@@ -195,28 +168,25 @@ class PositionEmployeeDeleteAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class VacancyCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
     @swagger_auto_schema(request_body=VacancySerializers)
     def post(self, request, *args, **kwargs):
         serializer = VacancySerializers(data=request.data)
         if serializer.is_valid():
-            user_id  = request.data.get('user_id')
+            user_id  = request.user.id
             branch = request.data.get('branch')
             position = request.data.get('position')
   
             user = EmployerCompany.objects.get(user__id=user_id)
+        
             #выводим только его филлиалы и проверяем есть ли у него такой филлиал
             branch = Branch.objects.filter(company=user).filter(id=branch).first()
             position = PositionEmployee.objects.filter(employer=user_id).filter(id=position).first()
          
-    
-            if user_id is None:
-                return Response({'error': 'User ID is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-            
+
             if user is None:
                 return Response({'error': 'Вы еще не добавили компанию'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            if user.user.role != 'is_employer':
-                return Response({'error': 'Вы не работодатель'}, status=status.HTTP_400_BAD_REQUEST)
             
             if branch is None:
                 return Response({'error': 'Branch is missing.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -224,12 +194,15 @@ class VacancyCreateAPIView(APIView):
             if position is None:
                 return Response({'error': 'Position is missing.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            serializer.save()
+            serializer.save(employer_company=user, branch=branch, position=position)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+
 class VacancyUpdateAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
     @swagger_auto_schema(request_body=VacancySerializers)
     def patch(self, request, *args, **kwargs):
         vacancy_id = kwargs['pk']
@@ -265,13 +238,12 @@ class VacancyDetailAPIView(APIView):
 
 
 class EmployerVacancyListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
     serializer_class = VacancyListSerializers
 
     def get_queryset(self):
-        user_id = self.request.query_params.get('user_id', None)
-        if not user_id:
-            return Vacancy.objects.none()
+        user_id = self.request.user.id
         
         user = get_object_or_404(EmployerCompany, user__id=user_id)
         queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch', 'position')

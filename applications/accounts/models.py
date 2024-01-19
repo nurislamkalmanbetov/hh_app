@@ -117,10 +117,6 @@ class Profile(models.Model):
         ('Кыргызский', _('Kyrgyz')),
         ('Английский', _('English')),
         ('Немецкий', _('German')),
-        ('Французский', _('French')),
-        ('Турецкий', _('Turkish')),
-        ('Китайский', _('Chinese')),
-        ('Другое', _('Another')),
     )
 
     KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES = (
@@ -131,6 +127,7 @@ class Profile(models.Model):
         ('C1', _('C1')),
         ('C2', _('C2')),
     )
+
     first_name = models.CharField(_('Имя'), max_length=50, blank=False)
     midlle_name = models.CharField(_('Отчество'), max_length=50, blank=True)
     last_name = models.CharField(_('Фамилия'), max_length=50, blank=False)
@@ -143,8 +140,19 @@ class Profile(models.Model):
     inn = models.CharField(_('ИНН'), max_length=50, blank=True)
     phone = models.CharField(_('Номер телефона'), max_length=50, blank=True, null=True, db_index=True)
 
-    language = models.CharField(_('Язык'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_CHOICES, blank=True)
-    language_level = models.CharField(_('Уровень языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
+    language_1 = models.CharField(_('Язык'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_CHOICES, blank=True)
+    language_level_1 = models.CharField(_('Уровень языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
+    
+    language_2 = models.CharField(_('Язык'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_CHOICES, blank=True)
+    language_level_2 = models.CharField(_('Уровень языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
+
+    language_3 = models.CharField(_('Язык'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_CHOICES, blank=True)
+    language_level_3 = models.CharField(_('Уровень языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
+        
+    language_4 = models.CharField(_('Язык'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_CHOICES, blank=True)
+    language_level_4 = models.CharField(_('Уровень языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
+    
+
     whatsapp_phone_number = models.CharField(_('Номер Whatsapp'), max_length=50, blank=True)
 
 

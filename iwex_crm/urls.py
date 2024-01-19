@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
 from django.conf.urls.static import static
 from django.conf.urls import handler404, handler500
 from django.contrib import admin
@@ -6,15 +8,13 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include, re_path
 from rest_framework import permissions
 from drf_yasg2.views import get_schema_view
+
 from drf_yasg2 import openapi
 
 
 
 
-
-
 from django.views.i18n import set_language
-
 
 
 schema_view = get_schema_view(
@@ -27,7 +27,11 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=(permissions.AllowAny,)
+
+    
+
+  
     # url='https://crm.iwex.kg',
 )
 

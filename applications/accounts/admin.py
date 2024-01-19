@@ -69,26 +69,30 @@ class WorkExperienceAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+
     list_display = (
         'id', 'user', 'first_name', 'last_name', 
-        'nationality','language','language_level',
-      
-
+        'nationality', 'language_1', 'language_level_1',
+        'language_2', 'language_level_2', 'language_3',
+        'language_level_3', 'language_4', 'language_level_4',
     )
-    search_fields = ('user__email', 'nationality', 'gender', 'language')
-    list_filter = ('gender', 'nationality', 'language', 'language_level',)
+
+    search_fields = ('user__email', 'nationality', 'gender', 'language_1', 'language_level_1',
+                     'language_2', 'language_level_2', 'language_3', 'language_level_3',
+                     'language_4', 'language_level_4',)
+    list_filter = ('gender', 'nationality', 'language_1', 'language_level_1',
+                   'language_2', 'language_level_2', 'language_3', 'language_level_3',
+                   'language_4', 'language_level_4',)
     fieldsets = (
         (None, {'fields': (
-
             'user', 'first_name', 'last_name', 'midlle_name',
             'profile_photo','gender','nationality','date_of_birth',
-            'inn','language','language_level',
-        
-
+            'inn', 'language_1', 'language_level_1',
+            'language_2', 'language_level_2', 'language_3',
+            'language_level_3', 'language_4', 'language_level_4',
             )}),
-
         ('Contact', {'fields': ('phone', 'whatsapp_phone_number')}),
- 
+        # ('Work and Rating', {'fields': ('work_experience', 'rating')}),
     )
 
 

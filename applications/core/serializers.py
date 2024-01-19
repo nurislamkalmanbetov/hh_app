@@ -24,6 +24,9 @@ class EmployerProfileSerializers(serializers.ModelSerializer):
 
 class EmployerCompanySerialzers(serializers.ModelSerializer):
     iin = serializers.CharField(required=False, allow_blank=True)
+
+    icon = serializers.ImageField(required=False, use_url=True,allow_null=True)
+  
     class Meta:
         model = EmployerCompany
         fields = [
@@ -37,13 +40,22 @@ class EmployerCompanySerialzers(serializers.ModelSerializer):
             'icon',
         ]
 
+
+    def get_url_icon(self, obj):  
+        request = self.context.get('request')
+        url_icon = obj.icon.url
+        return request.build_absolute_uri(url_icon)
+    
+    
+   
+
 class EmployerUpdateSerialzers(serializers.ModelSerializer):
         first_name = serializers.CharField(required=False)
         last_name = serializers.CharField(required=False)
         name = serializers.CharField(required=False)
         iin = serializers.CharField(required=False, allow_blank=True)
         description = serializers.CharField(required=False, allow_blank=True)
-        icon = serializers.ImageField(required=False, allow_null=True)
+        icon = serializers.ImageField(required=False, use_url=True,allow_null=True)
 
 
     
@@ -58,6 +70,16 @@ class EmployerUpdateSerialzers(serializers.ModelSerializer):
                 'description',
                 'icon',
             ]
+        
+        def update(self, instance, validated_data):
+            instance.first_name = validated_data.get('first_name', instance.first_name)
+            instance.last_name = validated_data.get('last_name', instance.last_name)
+            instance.name = validated_data.get('name', instance.name)
+            instance.iin = validated_data.get('iin', instance.iin)
+            instance.description = validated_data.get('description', instance.description)
+            instance.icon = validated_data.get('icon', instance.icon)
+            instance.save()
+            return instance
 
 
 class CitySerializers(serializers.ModelSerializer):
@@ -78,7 +100,6 @@ class BranchSerializers(serializers.ModelSerializer):
         fields = [
             'id',
             'city',
-            'company',
             'name',
             'address',
             'link_address',
@@ -163,7 +184,6 @@ class PositionEmployeeSerializers(serializers.ModelSerializer):
         model = PositionEmployee
         fields = [
             'id',
-            'employer',
             'name',
 
         ]
@@ -173,12 +193,10 @@ class PositionEmployeeSerializers(serializers.ModelSerializer):
 
 
 class VacancySerializers(serializers.ModelSerializer):
-    user_id = serializers.IntegerField(source='employer_company.user.id')
 
     class Meta:
         model = Vacancy
         fields = [
-            'user_id', 
             'branch',
             'position', 
             'duty', 
@@ -193,13 +211,6 @@ class VacancySerializers(serializers.ModelSerializer):
 
             ]
     
-
-    def create(self, validated_data):
-        user_id = validated_data.pop('employer_company')['user']['id']
-        user = User.objects.get(id=user_id)
-        employer_company = EmployerCompany.objects.get(user=user)
-        vacancy = Vacancy.objects.create(employer_company=employer_company, **validated_data)
-        return vacancy
 
     def update(self, instance, validated_data):
         instance.branch = validated_data.get('branch', instance.branch)
