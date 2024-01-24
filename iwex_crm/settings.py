@@ -36,10 +36,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ADsafaegksdgfsdlgsklgk2444234dsflmfsdlgsdklgk34flskdgd'
-
+SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG')
 
 if not DEBUG:
     sentry_sdk.init(
@@ -107,9 +106,9 @@ MIDDLEWARE = [
     
 ]
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = env.tuple('SECURE_PROXY_SSL_HEADER')
 
-ROOT_URLCONF = 'iwex_crm.urls'
+ROOT_URLCONF = env.str('ROOT_URLCONF')
 
 TEMPLATES = [
     {
@@ -137,11 +136,11 @@ WSGI_APPLICATION = 'iwex_crm.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'iwex_new',
-       'USER': 'postgres',
-       'PASSWORD':  '123',
-       'HOST': '127.0.0.1',
-       'PORT':'5433',
+       'NAME': env('NAME_DB'),
+       'USER': env('USER_DB'),
+       'PASSWORD':  env('PASSWORD_DB'),
+       'HOST': env('HOST_DB'),
+       'PORT':env('PORT_DB'),
    }
 }
 
@@ -191,7 +190,7 @@ EXTRA_LANG_INFO = {
     },
 }
 
-JQUERY_URL = True
+JQUERY_URL = env.bool('JQUERY_URL')
 
 LANG_INFO = dict(django.conf.locale.LANG_INFO.items())
 LANG_INFO.update(EXTRA_LANG_INFO.items())
@@ -217,22 +216,22 @@ LOCALE_PATHS = (
 TIME_ZONE = 'Asia/Bishkek'
 
 
-USE_I18N = True
+USE_I18N = env.bool('USE_I18N')
 
-USE_L10N = True
+USE_L10N = env.bool('USE_L10N')
 
-USE_TZ = True
+USE_TZ = env.bool('USE_TZ')
 
 
 # GMAIL SMTP
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'qvfflfeokayavhnp'
-EMAIL_HOST_USER = 'kalmanbetovnurislam19@gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = 'IWEX'
+EMAIL_BACKEND = env.str('EMAIL_BACKEND')
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_PORT = env.int('EMAIL_PORT')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL')
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
 
 default_app_config = 'applications.core.apps.CoreConfig'
 
@@ -244,17 +243,17 @@ default_app_config = 'applications.core.apps.CoreConfig'
 # EMAIL_USE_TLS = True
 # DEFAULT_FROM_EMAIL = 'IWEX'
 
-AUTH_USER_MODEL = 'accounts.User'
-JQUERY_URL = False
+AUTH_USER_MODEL = env.str('AUTH_USER_MODEL')
+
 
 # Login url for @login_required decorator
-LOGIN_URL = '/signin/'
+LOGIN_URL = env.str('LOGIN_URL')
 
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BROKER_URL = env.str('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env.str('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT = env.list('CELERY_ACCEPT_CONTENT')
+CELERY_TASK_SERIALIZER = env.str('CELERY_TASK_SERIALIZER')
+CELERY_RESULT_SERIALIZER = env.str('CELERY_RESULT_SERIALIZER')
 
 # Настройки для статических файлов
 STATIC_URL = '/static/'
@@ -268,8 +267,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
-CORS_ORIGIN_ALLOW_ALL = True
-IMPORT_EXPORT_USE_TRANSACTIONS = True
+CORS_ORIGIN_ALLOW_ALL = env.bool('CORS_ORIGIN_ALLOW_ALL')
+IMPORT_EXPORT_USE_TRANSACTIONS = env.bool('IMPORT_EXPORT_USE_TRANSACTIONS')
 
 
 # settings.py
@@ -284,3 +283,4 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 }
+

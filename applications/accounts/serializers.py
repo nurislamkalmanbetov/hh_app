@@ -51,62 +51,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         return data
-
-
-
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Profile
-        fields = (
-            'id',
-            'user',
-
-            'first_name', 'last_name',
-            'user','profile_photo','gender','nationality',
-            'date_of_birth','inn','phone',
-            
-            'language_1', 'language_level_1',
-            'language_2', 'language_level_2',
-            'language_3', 'language_level_3',
-            'language_4', 'language_level_4',
-
-            'whatsapp_phone_number',
-        )
-
-
-
-
-
-
-        
-class ProfileListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Profile
-        fields = (
-            'id',
-            'user',
-
-            'first_name', 'last_name',
-            'user','profile_photo','gender','nationality',
-            'date_of_birth','inn','phone',
-            
-            'language_1', 'language_level_1',
-            'language_2', 'language_level_2',
-            'language_3', 'language_level_3',
-            'language_4', 'language_level_4',
-
-            'whatsapp_phone_number',
-        )
-
+    
 
 
 class UserListSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=User.ROLE_CHOICES)
-
 
     class Meta:
         model = User
@@ -119,88 +68,140 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = (
+            'id', 'profile_photo',
+            'first_name', 'first_name_ru', 
+            'last_name', 'last_name_ru',
+            'middle_name', 'middle_name_ru',
+            'gender_ru', 'gender_en', 'gender_de',
+            'nationality_ru', 'nationality_en', 'nationality_de', 
+            'birth_country_ru', 'birth_country_en', 'birth_country_de',
+            'birth_region_ru', 'birth_region_en', 'birth_region_de',
+            'date_of_birth', 'phone', 'whatsapp_phone_number',
+            'german', 'english', 'russian',
+        )
+
+
+class ProfileAllSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = (
+            'id', 'profile_photo',
+            'first_name', 
+            'last_name',
+            'middle_name',
+            'gender_en',
+            'nationality_en',
+            'phone',
+            'german', 'english',
+            
+        )
+
+
+
+class UniversitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = University
+        fields = (
+            'id', 
+            'name_ru', 'name_en', 'name_de',
+            'degree_type_ru', 'degree_type_en', 'degree_type_de',
+            'faculty_ru', 'faculty_en', 'faculty_de',
+            'address_ru', 'address_en', 'address_de',
+            'phone_number_university_ru',
+            'email_university','website_university',
+            'start_date','end_date','total_years',
+            'kurs_year',
+            'start_holiday', 'end_holiday',
+        )
+
+
+class PassportAndTermSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PassportAndTerm
+        fields = (
+            'id', 
+            'number_id_passport', 'inn',
+            'passport_number', 'passport_date_of_issue',
+            'passport_end_time', 'pnr_code',
+            'pdf_file', 'term_date_time',
+        )
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payment
+        fields = (
+            'id', 
+            'total_amount','total_amount_in_words',
+            'initial_fee','initial_fee_in_words',
+            'average_fee','average_fee_in_words',
+            'final_fee','final_fee_in_words',
+            'debt','debt_in_words',
+            'payment_date','payment_accepted_by',
+            'payment_accepted_date','payment_accepted',
+        )
+
+
+class DealSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Deal 
+        fields = (
+            'id', 
+            'phone_number', 'participant',
+            'flight_date','steuer_id',
+            'name','stage',
+            'program','contract_date',
+            'inn','comment','hijab',
+        )
+
+
 
 class RatingSerializer(serializers.ModelSerializer):
-    user_email = serializers.EmailField(write_only=True)
-    employer_email = serializers.EmailField(write_only=True)
-    user_email_read = serializers.EmailField(source='user.email', read_only=True)
-    employer_email_read = serializers.EmailField(source='employer.email', read_only=True)
-    # new 
     value_rating = serializers.CharField(source='get_star_display', read_only=True)
     value_rating_write = serializers.ChoiceField(source='value_rating', choices=Rating.STAR_CHOICES, write_only=True, help_text="Рейтинг от 1-5")
 
+
     class Meta:
         model = Rating
-        # fields = (
-            # 'id', 'user_email_read', 'employer_email_read', 'value_rating', 
-            # 'rating_date', 'user_email', 'employer_email'
-            # )
         
-        # new 
         fields = (
-            'id', 'user_email_read', 'employer_email_read', 'value_rating', 
-            'rating_date', 'user_email', 'employer_email', 'value_rating_write'
+            'id', 
+            'value_rating', 
+            'rating_date', 
+            'user', 
+            'employer', 
+            'value_rating_write',
             )
-    
-    
-    def create(self, validated_data):
-        user_email = validated_data.pop('user_email', None)
-        employer_email = validated_data.pop('employer_email', None)
-
-        if not employer_email or not user_email:
-            raise ValidationError({'detail': 'Необходимо предоставить адреса электронной почты пользователя и работодателя.'})
-
-        employer = User.objects.filter(email=employer_email).first()
-        if not employer or employer.role != 'Работодатель':
-            raise ValidationError({'employer_email': 'Только работодатели могут создавать рейтинги или работодатель не найден.'})
-
-        user = User.objects.filter(email=user_email).first()
-        if not user:
-            raise ValidationError({'user_email': f"Пользователь с адресом электронной почты {user_email} не найден."})
-
-        if Rating.objects.filter(user=user, employer=employer).exists():
-            raise ValidationError('Рейтинг от этого работодателя для данного пользователя уже существует.')
-
-        rating = Rating.objects.create(user=user, employer=employer, **validated_data)
-        return rating
-
+        
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user_email = serializers.EmailField(write_only=True)
-    employer_email = serializers.EmailField(write_only=True)
-    user_email_read = serializers.EmailField(source='user.email', read_only=True)
-    employer_email_read = serializers.EmailField(source='employer.email', read_only=True)
-    rating__rating = serializers.IntegerField(source='rating.value_rating', read_only=True)
 
     class Meta:
         model = Review
-        fields = ('id', 'user_email_read', 'employer_email_read','rating__rating', 'text', 'creation_date', 'user_email', 'employer_email')
+        fields = (
+            'id', 
+            'rating', 
+            'text', 
+            'creation_date', 
+            'user', 
+            'employer',
+            )
 
-    def create(self, validated_data):
-        user_email = validated_data.pop('user_email', None)
-        employer_email = validated_data.pop('employer_email', None)
-
-        if not employer_email or not user_email:
-            raise ValidationError({'detail': 'Необходимо предоставить адреса электронной почты пользователя и работодателя.'})
-
-        employer = User.objects.filter(email=employer_email).first()
-        if not employer or employer.role != 'Работодатель':
-            raise ValidationError({'employer_email': 'Только работодатели могут создавать отзывы или работодатель не найден.'})
-
-        user = User.objects.filter(email=user_email).first()
-        if not user:
-            raise ValidationError({'user_email': f"Пользователь с адресом электронной почты {user_email} не найден."})
-
-        review = Review.objects.create(user=user, employer=employer, **validated_data)
-        return review
-    
 
 
 
 class WorkExperienceSerializer(serializers.ModelSerializer):
-    user_email = serializers.EmailField(write_only=True)
-    user_email_read = serializers.EmailField(source='user.email', read_only=True)
     type_company = serializers.ChoiceField(choices=WorkExperience.TYPE_OF_COMPANY_CHOICES, help_text="Тип компании")
     start_date = serializers.DateField(help_text="Дата начала работы")
     end_date = serializers.DateField(help_text="Дата окончания работы")
@@ -209,29 +210,18 @@ class WorkExperienceSerializer(serializers.ModelSerializer):
         model = WorkExperience
         fields = (
             'id', 
-            'user_email_read', 
-            'type_company', 'company', 'position', 'start_date', 'end_date', 'responsibilities', 'country', 
-            'user_email'
+            'user',
+            'type_company', 
+            'company', 
+            'position', 
+            'start_date', 
+            'end_date', 
+            'responsibilities', 
+            'country', 
         )
-
-    def create(self, validated_data):
-        user_email = validated_data.pop('user_email', None)
-
-        if not user_email:
-            raise ValidationError({'detail': 'Необходимо предоставить адрес электронной почты пользователя.'})
-
-        user = User.objects.filter(email=user_email).first()
-        if not user:
-            raise ValidationError({'user_email': f"Пользователь с адресом электронной почты {user_email} не найден."})
-
-        work_experience = WorkExperience.objects.create(user=user, **validated_data)
-        return work_experience
-    
 
 
 class WorkScheduleSerializer(serializers.ModelSerializer):
-    user_email = serializers.EmailField(write_only=True)
-    user_email_read = serializers.EmailField(source='user.email', read_only=True)
     
     monday = serializers.ChoiceField(choices=WorkSchedule.TIME_CHOICES)
     tuesday = serializers.ChoiceField(choices=WorkSchedule.TIME_CHOICES)
@@ -246,9 +236,18 @@ class WorkScheduleSerializer(serializers.ModelSerializer):
         model = WorkSchedule
         fields = (
             'id',
-            'user_email', 'user_email_read',
-            'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
-            'custom', 'custom_start_time', 'custom_end_time',
+            'user',
+
+            'monday', 
+            'tuesday', 
+            'wednesday', 
+            'thursday', 
+            'friday', 
+            'saturday', 
+            'sunday',
+            'custom', 
+            'custom_start_time', 
+            'custom_end_time',
         )
 
     def to_representation(self, instance):

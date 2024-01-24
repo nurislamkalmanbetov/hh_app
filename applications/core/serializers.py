@@ -208,6 +208,8 @@ class VacancySerializers(serializers.ModelSerializer):
             'salary', 
             'increase_choices', 
             'description',
+            'language_german',
+            'language_english',
 
             ]
     
@@ -258,6 +260,8 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
             'increase_choices', 
             'description',
             'views_vacancy',
+            'language_german',
+            'language_english',
             'created_date',
 
 
@@ -266,7 +270,10 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime("%d.%m.%Y")
 
-
+    def get_employer_company_icon(self, obj):
+        request = self.context.get('request')
+        url_icon = obj.employer_company.icon.url
+        return request.build_absolute_uri(url_icon)
 
 
 class VacancyListSerializers(serializers.ModelSerializer):
@@ -302,3 +309,16 @@ class VacancyListSerializers(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime("%d.%m.%Y")
 
+
+class InvitationSerializers(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Invitation
+        fields = [
+            'id',
+            'vacancy',
+            'user',
+            'created_date',
+        ]
+
+    

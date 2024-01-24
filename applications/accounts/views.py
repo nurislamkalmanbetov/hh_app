@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, login
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import (exceptions, filters, generics, mixins, status,
-                            viewsets)
-from rest_framework.generics import ListAPIView, CreateAPIView
+
+from rest_framework import (exceptions, filters, generics, mixins, status, viewsets)
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
@@ -13,16 +16,19 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.core.mail import send_mail
-from .serializers import *
-from django.template.loader import render_to_string
-from random import randint
-from django.contrib.auth import authenticate, login
-from rest_framework.permissions import IsAuthenticated
-#импортируем ObtainAuthToken
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
+
+from drf_yasg2.utils import swagger_auto_schema
+from random import randint
+
+from .permissions import IsEmployeePermisson
+from applications.core.permissions import IsEmployerPermisson
+from .serializers import *
+
 
 User = get_user_model()
+
 
 def send_custom_email(email, subject, template_name, context):
     html_message = render_to_string(template_name, context)
@@ -111,7 +117,6 @@ class ResetPasswordAPIView(APIView):
 
         if user is None:
             return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
-
         verification_code = randint(10000, 99999)
         user.verification_code = verification_code
         user.verification_code_created_at = timezone.now()
@@ -199,7 +204,6 @@ class SetPasswordAPIView(APIView):
         return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
 
@@ -242,59 +246,91 @@ class AccessTokenView(ObtainAuthToken):
             "email": user.email, 
             "role": user.role,
         })
-
-
-class ProfileView(generics.CreateAPIView):
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()  
-    parser_classes = (MultiPartParser, FormParser)
-
-    def perform_create(self, serializer):
-        user_data = self.request.data.get('user')
-        print(user_data)
-        try:
-            user = User.objects.get(id=user_data)
-        except User.DoesNotExist:
-            raise serializers.ValidationError({'detail': 'Вы не зарегистрированы'})
-        
-
-        serializer.save(user=user)
-
-        # Устанавливаем поле is_active пользователя в значение True
-        user.is_active = True
-        user.save()
-            
-    def post(self, request, *args, **kwargs):
-        
-        return self.create(request, *args, **kwargs)
-
-
-class ProfileListView(ListAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileListSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['gender', 'nationality', 'date_of_birth', ]
+    
 
 
 class UserView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     parser_classes = (MultiPartParser, FormParser)
     filterset_fields = ['email', 'role']
+    
+
+class ProfileListView(RetrieveAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['id']
+
+    def get_queryset(self):
+        return Profile.objects.all()
+
+    def get_object(self):
+        user_id = self.kwargs['id']  # Получение значения айди из URL
+        return self.get_queryset().filter(user_id=user_id).first()
+    
+
+
+class ProfileListAllView(ListAPIView):
+    serializer_class = ProfileAllSerializer
+    filter_fields = ['gender_en', 'nationality_en', 'german', 'english',]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Profile.objects.all()
+
+
+
+class UniversityListView(ListAPIView):
+    queryset = University.objects.all()
+    serializer_class = UniversitySerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class PassportAndTermListView(ListAPIView):
+    queryset = PassportAndTerm.objects.all()
+    serializer_class = PassportAndTermSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+
+
+
+class PaymentListView(ListAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+
+
+class DealListView(ListAPIView):
+    queryset = Deal.objects.all()
+    serializer_class = DealSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+
+
 
 
 class RatingListView(ListAPIView):
-    queryset = Rating.objects.all()
     serializer_class = RatingSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     parser_classes = (MultiPartParser, FormParser)
     filterset_fields = ['value_rating',]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Rating.objects.filter(user=user_id)
     
 
 class RatingCreateView(CreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     parser_classes = (MultiPartParser, FormParser)
 
 
@@ -309,29 +345,36 @@ class RatingCreateView(CreateAPIView):
             # Если ошибка валидации связана с дублированием рейтинга
             if 'Рейтинг от этого работодателя для данного пользователя уже существует' in str(e):
                 return Response({'detail': str(e)}, status=status.HTTP_200_OK)
-            
+            # Все остальные ошибки валидации
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 
 class RatingRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['value_rating', ]
     parser_classes = (MultiPartParser, FormParser)
 
 
+
 class ReviewCreateAPIView(generics.ListCreateAPIView):
-    queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['rating__value_rating', ]
     parser_classes = (MultiPartParser, FormParser)
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Review.objects.filter(user=user_id)
 
 
 class WorkExperienceAPIView(generics.ListCreateAPIView):
     queryset = WorkExperience.objects.all()
     serializer_class = WorkExperienceSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['type_company', 'company', 'position', 'country', ]
     parser_classes = (MultiPartParser, FormParser)
@@ -340,7 +383,7 @@ class WorkExperienceAPIView(generics.ListCreateAPIView):
 class WorkScheduleAPIView(generics.ListCreateAPIView):
     queryset = WorkSchedule.objects.all()
     serializer_class = WorkScheduleSerializer
+    permission_classes = [IsAuthenticated, IsEmployeePermisson]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['custom',]
     parser_classes = (MultiPartParser, FormParser)
-

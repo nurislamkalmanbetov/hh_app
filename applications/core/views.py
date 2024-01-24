@@ -43,9 +43,11 @@ class EmployerCompanyAPIView(APIView):
     @swagger_auto_schema(request_body=EmployerCompanySerialzers)
     def post(self, request, *args, **kwargs):
         serializer = EmployerCompanySerialzers(data=request.data)
+   
         if serializer.is_valid():
             user = request.user
             serializer.save(user=user)
+       
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -228,13 +230,21 @@ class VacancyListAPIView(ListAPIView):
 
 class VacancyDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         vacancy_id = kwargs['pk']
-        vacancy = Vacancy.objects.filter(id=vacancy_id).select_related('employer_company', 'branch', 'position').first()
+        vacancy = Vacancy.objects.filter(id=vacancy_id).select_related(
+            'employer_company',
+            'branch',
+            'position',
+        ).first()
+
         if vacancy is None:
             return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = VacancyDetailSerializers(vacancy)
+
+        serializer = VacancyDetailSerializers(vacancy, context={'request': request})
         return Response(serializer.data)
+
 
 
 class EmployerVacancyListAPIView(ListAPIView):
@@ -248,3 +258,5 @@ class EmployerVacancyListAPIView(ListAPIView):
         user = get_object_or_404(EmployerCompany, user__id=user_id)
         queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch', 'position')
         return queryset
+
+

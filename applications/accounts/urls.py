@@ -8,12 +8,18 @@ urlpatterns = [
     path('reset-password/', ResetPasswordAPIView.as_view(), name='reset-password'),
     path('verify-email/', VerifyEmailAPIView.as_view(), name='verify-email'),
     path('set-password/', SetPasswordAPIView.as_view(), name='set-password'),
-    path('resend-password-confirm/', ResetPasswordAPIView.as_view(), name='ResetPasswordConfirm'),
     path('signin/', UserLoginView.as_view(), name='signin'),
     path('token/', AccessTokenView.as_view(), name='token_refresh'),
     # Profile
-    path('profiles/', ProfileView.as_view(), name='profile'),
-    path('profiles-list/', ProfileListView.as_view(), name='profile-list'),
+    path('profile-detail/<int:id>/', ProfileListView.as_view(), name='profile-list'),
+    path('profiles-list-all/', ProfileListAllView.as_view(), name='profile-list-all'),
+    # University
+    path('university-list/', UniversityListView.as_view(), name='university-list'),
+    # Passport's
+    path('passport-term-list/', PassportAndTermListView.as_view(), name='passport-term-list'),
+    # Payment & Deal
+    path('payment-list/', PaymentListView.as_view(), name='payment-list'),
+    path('deal-list/', DealListView.as_view(), name='deal-list'),
     # User
     path('user-lists/', UserView.as_view(), name='user-list'),
     # Rating 
@@ -28,6 +34,3 @@ urlpatterns = [
     path('work-schedule-list/', WorkScheduleAPIView.as_view(), name='work-schedule-list'),
     
 ]
-
-
-

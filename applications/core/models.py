@@ -34,7 +34,7 @@ class City(models.Model):
         verbose_name_plural = _('Города')
 
 class Branch(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name=_('Город'))
+    city = models.ForeignKey(City, on_delete=models.SET_NULL,null=True, verbose_name=_('Город'))
     company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Компания'))
     name = models.CharField(_('Название филлиала'), max_length=255)
     address = models.CharField(_('Текстовый адрес'), max_length=255, blank=True, default='')
@@ -103,17 +103,24 @@ class PositionEmployee(models.Model):
 
 class Vacancy(models.Model):
     GENDER_CHOICES = (
-        ('Мужской', _('Мужской')),
-        ('Женский', _('Женский')),
-        ('Неважно', _('Неважно')),
-    
+        ('Male', _('Мужской')),
+        ('Female', _('Женский')),
+        ('Any', _('Неважно')),
     )
 
+    KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES = (
+        ('A1', 'A1'),
+        ('A2', 'A2'),
+        ('B1', 'B1'),
+        ('B2', 'B2'),
+        ('C1', 'C1'),
+        ('C2', 'C2'),
+    )
 
     employer_company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
   
-    branch = models.ForeignKey(Branch, on_delete=models.PROTECT, verbose_name=_('Филиал'))
-    position = models.ForeignKey(PositionEmployee, on_delete=models.PROTECT, verbose_name=_('Позиция'))
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL,null=True, verbose_name=_('Филиал'))
+    position = models.ForeignKey(PositionEmployee, on_delete=models.SET_NULL,null=True, verbose_name=_('Позиция'))
     duty = models.TextField(_('Обязанности'),)
     experience = models.TextField(_('Опыт работы'),)
     clothingform = models.CharField(max_length=255, verbose_name=_('Форма одежды'))
@@ -128,6 +135,8 @@ class Vacancy(models.Model):
     increase_choices = models.BooleanField(_('Повышение зарплаты'), default=False)
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
     updated_date = models.DateTimeField(auto_now=True, verbose_name=_('Дата обновления'))
+    language_german = models.CharField(_('Знание немецкого языка'), max_length=50,   choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True, null=True)
+    language_english = models.CharField(_('Знание английского языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True,null=True)
     is_active = models.BooleanField(_('Активный'), default=True)
 
     def __str__(self):
@@ -138,21 +147,15 @@ class Vacancy(models.Model):
         verbose_name_plural = _('Вакансии')
 
 
-# #отклик на вакансию
-# class ResponseVacancy(models.Model):
-#     STATUS_CHOICES = (
-#         ('На рассмотрении', _('На рассмотрении')),
-#         ('Принят', _('Принят')),
-#         ('Отказано', _('Отказано')),
-#     )
-#     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name=_('Вакансия'))
-#     user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name='respone_profile',verbose_name=_('Пользователь'))
 
-#     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+class Invitation(models.Model):
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name=_('Вакансия'))
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, verbose_name=_('Пользователь'))
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
 
-#     def __str__(self):
-#         return self.vacancy.employer_company.name
+    def __str__(self):
+        return self.vacancy.employer_company.name
 
-#     class Meta:
-#         verbose_name = _('Отклик на вакансию')
-#         verbose_name_plural = _('Отклики на вакансии')
+    class Meta:
+        verbose_name = _('Приглашение на вакансию')
+        verbose_name_plural = _('Приглашения на вакансии')
