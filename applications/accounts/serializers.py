@@ -54,62 +54,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     
 
 
-class UserListSerializer(serializers.ModelSerializer):
-    role = serializers.ChoiceField(choices=User.ROLE_CHOICES)
-
-    class Meta:
-        model = User
-        fields = (
-            'id', 'email',
-            'role', 'is_staff', 'is_superuser',
-            'is_active', 'is_verified_email',
-            'verification_code_created_at', 'registered_at',
-        )
-
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Profile
-        fields = (
-            'id', 'profile_photo',
-            'first_name', 'first_name_ru', 
-            'last_name', 'last_name_ru',
-            'middle_name', 'middle_name_ru',
-            'gender_ru', 'gender_en', 'gender_de',
-            'nationality_ru', 'nationality_en', 'nationality_de', 
-            'birth_country_ru', 'birth_country_en', 'birth_country_de',
-            'birth_region_ru', 'birth_region_en', 'birth_region_de',
-            'date_of_birth', 'phone', 'whatsapp_phone_number',
-            'german', 'english', 'russian',
-        )
-
-
-class ProfileAllSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Profile
-        fields = (
-            'id', 'profile_photo',
-            'first_name', 
-            'last_name',
-            'middle_name',
-            'gender_en',
-            'nationality_en',
-            'phone',
-            'german', 'english',
-            
-        )
-
-
 
 class UniversitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = University
         fields = (
-            'id', 
+            'id',
+            'user',
             'name_ru', 'name_en', 'name_de',
             'degree_type_ru', 'degree_type_en', 'degree_type_de',
             'faculty_ru', 'faculty_en', 'faculty_de',
@@ -120,6 +72,63 @@ class UniversitySerializer(serializers.ModelSerializer):
             'kurs_year',
             'start_holiday', 'end_holiday',
         )
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    universities = UniversitySerializer(many=True, read_only=True)
+    class Meta:
+        model = Profile
+        fields = (
+            'id', 
+            'profile_photo',
+            'first_name', 
+            'first_name_ru', 
+            'last_name', 
+            'last_name_ru',
+            'middle_name', 
+            'middle_name_ru',
+            'gender_ru', 
+            'gender_en', 
+            'gender_de',
+            'nationality_ru', 
+            'nationality_en', 
+            'nationality_de', 
+            'birth_country_ru', 
+            'birth_country_en', 
+            'birth_country_de',
+            'birth_region_ru', 
+            'birth_region_en', 
+            'birth_region_de',
+            'date_of_birth', 
+            'phone', 
+            'whatsapp_phone_number',
+            'german', 
+            'english', 
+            'russian',
+            'universities',
+        )
+
+
+class ProfileAllSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Profile
+        fields = (
+            'id', 'profile_photo',
+            'first_name', 
+            'last_name',
+            'gender_en',
+            'nationality_en',
+            'date_of_birth',
+            'phone',
+            'german', 
+            'english',
+            
+        )
+
+
+
+
 
 
 class PassportAndTermSerializer(serializers.ModelSerializer):

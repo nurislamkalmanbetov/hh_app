@@ -149,12 +149,17 @@ class Vacancy(models.Model):
 
 
 class Invitation(models.Model):
+    employer = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name=_('Вакансия'))
     user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, verbose_name=_('Пользователь'))
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+    is_rejected = models.BooleanField(_('Отклонено'), default=False)
+    is_accepted = models.BooleanField(_('Принято'), default=False)
+    is_work = models.BooleanField(_('Работает'), default=False)
 
     def __str__(self):
         return self.vacancy.employer_company.name
+    
 
     class Meta:
         verbose_name = _('Приглашение на вакансию')

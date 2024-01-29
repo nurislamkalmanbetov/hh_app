@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from django.utils.translation import gettext_lazy as _
 
 class SingletonModel(models.Model):
 
@@ -34,20 +35,20 @@ class SiteSettings(SingletonModel):
         return 'Настройки CRM'
 
     class Meta:
-        verbose_name = 'Настройки CRM'
-        verbose_name_plural = 'Настройки CRM'
+        verbose_name = _('Настройки CRM')
+        verbose_name_plural = _('Настройки CRM')
 
 
 class FooterLink(models.Model):
-    instagram_link = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ссылка на Instagram")
-    facebook_link = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ссылка на Facebook")
-    whatsapp_link = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ссылка на WhatsApp")
-    phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name="Номер телефона")
-    address = models.CharField(max_length=200, blank=True, null=True, verbose_name="Адрес")
+    instagram_link = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("Ссылка на Instagram"))
+    facebook_link = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("Ссылка на Facebook"))
+    whatsapp_link = models.CharField(max_length=100, blank=True, null=True, verbose_name=_("Ссылка на WhatsApp"))
+    phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name=_("Номер телефона"))
+    address = models.CharField(max_length=200, blank=True, null=True, verbose_name=_("Адрес"))
     email = models.EmailField(blank=True, null=True, verbose_name="Email")
-    created_at = models.DateTimeField(default=timezone.now, verbose_name="Дата создания")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    created_by = models.ForeignKey('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_footer_links', verbose_name="Создано пользователем")
+    created_at = models.DateTimeField(default=timezone.now, verbose_name=_("Дата создания"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Дата обновления"))
+    created_by = models.ForeignKey('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_footer_links', verbose_name=_("Создано пользователем"))
     text = RichTextField(verbose_name="Текст для футера")
 
     def str(self):
@@ -59,21 +60,21 @@ class FooterLink(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Информация внизу сайта'
-        verbose_name_plural = 'Информации внизу сайта'
+        verbose_name = _('Информация внизу сайта')
+        verbose_name_plural = _('Информации внизу сайта')
 
 
 class Logo(models.Model):
-    image = models.ImageField(upload_to='logos/', verbose_name='Изображение логотипа')
-    description = models.TextField(blank=True, verbose_name='Описание логотипа')
-    created_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name='Создано пользователем')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата последнего обновления')
-    external_url = models.URLField(blank=True, verbose_name='Внешний URL логотипа')
+    image = models.ImageField(upload_to='logos/', verbose_name=_('Изображение логотипа'))
+    description = models.TextField(blank=True, verbose_name=_('Описание логотипа'))
+    created_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Создано пользователем'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата создания'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Дата последнего обновления'))
+    external_url = models.URLField(blank=True, verbose_name=_('Внешний URL логотипа'))
 
     def __str__(self):
         return f"Логотип {self.id}"
     
     class Meta:
-        verbose_name = 'Лого сайта'
-        verbose_name_plural = 'Лого сайтов'
+        verbose_name = _('Лого сайта')
+        verbose_name_plural = _('Лого сайтов')

@@ -25,6 +25,7 @@ from random import randint
 from .permissions import IsEmployeePermisson
 from applications.core.permissions import IsEmployerPermisson
 from .serializers import *
+from .filters import ProfileFilter
 
 
 User = get_user_model()
@@ -76,9 +77,6 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = User.objects.filter(email=serializer.validated_data['email']).first()
-
-            if user is not None and user.is_verified_email:
-                return Response({"error": "Пользователь уже существует"}, status=status.HTTP_400_BAD_REQUEST)
 
             user = User.objects.create(
                 email=serializer.validated_data['email'],
@@ -249,141 +247,130 @@ class AccessTokenView(ObtainAuthToken):
     
 
 
-class UserView(ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserListSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    parser_classes = (MultiPartParser, FormParser)
-    filterset_fields = ['email', 'role']
-    
 
-class ProfileListView(RetrieveAPIView):
+class ProfileDetailView(ListAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['id']
 
     def get_queryset(self):
-        return Profile.objects.all()
-
-    def get_object(self):
-        user_id = self.kwargs['id']  # Получение значения айди из URL
-        return self.get_queryset().filter(user_id=user_id).first()
+        profile_id = self.kwargs['id']
+        return Profile.objects.filter(id=profile_id)
     
-
 
 class ProfileListAllView(ListAPIView):
     serializer_class = ProfileAllSerializer
     filter_fields = ['gender_en', 'nationality_en', 'german', 'english',]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsEmployerPermisson]
 
     def get_queryset(self):
         return Profile.objects.all()
 
 
 
-class UniversityListView(ListAPIView):
-    queryset = University.objects.all()
-    serializer_class = UniversitySerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    parser_classes = (MultiPartParser, FormParser)
+# class UniversityListView(ListAPIView):
+#     queryset = University.objects.all()
+#     serializer_class = UniversitySerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+#     parser_classes = (MultiPartParser, FormParser)
 
 
-class PassportAndTermListView(ListAPIView):
-    queryset = PassportAndTerm.objects.all()
-    serializer_class = PassportAndTermSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-
-
-
-class PaymentListView(ListAPIView):
-    queryset = Payment.objects.all()
-    serializer_class = PaymentSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-
-
-class DealListView(ListAPIView):
-    queryset = Deal.objects.all()
-    serializer_class = DealSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+# class PassportAndTermListView(ListAPIView):
+#     queryset = PassportAndTerm.objects.all()
+#     serializer_class = PassportAndTermSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
 
 
 
+# class PaymentListView(ListAPIView):
+#     queryset = Payment.objects.all()
+#     serializer_class = PaymentSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
 
-class RatingListView(ListAPIView):
-    serializer_class = RatingSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    parser_classes = (MultiPartParser, FormParser)
-    filterset_fields = ['value_rating',]
 
-    def get_queryset(self):
-        user_id = self.request.user.id
-        return Rating.objects.filter(user=user_id)
+# class DealListView(ListAPIView):
+#     queryset = Deal.objects.all()
+#     serializer_class = DealSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+
+
+
+
+# class RatingListView(ListAPIView):
+#     serializer_class = RatingSerializer
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     parser_classes = (MultiPartParser, FormParser)
+#     filterset_fields = ['value_rating',]
+
+#     def get_queryset(self):
+#         user_id = self.request.user.id
+#         return Rating.objects.filter(user=user_id)
     
 
-class RatingCreateView(CreateAPIView):
-    queryset = Rating.objects.all()
-    serializer_class = RatingSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    parser_classes = (MultiPartParser, FormParser)
+# class RatingCreateView(CreateAPIView):
+#     queryset = Rating.objects.all()
+#     serializer_class = RatingSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     parser_classes = (MultiPartParser, FormParser)
 
 
-    def post(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        except ValidationError as e:
-            # Если ошибка валидации связана с дублированием рейтинга
-            if 'Рейтинг от этого работодателя для данного пользователя уже существует' in str(e):
-                return Response({'detail': str(e)}, status=status.HTTP_200_OK)
-            # Все остальные ошибки валидации
-            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request, *args, **kwargs):
+#         try:
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             headers = self.get_success_headers(serializer.data)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#         except ValidationError as e:
+#             # Если ошибка валидации связана с дублированием рейтинга
+#             if 'Рейтинг от этого работодателя для данного пользователя уже существует' in str(e):
+#                 return Response({'detail': str(e)}, status=status.HTTP_200_OK)
+#             # Все остальные ошибки валидации
+#             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 
-class RatingRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Rating.objects.all()
-    serializer_class = RatingSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['value_rating', ]
-    parser_classes = (MultiPartParser, FormParser)
+# class RatingRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Rating.objects.all()
+#     serializer_class = RatingSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+#     filterset_fields = ['value_rating', ]
+#     parser_classes = (MultiPartParser, FormParser)
 
 
 
-class ReviewCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['rating__value_rating', ]
-    parser_classes = (MultiPartParser, FormParser)
+# class ReviewCreateAPIView(generics.ListCreateAPIView):
+#     serializer_class = ReviewSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+#     filterset_fields = ['rating__value_rating', ]
+#     parser_classes = (MultiPartParser, FormParser)
 
-    def get_queryset(self):
-        user_id = self.request.user.id
-        return Review.objects.filter(user=user_id)
-
-
-class WorkExperienceAPIView(generics.ListCreateAPIView):
-    queryset = WorkExperience.objects.all()
-    serializer_class = WorkExperienceSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['type_company', 'company', 'position', 'country', ]
-    parser_classes = (MultiPartParser, FormParser)
+#     def get_queryset(self):
+#         user_id = self.request.user.id
+#         return Review.objects.filter(user=user_id)
 
 
-class WorkScheduleAPIView(generics.ListCreateAPIView):
-    queryset = WorkSchedule.objects.all()
-    serializer_class = WorkScheduleSerializer
-    permission_classes = [IsAuthenticated, IsEmployeePermisson]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['custom',]
-    parser_classes = (MultiPartParser, FormParser)
+# class WorkExperienceAPIView(generics.ListCreateAPIView):
+#     queryset = WorkExperience.objects.all()
+#     serializer_class = WorkExperienceSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+#     filterset_fields = ['type_company', 'company', 'position', 'country', ]
+#     parser_classes = (MultiPartParser, FormParser)
+
+
+# class WorkScheduleAPIView(generics.ListCreateAPIView):
+#     queryset = WorkSchedule.objects.all()
+#     serializer_class = WorkScheduleSerializer
+#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+#     filterset_fields = ['custom',]
+#     parser_classes = (MultiPartParser, FormParser)
+
+
+

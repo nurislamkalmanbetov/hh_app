@@ -64,12 +64,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'schedule',
+    # 'schedule',
     'easy_thumbnails',
     'storages',
     'applications.accounts',
     'applications.core',
-    'applications.bot',
+    # 'applications.bot',
     'applications.common',
     'drf_yasg2',
     'rest_framework',
@@ -181,23 +181,23 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-EXTRA_LANG_INFO = {
-    'ky': {
-        'bidi': False,  # right-to-left
-        'code': 'ky',
-        'name': 'Kyrgyz',
-        'name_local': 'Кыргызча', #unicode codepoints here
-    },
-}
+# EXTRA_LANG_INFO = {
+#     'ky': {
+#         'bidi': False,  # right-to-left
+#         'code': 'ky',
+#         'name': 'Kyrgyz',
+#         'name_local': 'Кыргызча', #unicode codepoints here
+#     },
+# }
 
 JQUERY_URL = env.bool('JQUERY_URL')
 
-LANG_INFO = dict(django.conf.locale.LANG_INFO.items())
-LANG_INFO.update(EXTRA_LANG_INFO.items())
-django.conf.locale.LANG_INFO = LANG_INFO
+# LANG_INFO = dict(django.conf.locale.LANG_INFO.items())
+# LANG_INFO.update(EXTRA_LANG_INFO.items())
+# django.conf.locale.LANG_INFO = LANG_INFO
 
 # Languages using BiDi (right-to-left) layout
-global_settings.LANGUAGES.extend([('ky', 'Кыргызча'), ])
+# global_settings.LANGUAGES.extend([('ky', 'Кыргызча'), ])
 
 LANGUAGE_CODE = 'ru-ru'
 
@@ -205,7 +205,6 @@ LANGUAGES = (
     ('ru', 'Russian'),
     ('de', 'German'),
     ('en', 'English'),
-    ('ky', 'Kyrgyz'),
 )
 
 LOCALE_PATHS = (

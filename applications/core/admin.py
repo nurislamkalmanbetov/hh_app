@@ -43,9 +43,17 @@ class VacancyAdmin(admin.ModelAdmin):
         model = Vacancy
 
 
+class InvitationAdmin(admin.ModelAdmin):
+    list_display = ['id','employer','vacancy','user', 'is_rejected', 'is_accepted']
+    ordering = ('id',)
+    class Meta:
+        model = Invitation
+
+
 admin.site.register(City)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(ReviewBranch)
 admin.site.register(PositionEmployee, PositionEmployeeAdmin)
 admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)
+admin.site.register(Invitation, InvitationAdmin)

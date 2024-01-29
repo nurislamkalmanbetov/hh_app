@@ -26,7 +26,7 @@ services:
     build: . 
     restart: always
     command: >
-          bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py makemessages -l de && python manage.py compilemessages && python  manage.py runserver 0.0.0.0:8005"
+          bash -c "python manage.py migrate && python  manage.py runserver 0.0.0.0:8005"
     ports:
           - "8005:8005"
     env_file:
@@ -34,7 +34,7 @@ services:
     depends_on:
       - db 
     volumes:
-      - /home/iwex-crm-master/media:/app/media
+      - .:/app
 
 
 volumes:

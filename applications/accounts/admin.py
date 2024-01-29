@@ -64,8 +64,8 @@ class ProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_filter = ('gender_ru', 'nationality_ru', 'english', 'russian', 'german',)
     fieldsets = (
         (None, {'fields': (
-            'user', 'first_name', 'first_name_ru', 'last_name', 'last_name_ru',
-            'middle_name', 'middle_name_ru', 'profile_photo',
+            'user', 'first_name', 'first_name_ru','first_name_de', 'last_name', 'last_name_ru','last_name_de',
+            'middle_name', 'middle_name_ru','middle_name_de', 'profile_photo',
             'gender_ru', 'gender_en', 'gender_de',
             'nationality_ru', 'nationality_en', 'nationality_de',
             'birth_country_ru', 'birth_country_en', 'birth_country_de',

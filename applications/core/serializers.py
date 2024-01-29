@@ -1,6 +1,7 @@
 from applications.accounts.models import User
 from rest_framework import serializers
 from .models import *
+from applications.accounts.serializers import ProfileAllSerializer
 from django.contrib.auth import get_user_model
 # from schedule.models import Event
 
@@ -20,6 +21,7 @@ class EmployerProfileSerializers(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'name',
+            'description',
         ]
 
 class EmployerCompanySerialzers(serializers.ModelSerializer):
@@ -141,41 +143,41 @@ class BranchListSerializers(serializers.ModelSerializer):
 
     
 
-class ReviewBranchSerializers(serializers.ModelSerializer):
+# class ReviewBranchSerializers(serializers.ModelSerializer):
 
-    class Meta:
-        model = ReviewBranch
-        fields = [
-            'id',
-            'branch',
-            'user',
-            'review',
-            'created_date',
-        ]
+#     class Meta:
+#         model = ReviewBranch
+#         fields = [
+#             'id',
+#             'branch',
+#             'user',
+#             'review',
+#             'created_date',
+#         ]
 
 
-class RatingEmployerCompanySerializers(serializers.ModelSerializer):
+# class RatingEmployerCompanySerializers(serializers.ModelSerializer):
     
-    class Meta:
-        model = RatingEmployerCompany
-        fields = [
-            'id',
-            'company',
-            'user',
-            'rating',
-        ]   
+#     class Meta:
+#         model = RatingEmployerCompany
+#         fields = [
+#             'id',
+#             'company',
+#             'user',
+#             'rating',
+#         ]   
 
 
-class RatingEmployerCompanySerializers(serializers.ModelSerializer):
+# class RatingEmployerCompanySerializers(serializers.ModelSerializer):
         
-        class Meta:
-            model = RatingEmployerCompany
-            fields = [
-                'id',
-                'company',
-                'user',
-                'rating',
-            ]
+#         class Meta:
+#             model = RatingEmployerCompany
+#             fields = [
+#                 'id',
+#                 'company',
+#                 'user',
+#                 'rating',
+#             ]
 
 
 class PositionEmployeeSerializers(serializers.ModelSerializer):
@@ -312,13 +314,28 @@ class VacancyListSerializers(serializers.ModelSerializer):
 
 class InvitationSerializers(serializers.ModelSerializer):
     
+    user_profile = ProfileAllSerializer(source='user', read_only=True)
+    created_date = serializers.SerializerMethodField(read_only=True)
+    position = PositionEmployeeSerializers(source='vacancy.position', read_only=True)
+    branch = BranchListSerializers(source='vacancy.branch', read_only=True)
+    
     class Meta:
         model = Invitation
         fields = [
             'id',
             'vacancy',
             'user',
+            'user_profile',
             'created_date',
+            'position',
+            'branch',
         ]
 
-    
+    def get_created_date(self, obj):
+        return obj.created_date.strftime("%d.%m.%Y")
+
+    def get_user_profile_icon(self, obj):
+        request = self.context.get('request')
+        url_icon = obj.user.icon.url
+        return request.build_absolute_uri(url_icon)
+

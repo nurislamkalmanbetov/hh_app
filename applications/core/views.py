@@ -117,12 +117,8 @@ class BranchListAPIView(ListAPIView):
     serializer_class = BranchListSerializers
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     def get_queryset(self):
-        company_id = self.request.query_params.get('company_id', None)
-        if not company_id:
-            return Branch.objects.none()
-        
-        company = get_object_or_404(EmployerCompany, id=company_id)
-        queryset = Branch.objects.filter(company=company).select_related('city', 'company')
+        user_id = self.request.user.id
+        queryset = Branch.objects.filter(company__user__id=user_id).select_related('city', 'company')
         return queryset
         
 class BranchDetailListAPIView(ListAPIView):
@@ -168,6 +164,7 @@ class PositionEmployeeDeleteAPIView(APIView):
         position_employee = PositionEmployee.objects.get(id=position_employee_id)
         position_employee.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class VacancyCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
@@ -256,7 +253,32 @@ class EmployerVacancyListAPIView(ListAPIView):
         user_id = self.request.user.id
         
         user = get_object_or_404(EmployerCompany, user__id=user_id)
-        queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch', 'position')
+        queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch', 'position',)
         return queryset
 
 
+class InvitationAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+        invitation = Invitation.objects.filter(employer__user__id=user_id).select_related('employer', 'vacancy', 'user',)
+        serializer = InvitationSerializers(invitation, many=True,  context={'request': request})
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=InvitationSerializers)
+    def post(self, request, *args, **kwargs):
+        serializer = InvitationSerializers(data=request.data)
+        if serializer.is_valid():
+            user_id = request.user.id
+            vacancy = request.data.get('vacancy')
+            user = EmployerCompany.objects.get(user__id=user_id)
+            vacancy = Vacancy.objects.filter(employer_company=user).filter(id=vacancy).first()
+            if vacancy is None:
+                return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer.save(employer=user, vacancy=vacancy)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

@@ -1,51 +1,13 @@
-import datetime
-import json
-import uuid
 from datetime import date, timedelta
-
-from applications.accounts.managers import ( UserManager)
-from applications.core.models import (EmployerCompany, Vacancy)
-from django.contrib.admin.models import LogEntry
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_image_file_extension
 from django.db import models
-from django.utils import timezone
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from model_utils import FieldTracker
 from django.utils.translation import gettext_lazy as _
-from smart_selects.db_fields import ChainedForeignKey
-from ckeditor.fields import RichTextField
-
-
-
-import datetime
-import json
-import uuid
 from datetime import date, timedelta
 from applications.accounts.utils import user_directory_path
 from applications.accounts.managers import *
-
-from django.contrib.admin.models import LogEntry    
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
-from django.core.exceptions import ValidationError
-from django.core.validators import validate_image_file_extension
-from django.db import models
-from django.utils import timezone
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from model_utils import FieldTracker
-from django.utils.translation import gettext_lazy as _
-
-from smart_selects.db_fields import ChainedForeignKey
-
-
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 
@@ -63,9 +25,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(_('Суперпользователь'), default=False)
     is_active = models.BooleanField(_('Активен'), default=False)
     is_delete = models.BooleanField(_('Удален'), default=False)
-    is_verified_email = models.BooleanField('Почта подтверждена', default=False)
-    verification_code = models.CharField('Код подтверждения', max_length=6, blank=True, null=True)
-    verification_code_created_at = models.DateTimeField('Дата создания кода подтверждения', blank=True, null=True)
+    is_verified_email = models.BooleanField(_('Почта подтверждена'), default=False)
+    verification_code = models.CharField(_('Код подтверждения'), max_length=6, blank=True, null=True)
+    verification_code_created_at = models.DateTimeField(_('Дата создания кода подтверждения'), blank=True, null=True)
     registered_at = models.DateTimeField(_('Дата регистрации'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Дата обновления'), auto_now=True)
     
@@ -99,8 +61,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
 
     GENDER_CHOICES_RU = (
-        ("Мужской", "Мужской"),
-        ("Женский", "Женский"),
+        ("Мужской", _("Мужской")),
+        ("Женский", _("Женский")),
     )
 
     GENDER_CHOICES_EN = (
@@ -114,10 +76,10 @@ class Profile(models.Model):
     )
 
     KNOWLEGE_OF_LANGUAGES_CHOICES = (
-        ('Russian', 'Русский'),
-        ('Kyrgyz', 'Кыргызский'),
-        ('English', 'Английский'),
-        ('German', 'Немецкий'),
+        ('Russian', _('Русский')),
+        ('Kyrgyz', _('Кыргызский')),
+        ('English', _('Английский')),
+        ('German', _('Немецкий')),
     )
 
     KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES = (
@@ -132,14 +94,17 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('Пользователь'), related_name='profile', on_delete=models.CASCADE)
     profile_photo = models.ImageField(_('Фото профиля'), upload_to=user_directory_path, blank=True, null=True, validators=[validate_image_file_extension])
 
-    first_name = models.CharField('Имя на латинице', max_length=255, default='', blank=True)
-    first_name_ru = models.CharField('Имя на кириллице', max_length=255, default='', blank=True)
+    first_name = models.CharField(_('Имя на латинице'), max_length=255, default='', blank=True)
+    first_name_ru = models.CharField(_('Имя на кириллице'), max_length=255, default='', blank=True)
+    first_name_de = models.CharField(_('Имя на немецком'), max_length=255, default='', blank=True)
 
-    last_name = models.CharField('Фамилия на латинице', max_length=255, default='', blank=True)
-    last_name_ru = models.CharField('Фамилия на кирилице', max_length=255, default='', blank=True)
+    last_name = models.CharField(_('Фамилия на латинице'), max_length=255, default='', blank=True)
+    last_name_ru = models.CharField(_('Фамилия на кирилице'), max_length=255, default='', blank=True)
+    last_name_de = models.CharField(_('Фамилия на немецком'), max_length=255, default='', blank=True)
 
     middle_name = models.CharField(_('Отчество на латинице'), max_length=50, default='', blank=True)
     middle_name_ru = models.CharField(_('Отчество на кирилице'), max_length=50, default='', blank=True)
+    middle_name_de = models.CharField(_('Отчество на немецком'), max_length=50, default='', blank=True)
     
     gender_ru = models.CharField(_('Пол на кириллице'), max_length=50, choices=GENDER_CHOICES_RU, blank=True)
     gender_en = models.CharField(_('Пол на латинице'), max_length=50, choices=GENDER_CHOICES_EN, blank=True)
@@ -149,13 +114,13 @@ class Profile(models.Model):
     nationality_en = models.CharField(_('Гражданство на латинице'), max_length=50,  blank=True)
     nationality_de = models.CharField(_('Гражданство на немецком'), max_length=50, blank=True)
 
-    birth_country_ru = models.CharField('Страна рождения на кириллице', max_length=50, default='', blank=True)
-    birth_country_en = models.CharField('Страна рождения на латинице', max_length=50, default='', blank=True)
-    birth_country_de = models.CharField('Страна рождения на немецком', max_length=50, default='', blank=True) 
+    birth_country_ru = models.CharField(_('Страна рождения на кириллице'), max_length=50, default='', blank=True)
+    birth_country_en = models.CharField(_('Страна рождения на латинице'), max_length=50, default='', blank=True)
+    birth_country_de = models.CharField(_('Страна рождения на немецком'), max_length=50, default='', blank=True) 
 
-    birth_region_ru = models.CharField('Область рождения на кириллице', max_length=50, default='', blank=True)
-    birth_region_en = models.CharField('Область рождения на латинице', max_length=50, default='', blank=True)
-    birth_region_de = models.CharField('Область рождения на немецком', max_length=50, default='', blank=True)   
+    birth_region_ru = models.CharField(_('Область рождения на кириллице'), max_length=50, default='', blank=True)
+    birth_region_en = models.CharField(_('Область рождения на латинице'), max_length=50, default='', blank=True)
+    birth_region_de = models.CharField(_('Область рождения на немецком'), max_length=50, default='', blank=True)   
 
     date_of_birth = models.DateField(_('Дата рождения'), blank=True, null=True)
     phone = models.CharField(_('Номер телефона'), max_length=50, blank=True, null=True, db_index=True)
@@ -183,12 +148,12 @@ class University(models.Model):
         ('3', '3'),
         ('4', '4'),
         ('5', '5'),
-        ('Other', 'Другое')
+        ('Other', _('Другое'))
     )
 
     TYPE_STUDY_RU = (
-        ('Бакалавриат', 'Бакалавриат'),
-        ('Магистратура', 'Магистратура'),
+        ('Бакалавриат', _('Бакалавриат')),
+        ('Магистратура', _('Магистратура')),
     )
 
     TYPE_STUDY_EN_DE = (
@@ -242,7 +207,7 @@ class PassportAndTerm(models.Model):
     inn = models.CharField(_('ИНН'), max_length=50, blank=True)
     passport_number = models.CharField(_('Номер загран паспорта'), max_length=50, blank=True)
     passport_date_of_issue = models.DateField(_('Дата выдачи паспорта'), blank=True, null=True)
-    passport_end_time = models.DateField('Дата окончания загранпаспорта', blank=True, null=True)
+    passport_end_time = models.DateField(_('Дата окончания загранпаспорта'), blank=True, null=True)
     pnr_code = models.CharField(_('PNR код'), max_length=50, blank=True)
     pdf_file = models.FileField(_('PDF файл'), upload_to=user_directory_path, blank=True, null=True)
     term_date_time = models.DateTimeField(_('Дата и время термина'), blank=True, null=True)
@@ -393,26 +358,26 @@ class Review(models.Model):
 class WorkExperience(models.Model):
 
     TYPE_OF_COMPANY_CHOICES = (
-        ('Hotel', 'Отель'),
-        ('Restaurant', 'Ресторан'),
-        ('Cafe', 'Кафе'),
-        ('Factory', 'Фабрика'),
-        ('Salon', 'Салон'),
-        ('Sales', 'Продажи'),
-        ('Other', 'Другое'),
+        ('Hotel', _('Отель')),
+        ('Restaurant', _('Ресторан')),
+        ('Cafe', _('Кафе')),
+        ('Factory', _('Фабрика')),
+        ('Salon', _('Салон')),
+        ('Sales', _('Продажи')),
+        ('Other', _('Другое')),
     )
 
     JOB_TITLE_CHOICES = (
-        ('Manager', 'Менеджер'),
-        ('Waiter', 'Официант'),
-        ('Cook', 'Повар'),
-        ('Seller', 'Продавец'),
-        ('Driver', 'Водитель'),
-        ('Cashier', 'Кассир'),
-        ('Builder', 'Строитель'),
-        ('Butcher', 'Мясник'),
-        ('Backer', 'Пекарь'),
-        ('Other', 'Другое'),
+        ('Manager', _('Менеджер')),
+        ('Waiter', _('Официант')),
+        ('Cook', _('Повар')),
+        ('Seller', _('Продавец')),
+        ('Driver', _('Водитель')),
+        ('Cashier', _('Кассир')),
+        ('Builder', _('Строитель')),
+        ('Butcher', _('Мясник')),
+        ('Backer', _('Пекарь')),
+        ('Other', _('Другое')),
     )
 
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='work_experiences', verbose_name=_('Соискатель'))
@@ -425,7 +390,8 @@ class WorkExperience(models.Model):
     country = models.CharField(_('Страна'), max_length=255, blank=True)
 
     def __str__(self):
-        return f"{self.user.email} - {self.company}"
+        return f"{self.user.user.email} - {self.company}"
+
 
     class Meta:
         verbose_name = _('Опыт работы')
