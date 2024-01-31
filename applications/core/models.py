@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Sum
 from django.conf import settings
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class EmployerCompany(models.Model):
@@ -67,11 +67,11 @@ class ReviewBranch(models.Model):
 
 class RatingEmployerCompany(models.Model):
     RATING_CHOICES = (
-        (1, _('1')),
-        (2, _('2')),
-        (3, _('3')),
-        (4, _('4')),
-        (5, _('5')),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
     )
     company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Компания'))
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Пользователь'))

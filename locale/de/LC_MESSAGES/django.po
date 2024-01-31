@@ -4,973 +4,895 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 
-msgid "университет"
-msgstr "Universität"
+msgid "Соискатель"
+msgstr "Antragsteller"
 
-msgid "университеты"
-msgstr "Universitäten"
+#: applications/accounts/models.py:17
+msgid "Email адрес"
+msgstr "E-Mail Adresse"
 
-msgid "Название на русском"
-msgstr "Name auf Russisch"
-
-msgid "Название на немецком"
-msgstr "Name auf Deutsch"
-
-msgid "Адрес на немецком"
-msgstr "Adresse auf Deutsch"
-
+#: applications/accounts/models.py:18 applications/accounts/models.py:122
+#: applications/accounts/models.py:254
 msgid "Номер телефона"
-msgstr "Telefonnummer"
+msgstr "Rufnummer"
 
-msgid "Сайт университета"
-msgstr "Universitätswebsite"
+#: applications/accounts/models.py:19
+msgid "Роль"
+msgstr "Rolle"
 
+#: applications/accounts/models.py:20
+msgid "Сотрудник"
+msgstr "Mitarbeiter"
 
+#: applications/accounts/models.py:21
+msgid "Суперпользователь"
+msgstr "Superuser"
 
-msgid "факультет"
-msgstr "Fakultät"
+#: applications/accounts/models.py:22
+msgid "Активен"
+msgstr "Aktiv"
 
-msgid "факультеты"
-msgstr "Fakultäten"
+#: applications/accounts/models.py:23
+msgid "Удален"
+msgstr "Gelöscht"
 
+#: applications/accounts/models.py:24
+msgid "Почта подтверждена"
+msgstr "Mail bestätigt."
 
+#: applications/accounts/models.py:25
+msgid "Код подтверждения"
+msgstr "Bestätigungscode"
 
-msgid "уведомление"
-msgstr "Benachrichtigung"
+#: applications/accounts/models.py:26
+msgid "Дата создания кода подтверждения"
+msgstr "Datum der Erstellung des Bestätigungscodes"
 
-msgid "уведомления"
-msgstr "Benachrichtigungen"
+#: applications/accounts/models.py:27
+msgid "Дата регистрации"
+msgstr "Datum der Eintragung"
 
+#: applications/accounts/models.py:28 applications/core/models.py:136
+msgid "Дата обновления"
+msgstr "Datum der Aktualisierung"
+
+#: applications/accounts/models.py:53 applications/accounts/models.py:90
+#: applications/core/models.py:54 applications/core/models.py:76
+#: applications/core/models.py:153
 msgid "Пользователь"
 msgstr "Benutzer"
 
-msgid "Автор"
-msgstr "Autor"
+#: applications/accounts/models.py:54
+msgid "Пользователи"
+msgstr "Benutzer"
 
-msgid "Заголовок"
-msgstr "Titel"
-
-msgid "Сообщение"
-msgstr "Nachricht"
-
-msgid "Время отправки"
-msgstr "Versandzeit"
-
-msgid "Просмотрено"
-msgstr "Gesehen"
-
-
-
-msgid "Администратор для контрактов"
-msgstr "Administrator für Verträge"
-
-msgid "Администраторы для контрактов"
-msgstr "Administratoren für Verträge"
-
-msgid "Имя"
-msgstr "Vorname"
-
-msgid "Фамилия"
-msgstr "Nachname"
-
-msgid "Отчество"
-msgstr "Mittlerer Name"
-
-msgid "Пол"
-msgstr "Geschlecht"
-
+#: applications/accounts/models.py:60 applications/core/models.py:105
 msgid "Мужской"
 msgstr "Männlich"
 
+#: applications/accounts/models.py:61 applications/core/models.py:106
 msgid "Женский"
 msgstr "Weiblich"
 
-msgid "Номер патента (N1234567)"
-msgstr "Patentnummer (N1234567)"
+#: applications/accounts/models.py:75
+msgid "Русский"
+msgstr "Russisch"
 
-msgid "Дата получения патента"
-msgstr "Patentausstellungsdatum"
+#: applications/accounts/models.py:76
+msgid "Кыргызский"
+msgstr "Kirgisistan"
 
-msgid "Выдан (УГНС по Ленинскому району)"
-msgstr "Ausgestellt von (UFS im Leninsky-Bezirk)"
+#: applications/accounts/models.py:77
+msgid "Английский"
+msgstr "Englisch"
+
+#: applications/accounts/models.py:78
+msgid "Немецкий"
+msgstr "Deutsch"
+
+#: applications/accounts/models.py:91
+msgid "Фото профиля"
+msgstr "Profilbild"
+
+#: applications/accounts/models.py:93
+msgid "Имя на латинице"
+msgstr "Lateinischer Name"
+
+#: applications/accounts/models.py:94
+msgid "Имя на кириллице"
+msgstr "Name auf Kyrillisch"
+
+#: applications/accounts/models.py:95
+msgid "Имя на немецком"
+msgstr "Name auf Deutsch"
+
+#: applications/accounts/models.py:97
+msgid "Фамилия на латинице"
+msgstr "Nachname auf Lateinisch"
+
+#: applications/accounts/models.py:98
+msgid "Фамилия на кирилице"
+msgstr "Nachname auf Kyrillisch"
+
+#: applications/accounts/models.py:99
+msgid "Фамилия на немецком"
+msgstr "Nachname auf Deutsch"
+
+#: applications/accounts/models.py:101
+msgid "Отчество на латинице"
+msgstr "Patronymisch auf Lateinisch"
+
+#: applications/accounts/models.py:102
+msgid "Отчество на кирилице"
+msgstr "Kyrillisch patronymisch"
+
+#: applications/accounts/models.py:103
+msgid "Отчество на немецком"
+msgstr "patronymisch auf Deutsch"
+
+#: applications/accounts/models.py:105
+msgid "Пол на кириллице"
+msgstr "Geschlecht auf Kyrillisch"
+
+#: applications/accounts/models.py:106
+msgid "Пол на латинице"
+msgstr "Geschlecht in Latein"
+
+#: applications/accounts/models.py:107
+msgid "Пол на немецком"
+msgstr "Paul auf Deutsch"
+
+#: applications/accounts/models.py:109
+msgid "Гражданство на кирилице"
+msgstr "Staatsbürgerschaft auf Kyrillisch"
+
+#: applications/accounts/models.py:110
+msgid "Гражданство на латинице"
+msgstr "Staatsbürgerschaft in lateinischer Schrift"
+
+#: applications/accounts/models.py:111
+msgid "Гражданство на немецком"
+msgstr "Staatsbürgerschaft auf Deutsch"
+
+#: applications/accounts/models.py:113
+msgid "Страна рождения на кириллице"
+msgstr "Geburtsland in kyrillischer Schrift"
+
+#: applications/accounts/models.py:114
+msgid "Страна рождения на латинице"
+msgstr "Geburtsland in lateinischer Schrift"
+
+#: applications/accounts/models.py:115
+msgid "Страна рождения на немецком"
+msgstr "Geburtsland auf Deutsch"
+
+#: applications/accounts/models.py:117
+msgid "Область рождения на кириллице"
+msgstr "Geburtsregion im kyrillischen Alphabet"
+
+#: applications/accounts/models.py:118
+msgid "Область рождения на латинице"
+msgstr "Region der Geburt in lateinischer Schrift"
+
+#: applications/accounts/models.py:119
+msgid "Область рождения на немецком"
+msgstr "Geburtsregion auf Deutsch"
+
+#: applications/accounts/models.py:121
+msgid "Дата рождения"
+msgstr "Datum der Geburt"
+
+#: applications/accounts/models.py:123
+msgid "Номер Whatsapp"
+msgstr "Whatsapp-Nummer"
+
+#: applications/accounts/models.py:125 applications/core/models.py:137
+msgid "Знание немецкого языка"
+msgstr "Kenntnisse der deutschen Sprache"
+
+#: applications/accounts/models.py:126 applications/core/models.py:138
+msgid "Знание английского языка"
+msgstr "Englischkenntnisse"
+
+#: applications/accounts/models.py:127
+
+msgid "Знание русского языка"
+msgstr "Kenntnisse der russischen Sprache"
+
+#: applications/accounts/models.py:134
+msgid "Профиль соискателя"
+msgstr "Bewerberprofil"
+
+#: applications/accounts/models.py:135
+msgid "Профили соискателей"
+msgstr "Profile der Antragsteller"
+
+#: applications/accounts/models.py:147 applications/accounts/models.py:363
+#: applications/accounts/models.py:376
+msgid "Другое"
+msgstr "Andere"
+
+#: applications/accounts/models.py:151
+msgid "Бакалавриат"
+msgstr ""
+
+#: applications/accounts/models.py:152
+msgid "Магистратура"
+msgstr "Masterstudiengang"
+
+#: applications/accounts/models.py:161
+msgid "Название университета на кириллице"
+msgstr "Name der Universität in kyrillischer Schrift"
+
+#: applications/accounts/models.py:162
+
+msgid "Название университета на латинице"
+msgstr "Name der Universität in lateinischer Schrift"
+
+#: applications/accounts/models.py:163
+
+msgid "Название университета на немецком"
+msgstr "Name der Universität auf Deutsch"
+
+#: applications/accounts/models.py:165
+msgid "Тип обучения на кириллице"
+msgstr "Art der Ausbildung im kyrillischen Alphabet"
+
+#: applications/accounts/models.py:166
+msgid "Тип обучения на латинице"
+msgstr "Art der Ausbildung in lateinischer Schrift"
+
+#: applications/accounts/models.py:167
+msgid "Тип обучения на немецком"
+msgstr "Art des Studiums auf Deutsch"
+
+#: applications/accounts/models.py:169
+msgid "Факультет на кириллице"
+msgstr "Fakultät auf Kyrillisch"
+
+#: applications/accounts/models.py:170
+msgid "Факультет на латинице"
+msgstr "Fakultät in lateinischer Schrift"
+
+#: applications/accounts/models.py:171
+msgid "Факультет на немецком"
+msgstr "Deutschsprachige Fakultät"
+
+#: applications/accounts/models.py:173
+msgid "Адрес на кириллице"
+msgstr "Kyrillische Adresse"
+
+#: applications/accounts/models.py:174
+msgid "Адрес на латинице"
+msgstr "Lateinische Adresse"
+
+#: applications/accounts/models.py:175
+msgid "Адрес на немецком"
+msgstr "Deutsche Adresse"
+
+#: applications/accounts/models.py:177
+
+msgid "Номер телефона университета"
+msgstr "Telefonnummer der Universität"
+
+#: applications/accounts/models.py:179
+msgid "Email университета"
+msgstr "Universität E-Mail"
+
+#: applications/accounts/models.py:180
+msgid "Сайт университета"
+msgstr "Website der Universität"
+
+#: applications/accounts/models.py:182
+msgid "Год поступления в университет"
+msgstr "Jahr der Immatrikulation an der Universität"
+
+#: applications/accounts/models.py:183
+
+msgid "Год окончания университета"
+msgstr "Jahr des Studienabschlusses"
+
+#: applications/accounts/models.py:184
+msgid "Общее количество лет"
+msgstr "Gesamtzahl der Jahre"
+
+#: applications/accounts/models.py:186
+msgid "Курс"
+msgstr "Kurs"
+
+#: applications/accounts/models.py:188
+msgid "Начало каникул"
+msgstr "Der Beginn der Ferien"
+
+#: applications/accounts/models.py:189
+msgid "Конец каникул"
+msgstr "Das Ende der Ferien"
+
+#: applications/accounts/models.py:196
+msgid "Университет"
+msgstr "Universität"
+
+#: applications/accounts/models.py:197
+msgid "Университеты"
+msgstr "Universitäten"
+
+#: applications/accounts/models.py:202
+
+msgid "Номер ID паспорта"
+msgstr "Reisepass-ID-Nummer"
+
+#: applications/accounts/models.py:203 applications/accounts/models.py:262
+msgid "ИНН"
+msgstr "TIN"
+
+#: applications/accounts/models.py:204
+msgid "Номер загран паспорта"
+msgstr "Nummer des Reisepasses"
+
+#: applications/accounts/models.py:205
+
+msgid "Дата выдачи паспорта"
+msgstr "Datum der Ausstellung des Reisepasses"
+
+#: applications/accounts/models.py:206
+msgid "Дата окончания загранпаспорта"
+msgstr "Ablaufdatum des Reisepasses"
+
+#: applications/accounts/models.py:207
+msgid "PNR код"
+msgstr "PNR-Code"
+
+#: applications/accounts/models.py:208
+msgid "PDF файл"
+msgstr "PDF-Datei"
+
+#: applications/accounts/models.py:209
+msgid "Дата и время термина"
+msgstr "Datum und Uhrzeit des Termins"
+
+#: applications/accounts/models.py:215
+msgid "Паспортные данные и термин"
+msgstr "Angaben zum Reisepass und Laufzeit"
+
+#: applications/accounts/models.py:216
+msgid "Паспортные данные и термины"
+msgstr "Reisepassdaten und -bedingungen"
+
+#: applications/accounts/models.py:228
+msgid "Общая сумма"
+msgstr "Gesamtbetrag"
+
+#: applications/accounts/models.py:229
+msgid "Общая сумма прописью"
+msgstr ""
+
+#: applications/accounts/models.py:230
+msgid "Первоначальный взнос"
+msgstr "Gesamtbetrag in Worten"
+
+#: applications/accounts/models.py:231
+msgid "Первоначальный взнос прописью"
+msgstr "Anzahlung in Worten"
+
+#: applications/accounts/models.py:232
+msgid "Средний взнос"
+msgstr "Durchschnittlicher Beitrag"
+
+#: applications/accounts/models.py:233
+msgid "Средний взнос прописью"
+msgstr "Durchschnittlicher Beitrag in Worten"
+
+#: applications/accounts/models.py:234
+msgid "Окончательный взнос"
+msgstr "Letzte Tranche"
+
+#: applications/accounts/models.py:235
+msgid "Окончательный взнос прописью"
+msgstr "Letzte Tranche in Worten"
+
+#: applications/accounts/models.py:236
+msgid "Долг"
+msgstr "Verschuldung"
+
+#: applications/accounts/models.py:237
+msgid "Долг прописью"
+msgstr "Verschuldung in Worten"
+
+#: applications/accounts/models.py:238
+msgid "Дата оплаты"
+msgstr "Datum der Zahlung"
+
+#: applications/accounts/models.py:239
+msgid "Оплату принял"
+msgstr "Zahlung akzeptiert."
+
+#: applications/accounts/models.py:241
+msgid "Дата принятия оплаты"
+msgstr "Datum der Annahme der Zahlung"
+
+#: applications/accounts/models.py:242
+
+msgid "Оплата принята"
+msgstr "Zahlung akzeptiert"
+
+#: applications/accounts/models.py:248
+msgid "Оплата"
+msgstr "Zahlung"
+
+#: applications/accounts/models.py:249
+msgid "Оплаты"
+msgstr "Zahlungen"
+
+#: applications/accounts/models.py:255
+msgid "Участник"
+msgstr "Teilnehmer"
+
+#: applications/accounts/models.py:256
+msgid "Дата полета в Германию"
+msgstr "Datum des Fluges nach Deutschland"
+
+#: applications/accounts/models.py:257
+msgid "Steuer ID - Налоговый номер"
+msgstr "Steuer ID - Steuernummer"
+
+#: applications/accounts/models.py:258 applications/core/models.py:8
+msgid "Имя"
+msgstr "Name"
+
+#: applications/accounts/models.py:259
+msgid "Стадия сделки"
+msgstr "Transaktionsphase"
+
+#: applications/accounts/models.py:260
+msgid "Программа"
+msgstr "Programm"
+
+#: applications/accounts/models.py:261
+msgid "Дата заключения договора"
+msgstr "Datum des Vertragsabschlusses"
+
+#: applications/accounts/models.py:263
+msgid "Комментарий"
+msgstr "Kommentar"
+
+#: applications/accounts/models.py:264
+msgid "Носит Хиджаб"
+msgstr "Trägt einen Hidschab"
+
+#: applications/accounts/models.py:270
+msgid "Сделка"
+msgstr "Deal"
+
+#: applications/accounts/models.py:271
+msgid "Сделки"
+msgstr "Transaktionen"
+
+#: applications/accounts/models.py:278
+msgid "День (08:00-20:00)"
+msgstr "Tag (08:00-20:00)"
+
+#: applications/accounts/models.py:279
+msgid "Ночь (17:00-01:00)"
+msgstr "Nacht (17:00-01:00)"
+
+#: applications/accounts/models.py:280
+msgid "Вечер (20:00-08:00)"
+msgstr "Abend (20:00-08:00)"
+
+#: applications/accounts/models.py:281 applications/accounts/models.py:293
+msgid "Свой график"
+msgstr "Ihr Zeitplan"
+
+#: applications/accounts/models.py:286
+msgid "Понедельник"
+msgstr "Montag"
+
+#: applications/accounts/models.py:287
+msgid "Вторник"
+msgstr "Dienstag"
+
+#: applications/accounts/models.py:288
+msgid "Среда"
+msgstr "Mittwoch"
+
+#: applications/accounts/models.py:289
+msgid "Четверг"
+msgstr "Donnerstag"
+
+#: applications/accounts/models.py:290
+msgid "Пятница"
+msgstr "Freitag"
+
+#: applications/accounts/models.py:291
+msgid "Суббота"
+msgstr "Samstag"
+
+#: applications/accounts/models.py:292
+msgid "Воскресенье"
+msgstr "Sonntag"
+
+#: applications/accounts/models.py:295
+msgid "Начало работы (Свой график)"
+msgstr "Beginn der Arbeit (eigener Zeitplan)"
+
+#: applications/accounts/models.py:295 applications/accounts/models.py:296
+msgid "Введите время в формате HH:MM"
+msgstr "Eingabe der Uhrzeit im Format HH:MM"
+
+#: applications/accounts/models.py:296
+msgid "Окончание работы (Свой график)"
+msgstr "Ende der Arbeit (eigener Zeitplan)"
+
+#: applications/accounts/models.py:309
+msgid "График работы"
+msgstr "Arbeitsplan"
+
+#: applications/accounts/models.py:310
+msgid "Графики работ"
+msgstr "Arbeitszeiten"
+
+#: applications/accounts/models.py:315
+msgid "1 звезда"
+msgstr "1 Stern"
+
+#: applications/accounts/models.py:316
+msgid "2 звезды"
+msgstr "2 Sterne"
+
+#: applications/accounts/models.py:317
+msgid "3 звезды"
+msgstr "3 Sterne"
+
+#: applications/accounts/models.py:318
+msgid "4 звезды"
+msgstr "4 Sterne"
+
+#: applications/accounts/models.py:319
+msgid "5 звезд"
+msgstr "5 Sterne"
+
+#: applications/accounts/models.py:323
+msgid "Значение рейтинга"
+msgstr "Wert des Ratings"
+
+#: applications/accounts/models.py:324
+msgid "Дата рейтинга"
+msgstr "Datum der Bewertung"
+
+#: applications/accounts/models.py:334 applications/core/models.py:77
+msgid "Рейтинг"
+msgstr "Bewertung"
+
+#: applications/accounts/models.py:335
+msgid "Рейтинги"
+msgstr "Bewertungen"
+
+#: applications/accounts/models.py:343
+msgid "Текст отзыва"
+msgstr "Text der Rückmeldung"
+
+#: applications/accounts/models.py:344
+msgid "Дата создания"
+msgstr "Datum der Erstellung"
+
+#: applications/accounts/models.py:350 applications/core/models.py:55
+msgid "Отзыв"
+msgstr "Zeugnis"
+
+#: applications/accounts/models.py:351
+msgid "Отзывы"
+msgstr "Testimonials"
+
+#: applications/accounts/models.py:357
+msgid "Отель"
+msgstr "Hotel"
+
+#: applications/accounts/models.py:358
+msgid "Ресторан"
+msgstr "Restaurant"
+
+#: applications/accounts/models.py:359
+msgid "Кафе"
+msgstr "Café"
+
+#: applications/accounts/models.py:360
+msgid "Фабрика"
+msgstr "Fabrik"
+
+#: applications/accounts/models.py:361
+msgid "Салон"
+msgstr "Salon"
+
+#: applications/accounts/models.py:362
+msgid "Продажи"
+msgstr "Vertrieb"
+
+#: applications/accounts/models.py:367
+msgid "Менеджер"
+msgstr "Manager"
+
+#: applications/accounts/models.py:368
+msgid "Официант"
+msgstr "Kellner"
+
+#: applications/accounts/models.py:369
+msgid "Повар"
+msgstr "Kochen"
+
+#: applications/accounts/models.py:370
+msgid "Продавец"
+msgstr "Verkäufer"
+
+#: applications/accounts/models.py:371
+msgid "Водитель"
+msgstr "Treiber"
+
+#: applications/accounts/models.py:372
+msgid "Кассир"
+msgstr "Kassierer"
+
+#: applications/accounts/models.py:373
+msgid "Строитель"
+msgstr "Bauherr"
+
+#: applications/accounts/models.py:374
+msgid "Мясник"
+msgstr "Metzger"
+
+#: applications/accounts/models.py:375
+msgid "Пекарь"
+msgstr "Bäcker"
+
+#: applications/accounts/models.py:380
+msgid "Тип компании"
+msgstr "Art des Unternehmens"
+
+#: applications/accounts/models.py:381 applications/core/models.py:37
+#: applications/core/models.py:75
+msgid "Компания"
+msgstr "Unternehmen"
+
+#: applications/accounts/models.py:382
+msgid "Должность"
+msgstr "Position"
+
+#: applications/accounts/models.py:383
+msgid "Дата начала"
+msgstr "Datum des Beginns"
+
+#: applications/accounts/models.py:384
+msgid "Дата окончания"
+msgstr "Datum des Endes"
+
+#: applications/accounts/models.py:385 applications/core/models.py:123
+msgid "Обязанности"
+msgstr "Zuständigkeiten"
+
+#: applications/accounts/models.py:386
+msgid "Страна"
+msgstr "Land"
+
+#: applications/accounts/models.py:393 applications/accounts/models.py:394
+#: applications/core/models.py:124
+msgid "Опыт работы"
+msgstr "Berufserfahrung"
+
+#: applications/accounts/models.py:417 applications/core/models.py:32
+#: applications/core/models.py:36
+msgid "Город"
+msgstr "Stadt"
+
+#: applications/accounts/models.py:418 applications/core/models.py:33
+msgid "Города"
+msgstr "Städte"
+
+#: applications/core/models.py:9
+msgid "Фамилия"
+msgstr "Nachname"
+
+#: applications/core/models.py:10
+msgid "Изображение"
+msgstr "Bild"
+
+#: applications/core/models.py:12
+msgid "Название"
+msgstr "Titel"
+
+#: applications/core/models.py:13
+msgid "ИИН/БИН"
+msgstr "TIN/BIN"
+
+#: applications/core/models.py:14
+msgid "Описание"
+msgstr "Beschreibung"
+
+#: applications/core/models.py:22
+msgid "Работодатели"
+msgstr "Arbeitgeber"
+
+#: applications/core/models.py:38
+msgid "Название филлиала"
+msgstr "Filialname"
+
+#: applications/core/models.py:39
+msgid "Текстовый адрес"
+msgstr "Text-Adresse"
+
+#: applications/core/models.py:40
+msgid "Ссылка на адрес"
+msgstr "Link zur Adresse"
+
+#: applications/core/models.py:41
+msgid "Описание как добраться"
+msgstr "Beschreibung des Anfahrtsweges"
+
+#: applications/core/models.py:48 applications/core/models.py:53
+#: applications/core/models.py:121
+msgid "Филиал"
+msgstr "Zweigstelle"
+
+#: applications/core/models.py:49
+msgid "Филиалы"
+msgstr "Zweigstellen"
+
+#: applications/core/models.py:56 applications/core/models.py:78
+#: applications/core/models.py:135 applications/core/models.py:154
+msgid "Дата публикации"
+msgstr "Datum der Veröffentlichung"
+
+#: applications/core/models.py:62
+msgid "Отзыв филиала"
+msgstr "Feedback der Branche"
+
+#: applications/core/models.py:63
+msgid "Отзывы филиалов"
+msgstr "Testimonials der Branche"
 
 
+#: applications/core/models.py:84
+msgid "Рейтинг компании"
+msgstr "Bewertung des Unternehmens"
+
+#: applications/core/models.py:85
+msgid "Рейтинги компаний"
+msgstr "Unternehmensbewertungen"
+
+#: applications/core/models.py:89
+msgid "Название позиции"
+msgstr "Name der Position"
+
+#: applications/core/models.py:96
+msgid "Позиция работника"
+msgstr "Position des Mitarbeiters"
+
+#: applications/core/models.py:97
+msgid "Позиция работников"
+msgstr "Position der Mitarbeiter"
+
+#: applications/core/models.py:107
+msgid "Неважно"
+msgstr "Es spielt keine Rolle"
+
+#: applications/core/models.py:122
+msgid "Позиция"
+msgstr "Position"
+
+#: applications/core/models.py:125
+msgid "Форма одежды"
+msgstr "Kleiderordnung"
+
+#: applications/core/models.py:126
+msgid "Количество работников"
+msgstr "Anzahl der Mitarbeiter"
+
+#: applications/core/models.py:127
+msgid "Количество нанятых работников"
+msgstr "Anzahl der eingestellten Mitarbeiter"
+
+#: applications/core/models.py:128
+msgid "Пол"
+msgstr "Paul"
+
+#: applications/core/models.py:129
+msgid "Время начала работы"
+msgstr "Startzeit"
+
+#: applications/core/models.py:130
+msgid "Время окончания работы"
+msgstr "Ende der Arbeitszeit"
+
+#: applications/core/models.py:131
+msgid "Зарплата"
+msgstr "Gehalt"
+
+#: applications/core/models.py:132
+msgid "Коментарий"
+msgstr "Kommentar"
+
+#: applications/core/models.py:133
+msgid "Количество просмотров"
+msgstr "Anzahl der Ansichten"
+
+#: applications/core/models.py:134
+msgid "Повышение зарплаты"
+msgstr "Gehaltserhöhung"
+
+#: applications/core/models.py:139
+msgid "Активный"
+msgstr "Aktiv"
+
+#: applications/core/models.py:145 applications/core/models.py:152
+msgid "Вакансия"
+msgstr "Stellenausschreibung"
+
+#: applications/core/models.py:146
+msgid "Вакансии"
+msgstr "Offene Stellen"
+
+#: applications/core/models.py:155
+msgid "Отклонено"
+msgstr "Abgelehnt"
+
+#: applications/core/models.py:156
+msgid "Принято"
+msgstr "Angenommen"
+
+#: applications/core/models.py:157
+msgid "Работает"
+msgstr "Es klappt"
+
+#: applications/core/models.py:164
+msgid "Приглашение на вакансию"
+msgstr "Aufforderung zur Bewerbung auf eine freie Stelle"
+
+#: applications/core/models.py:165
+msgid "Приглашения на вакансии"
+msgstr "Einladungen zu freien Stellen"
+
+msgid "Настройки CRM"
+msgstr "CRM-Einstellungen"
+
+msgid "Информация внизу сайта"
+msgstr "Informationen im unteren Bereich der Website"
+
+msgid "Информации внизу сайта"
+msgstr "Die Informationen am Ende der Website"
+
+msgid "Лого сайта"
+msgstr "Logo der Website"
+
+msgid "Лого сайтов"
+msgstr "Logos für die Website"
 
 msgid "Работодатель"
 msgstr "Arbeitgeber"
 
-msgid "Работодатели"
-msgstr "Arbeitgeber"
+msgid "Изображение логотипа"
+msgstr "Logo-Bild"
 
-msgid "Фон"
-msgstr "Hintergrundbild"
+msgid "Описание логотипа"
+msgstr "Beschreibung des Logos"
 
-msgid "Название"
-msgstr "Bezeichnung"
+msgid "Внешний URL логотипа"
+msgstr "Externe URL des Logos"
 
-msgid "страна"
-msgstr "Land"
+msgid "Дата последнего обновления"
+msgstr "Datum der letzten Aktualisierung"
 
-msgid "Описание"
-msgstr "Beschreibung"
+msgid "Создано пользователем"
+msgstr "Erstellt von Benutzer"
 
+msgid "Ссылка на Instagram"
+msgstr "Instagram-Link"
 
+msgid "Ссылка на Facebook"
+msgstr "Facebook-Link"
 
-msgid "Вакансия"
-msgstr "Stelle"
-msgid "Вакансии"
-msgstr "Stellen"
+msgid "Ссылка на WhatsApp"
+msgstr "WhatsApp-Link"
 
-msgid "Язык"
-msgstr "Sprache"
+msgid "Адрес"
+msgstr "Adresse"
 
-msgid "Уровень владения"
-msgstr "Beherrschungsgrad"
-
-msgid "Требуемое количество мест"
-msgstr "Erforderliche Anzahl an Stellen"
-
-msgid "Колличество одобренных вакансии"
-msgstr "Anzahl genehmigter Stellen"
-
-msgid "Название вакансии"
-msgstr "Stellenbezeichnung"
-
-msgid "Зарплата"
-msgstr "Gehalt"
-
-msgid "Обязанности работника"
-msgstr "Mitarbeiterpflichten"
-
-msgid "Город"
-msgstr "Stadt"
-
-msgid "Жилье"
-msgstr "Unterkunft"
-
-msgid "Стоимость жилья"
-msgstr "Unterkunftskosten"
-
-msgid "Прошел на вакансию"
-msgstr "Hat die Stelle bestanden"
-
-msgid "Страховка"
-msgstr "Versicherung"
-
-msgid "Транспорт"
-msgstr "Verkehrsmittel"
-
-msgid "Контактные данные"
-msgstr "Kontaktdaten"
-
-msgid "Пункт назначения"
-msgstr "Zielort"
-
-msgid "Требования работодателя"
-msgstr "Arbeitgeberanforderungen"
-
-msgid "Доп. информация"
-msgstr "Zusätzliche Informationen"
-
-msgid "Дата публикации"
-msgstr "Veröffentlichungsdatum"
-
-
-
-msgid "Отклик на вакансию"
-msgstr "Bewerbung auf eine Stelle"
-
-msgid "Отклики на вакансии"
-msgstr "Bewerbungen auf Stellen"
-
-msgid "Статус отклика"
-msgstr "Bewerbungsstatus"
-
-msgid "На рассмотрении"
-msgstr "In Bearbeitung"
-
-msgid "Одобрено"
-msgstr "Genehmigt"
-
-msgid "Отказано"
-msgstr "Abgelehnt"
-
-msgid "Профиль соискателя"
-msgstr "Bewerberprofil"
-
-msgid "Комментарий работодателя"
-msgstr "Kommentar des Arbeitgebers"
-
-
-
-msgid "Приглашение на вакансию"
-msgstr "Einladung zur Stelle"
-
-msgid "Приглашения на вакансии"
-msgstr "Einladungen zu Stellen"
-
-msgid "Ожидает ответа"
-msgstr "Wartet auf Antwort"
-
-msgid "Принято"
-msgstr "Akzeptiert"
-
-msgid "Отклонено"
-msgstr "Abgelehnt"
-
-
-
-
-
-
-
-
-msgid "Отзыв о компании"
-msgstr "Rückblick auf das Unternehmen"
-
-msgid "Отзывы о компаниях"
-msgstr "Bewertungen von Unternehmen"
-
-msgid "Компания"
-msgstr "Firma"
-
-msgid "Рейтинг"
-msgstr "Reiting"
-
-msgid "Комментарий"
-msgstr "Ein Kommentar"
-
-msgid "Прошел модерацию"
-msgstr "Moderation bestanden"
-
-
-
-msgid "Количество зарегистрированных пользователей"
-msgstr "Anzahl registrierter Benutzer"
-
-msgid "Дата"
-msgstr "Datum"
-
-
-
-msgid "Тариф"
-msgstr "Tarif"
-
-msgid "Тарифы"
-msgstr "Tarife"
-
-msgid "Сумма цифрами"
-msgstr "Summe in Ziffern"
-
-msgid "Сумма буквами"
-msgstr "Summe in Buchstaben"
-
-msgid "Вариант тарифа"
-msgstr "Tarifoption"
-
-
-
-msgid "Отзыв"
-msgstr "Rezension"
-
-msgid "Отзывы"
-msgstr "Rezensionen" 
-
-
-
-msgid "Email адрес"
-msgstr "E-Mail-Adresse"
-
-
-
-msgid "Работадатель"
-msgstr "Arbeitgeber"
-
-msgid "Сотрудник"
-msgstr "Mitarbeiter"
-
-msgid "Студент"
-msgstr "Student"
-
-msgid "Суперпользователь"
-msgstr "Superuser"
-
-msgid "Активен"
-msgstr "Aktiv"
-
-msgid "Удален"
-msgstr "Gelöscht"
-
-msgid "Дата регистрации"
-msgstr "Registrationsdatum"
-
-msgid "Время начала работы"
-msgstr "Startzeit"
-
-msgid "Номер Whatsapp"
-msgstr "WhatsApp-Nummer"
-
-msgid "Оплату принял"
-msgstr "Zahlung erhalten"
-
-msgid "Оплачено"
-msgstr "Bezahlt"
-
-msgid "Остаток"
-msgstr "Restbetrag"
-
-msgid "Оплачено полностью"
-msgstr "Vollständig bezahlt"
-
-msgid "Дата оплаты"
-msgstr "Zahlungsdatum"
-
-msgid "Крайний срок оплаты"
-msgstr "Fälligkeitsdatum"
-
-msgid "Платеж студента"
-msgstr "Zahlung des Studenten"
-
-msgid "Платежи студентов"
-msgstr "Zahlungen der Studenten"
-
-msgid "сотрудники"
-msgstr "Mitarbeiter"
-
-msgid "Кыргызстан"
-msgstr "Kirgisistan"
-
-msgid "Казахстан"
-msgstr "Kasachstan"
-
-msgid "Узбекистан"
-msgstr "Usbekistan"
-
-msgid "Таджикистан"
-msgstr "Tadschikistan"
-
-msgid "Россия"
-msgstr "Russland"
-
-msgid "другое"
-msgstr "Sonstiges"
-
-msgid "Турция"
-msgstr "Türkei"
-
-msgid "Чуйская область"
-msgstr "Tschü-Region"
-
-msgid "Нарынская область"
-msgstr "Naryn-Region"
-
-msgid "Таласская область"
-msgstr "Talas-Region"
-
-msgid "Ыссык-Кульская область"
-msgstr "Yssykköl-Region"
-
-msgid "Жалал-Абадская область"
-msgstr "Dschalal-Abad-Region"
-
-msgid "Ошская область"
-msgstr "Osch-Region"
-
-msgid "Баткенская область"
-msgstr "Batken-Region"
-
-msgid "Бакалавр"
-msgstr "Bachelor"
-
-msgid "Магистр"
-msgstr "Master"
-
-msgid "Колледж"
-msgstr "Hochschule"
-
-msgid "Официант"
-msgstr "Kellner"
-
-msgid "Кассир"
-msgstr "Kassierer"
-
-msgid "Кух. работник"
-msgstr "Küchenpersonal"
-
-msgid "Горничная"
-msgstr "Zimmermädchen"
-
-msgid "Ресепшн"
-msgstr "Rezeption"
-
-msgid "Грузчик"
-msgstr "Lader"
-
-msgid "Таксист"
-msgstr "Taxifahrer"
-
-msgid "Преподаватель"
-msgstr "Lehrer"
-
-msgid "Няня"
-msgstr "Nanny"
-
-msgid "Курьер"
-msgstr "Kurier"
-
-msgid "Секретарь"
-msgstr "Sekretär"
-
-msgid "Работа на полях"
-msgstr "Feldarbeit"
-
-msgid "Оператор call-центра"
-msgstr "Call-Center-Agent"
-
-msgid "Охранник"
-msgstr "Sicherheitsmann"
-
-msgid "Промоутер"
-msgstr "Promoter"
-
-msgid "Бармен"
-msgstr "Barkeeper"
-
-msgid "Гид"
-msgstr "Reiseleiter"
-
-msgid "Аниматор"
-msgstr "Animator"
-
-msgid "Заправщик"
-msgstr "Tankwart"
-
-msgid "Администратор"
-msgstr "Administrator"
-
-msgid "Упаковщик"
-msgstr "Verpacker"
-
-msgid "Работа в швейном цеху"
-msgstr "Arbeit in der Näherei"
-
-msgid "Уборщица"
-msgstr "Reinigungskraft"
-
-msgid "Пастух"
-msgstr "Hirte"
-
-msgid "Работа на фермах"
-msgstr "Arbeit auf Farmen"
-
-msgid "Санитар"
-msgstr "Sanitäter"
-
-msgid "Строитель"
-msgstr "Bauarbeiter"
-
-msgid "Визажист"
-msgstr "Visagist"
-
-msgid "Дизайнер"
-msgstr "Designer"
-
-msgid "Домохозяйка"
-msgstr "Hausfrau"
-
-msgid "Кладовщик"
-msgstr "Lagerarbeiter"
-
-msgid "Маркетолог"
-msgstr "Marketingfachmann"
-
-msgid "Массажист"
-msgstr "Masseur"
-
-msgid "Мебельщик"
-msgstr "Möbeltischler"
-
-msgid "Медбрат"
-msgstr "Pflegebruder"
-
-msgid "Медсестра"
-msgstr "Krankenschwester"
-
-msgid "Мэнеджер"
-msgstr "Manager"
-
-msgid "Монтёр"
-msgstr "Monteur"
-
-msgid "Оператор"
-msgstr "Operator"
-
-msgid "Отделочник"
-msgstr "Finisher"
-
-msgid "Парикмахер"
-msgstr "Friseur"
-
-msgid "Переводчик"
-msgstr "Übersetzer"
-
-msgid "Повар"
-msgstr "Koch"
-
-msgid "Посудомойщик"
-msgstr "Spüler"
-
-msgid "Почтальон"
-msgstr "Briefträger"
-
-msgid "Прачка"
-msgstr "Wäscherin"
-
-msgid "Работа на складах"
-msgstr "Arbeit in Lagern"
-
-msgid "Разнорабочий"
-msgstr "Allrounder"
-
-msgid "Сантехник"
-msgstr "Installateur"
-
-msgid "Сварщик"
-msgstr "Schweißer"
-
-msgid "Сиделка"
-msgstr "Betreuerin"
-
-msgid "Торговый агент"
-msgstr "Handelsvertreter"
-
-msgid "Тренер"
-msgstr "Trainer"
-
-msgid "Уборщик"
-msgstr "Reinigungskraft"
-
-msgid "Фотограф"
-msgstr "Fotograf"
-
-msgid "Хореограф"
-msgstr "Choreograf"
-
-msgid "Электрик"
-msgstr "Elektriker"
-
-msgid "Германия"
-msgstr "Deutschland"
-
-msgid "Дубай"
-msgstr "Dubai"
-
-msgid "Америка"
-msgstr "Amerika"
-
-msgid "В совершенстве"
-msgstr "Perfekt"
-
-msgid "Очень хорошо"
-msgstr "Sehr gut"
-
-msgid "Хорошо"
-msgstr "Gut"
-
-msgid "Разговорный"
-msgstr "Konversationell"
-
-msgid "Обучаюсь"
-msgstr "Lerne"
-
-msgid "Начальный"
-msgstr "Anfänger"
-
-msgid "Не знаю"
-msgstr "Ich weiß nicht"
-
-msgid "до 1 года"
-msgstr "Weniger als 1 Jahr"
-
-msgid "1 год"
-msgstr "1 Jahr"
-
-msgid "2 года"
-msgstr "2 Jahre"
-
-msgid "3 года"
-msgstr "3 Jahre"
-
-msgid "4 и более лет"
-msgstr "4 Jahre und mehr"
-
-msgid "Механика"
-msgstr "Manuell"
-
-msgid "Автомат"
-msgstr "Automatisch"
-
-msgid "Механика и автомат"
-msgstr "Manuell und Automatisch"
-
-msgid "Да, отлично"
-msgstr "Ja, ausgezeichnet"
-
-msgid "Да, но плохо"
-msgstr "Ja, aber nicht gut"
-
-msgid "Нет, не умею"
-msgstr "Nein, ich kann es nicht"
-
-msgid "Посольство"
-msgstr "Botschaft"
-
-msgid "Визаметрик"
-msgstr "Visumetric"
-
-msgid "Нет маршрута"
-msgstr "Keine Route"
-
-
-msgid "Маршрут был составлен"
-msgstr "Die Route wurde erstellt"
-
-msgid "Маршрут был получен"
-msgstr "Die Route wurde erhalten"
-
-msgid "Нет"
-msgstr "Nein"
-
-msgid "Принес"
-msgstr "Gebracht"
-
-msgid "Отправили в Германию"
-msgstr "Nach Deutschland geschickt"
-
-msgid "Не дали"
-msgstr "Nicht gegeben"
-
-msgid "Не смог получить (сомнительно)"
-msgstr "Konnte nicht erhalten (zweifelhaft)"
-
-
-
-msgid "Подтвержден пользователем"
-msgstr "Vom Benutzer bestätigt"
-
-msgid "Статус заполнения формы"
-msgstr "Status des Formulars"
-
-msgid "Подтверждено админом"
-msgstr "Vom Administrator bestätigt"
-
-msgid "Доступ к справкам для регистрации"
-msgstr "Zugang zu Registrierungszertifikaten"
-
-msgid "Доступ к справкам для посольства"
-msgstr "Zugang zu Botschaftszertifikaten"
-
-msgid "Дата начала действия визы"
-msgstr "Visum Gültigkeitsdatum"
-
-msgid "Дата окончания действия визы"
-msgstr "Visum Ablaufdatum"
-
-msgid "Уровень"
-msgstr "Niveau"
-
-msgid "Курсы"
-msgstr "Kurse"
-
-
-
-msgid "Заметка"
-msgstr "Notiz"
-
-msgid "Имя на латинице"
-msgstr "Name in lateinischer Schrift"
-
-msgid "Имя на кириллице"
-msgstr "Name in kyrillischer Schrift"
-
-msgid "Фамилия на латинице"
-msgstr "Nachname in lateinischer Schrift"
-
-msgid "Фамилия на кириллице"
-msgstr "Nachname in kyrillischer Schrift"
-
-msgid "День рождения"
-msgstr "Geburtstag"
-
-msgid "Гражданство"
-msgstr "Staatsangehörigkeit"
-
-msgid "Был в Германии"
-msgstr "War in Deutschland"
-
-msgid "Страна рождения"
-msgstr "Geburtsland"
-
-msgid "Область рождения"
-msgstr "Gebietsgeburt"
-
-msgid "Город/cело рождения"
-msgstr "Stadt/Dorf der Geburt"
-
-msgid "Квартира (адрес прописки)"
-msgstr "Wohnung (gemeldete Adresse)"
-
-
-
-msgid "Дата поступления"
-msgstr "Eintrittsdatum"
-
-msgid "Дата окончания"
-msgstr "Ablaufdatum"
-
-msgid "Направление"
-msgstr "Richtung"
-
-msgid "Знание немецкого языка"
-msgstr "Deutschkenntnisse"
-
-msgid "Знание английского языка"
-msgstr "Englischkenntnisse"
-
-msgid "Знание турецкого языка"
-msgstr "Türkischkenntnisse"
-
-msgid "Знание русского языка"
-msgstr "Russischkenntnisse"
-
-msgid "Знание китайского языка"
-msgstr "Chinesischkenntnisse"
-
-msgid "Водительские права"
-msgstr "Führerschein"
-
-msgid "Стаж вождения"
-msgstr "Fahrerfahrung"
-
-msgid "Категории"
-msgstr "Kategorien"
-
-msgid "Подкатегории"
-msgstr "Unterkategorien"
-
-msgid "Идеи улучшения"
-msgstr "Verbesserungsideen"
-
-msgid "Категория A"
-msgstr "Kategorie A"
-
-msgid "Категория B"
-msgstr "Kategorie B"
-
-msgid "Категория C"
-msgstr "Kategorie C"
-
-msgid "Категория D"
-msgstr "Kategorie D"
-
-msgid "Категория E"
-msgstr "Kategorie E"
-
-msgid "Трактор"
-msgstr "Traktor"
-
-msgid "Коробка передач"
-msgstr "Getriebeart"
-
-msgid "Чтение"
-msgstr "Lesen"
-
-msgid "Пение"
-msgstr "Singen"
-
-msgid "Путешествие"
-msgstr "Reisen"
-
-msgid "Йога"
-msgstr "Yoga"
-
-msgid "Танцы"
-msgstr "Tanz"
-
-msgid "Спорт"
-msgstr "Sport"
-
-msgid "Рисование"
-msgstr "Malen"
-
-msgid "Компьютерные игры"
-msgstr "Computerspiele"
-
-msgid "Игра на гитаре"
-msgstr "Gitarrenspiel"
-
-msgid "Фильмы"
-msgstr "Filme"
-
-msgid "Музыка"
-msgstr "Musik"
-
-msgid "Вязание"
-msgstr "Stricken"
-
-msgid "Готовка"
-msgstr "Kochen"
-
-msgid "Рыбалка"
-msgstr "Angeln"
-
-msgid "Фотография"
-msgstr "Fotografie"
-
-msgid "Профиль студента"
-msgstr "Studentenprofil"
-
-msgid "Профили студентов"
-msgstr "Studentenprofile"
-
-msgid "Контакт студента"
-msgstr "Studentenkontakt"
-
-msgid "Контакты студентов"
-msgstr "Studentenkontakte"
-
-msgid "Документ Студента"
-msgstr "Studentendokument"
-
-msgid "Документы Студентов"
-msgstr "Studentendokumente"
-
-msgid "Не оповестили"
-msgstr "Nicht benachrichtigt"
-
-msgid "Сомнительно"
-msgstr "Zweifelhaft"
-
-msgid "Оповестили"
-msgstr "Benachrichtigt"
-
-msgid "Оповестили дважды"
-msgstr "Zweimal benachrichtigt"
-
-msgid "Приглашен"
-msgstr "Eingeladen"
-
-msgid "Дата оповещения"
-msgstr "Benachrichtigungsdatum"
-
-msgid "Подтверждение студента"
-msgstr "Studentenbestätigung"
-
-
-msgid "Дата и время собеседования"
-msgstr "Datum und Uhrzeit des Interviews"
-
-msgid "Дата начала работы"
-msgstr "Arbeitsbeginndatum"
-
-msgid "Дата окончания работы"
-msgstr "Arbeitsenddatum"
-
-msgid "Собеседование"
-msgstr "Interview"
-
-msgid "Собеседования"
-msgstr "Interviews"
-
-msgid "Общий список"
-msgstr "Allgemeine Liste"
-
-msgid "Справочная информация"
-msgstr "Referenzinformation"
-
-msgid "Оплатил"
-msgstr "Bezahlt"
-
-
-msgid "Сумма оплаты"
-msgstr "Zahlungsbetrag"
-
-msgid "Время создания счета"
-msgstr "Rechnungserstellungszeit"
-
-msgid "Время изменения счета"
-msgstr "Rechnungsänderungszeit"
-
-msgid "Счет"
-msgstr "Rechnung"
-
-msgid "Счета"
-msgstr "Rechnungen"
-
-msgid "Автор изменений"
-msgstr "Änderungsautor"
-
-msgid "Дата изменений"
-msgstr "Änderungsdatum"
-
-msgid "Текст изменения"
-msgstr "Änderungstext"
-
-msgid "История изменений Характеристики"
-msgstr "Änderungshistorie des Merkmals"
-
-msgid "Тех поддержка"
-msgstr "Technischer Support"
-
-msgid "Ответ"
-msgstr "Antwort"
-
-msgid "Отправлено"
-msgstr "Gesendet"
-
-msgid "Отправить студентам"
-msgstr "An Studenten senden"
-
-msgid "Отправить работодателям"
-msgstr "An Arbeitgeber senden"
-
-msgid "Объявление"
-msgstr "Ankündigung"
-
-msgid "Объявления"
-msgstr "Ankündigungen"
-
-msgid "ФИО"
-msgstr "Name, Vorname, Nachname"
-
-msgid "Емайл"
-msgstr "E-Mail"
-
-msgid "Дата заявки"
-msgstr "Antragsdatum"
-
-msgid "Примечание менеджера"
-msgstr "Managerkommentar"
-
-msgid "Дата звонка менеджера"
-msgstr "Anrufdatum des Managers"
-
-
-
-msgid "Позвонил"
-msgstr "Angerufen"
-
-msgid "Проконсультирован"
-msgstr "Beraten"
-
-msgid "Набрать позже"
-msgstr "Später anrufen"
-
-msgid "Заявка на подключение"
-msgstr "Anschlussantrag"
-
-msgid "Заявки на подключение"
-msgstr "Anschlussanträge"
-
-msgid "Пользователи"
-msgstr "Benutzer"
+msgid "Текст для футера"
+msgstr "Text in der Fußzeile"

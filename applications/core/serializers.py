@@ -313,11 +313,12 @@ class VacancyListSerializers(serializers.ModelSerializer):
 
 
 class InvitationSerializers(serializers.ModelSerializer):
-    
     user_profile = ProfileAllSerializer(source='user', read_only=True)
     created_date = serializers.SerializerMethodField(read_only=True)
     position = PositionEmployeeSerializers(source='vacancy.position', read_only=True)
     branch = BranchListSerializers(source='vacancy.branch', read_only=True)
+    
+
     
     class Meta:
         model = Invitation
