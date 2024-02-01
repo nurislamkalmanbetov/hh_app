@@ -124,8 +124,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
-media/
-.DS_Store
-static/package-lock.json
-static/.rpt2_cache/
+
 .vscode/
