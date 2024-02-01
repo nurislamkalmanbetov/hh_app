@@ -4,6 +4,13 @@ services:
     image: postgres:15
     env_file:
       - .env
+    environment:
+      POSTGRES_DB: ${NAME_DB}
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+      
+    restart: always
+
     ports:
       - "5432"
     volumes:
@@ -39,5 +46,5 @@ services:
 
 volumes:
   pgdata:
-  medias:
+  project:
 

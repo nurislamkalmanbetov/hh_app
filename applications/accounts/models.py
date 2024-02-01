@@ -135,6 +135,11 @@ class Profile(models.Model):
         return self.user.email
     
     class Meta:
+        indexes = [
+            models.Index(fields=['user', 'gender_en','german','russian' ])
+
+        ]
+
         verbose_name = _('Профиль соискателя')
         verbose_name_plural = _('Профили соискателей')
 
@@ -197,6 +202,10 @@ class University(models.Model):
         return self.user.user.email
     
     class Meta:
+        indexes = [
+            models.Index(fields=['user'])
+
+        ]
         verbose_name = _('Университет')
         verbose_name_plural = _('Университеты')
 
@@ -216,6 +225,10 @@ class PassportAndTerm(models.Model):
         return self.user.user.email
 
     class Meta:
+        indexes = [
+            models.Index(fields=['user'])
+
+        ]
         verbose_name = _('Паспортные данные и термин')
         verbose_name_plural = _('Паспортные данные и термины')
 

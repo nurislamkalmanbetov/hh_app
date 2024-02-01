@@ -185,7 +185,7 @@ class VacancyCreateAPIView(APIView):
          
 
             if user is None:
-                return Response({'error': 'Вы еще не добавили компанию'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
             
             if branch is None:
                 return Response({'error': 'Branch is missing.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -272,6 +272,10 @@ class InvitationAPIView(APIView):
         if serializer.is_valid():
             user_id = request.user.id
             vacancy = request.data.get('vacancy')
+            user = request.data.get('user')
+            invitation = Invitation.objects.filter(employer__user__id=user_id).filter(vacancy=vacancy).filter(user=user).first()
+            if invitation is not None:
+                return Response({'error': 'You have already invited this applicant'}, status=status.HTTP_400_BAD_REQUEST)
             user = EmployerCompany.objects.get(user__id=user_id)
             vacancy = Vacancy.objects.filter(employer_company=user).filter(id=vacancy).first()
             if vacancy is None:

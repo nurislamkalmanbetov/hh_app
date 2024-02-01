@@ -19,6 +19,10 @@ class EmployerCompany(models.Model):
         return self.name
 
     class Meta:
+        indexes = [
+            models.Index(fields=['user',]),
+        ]
+
         verbose_name = _('Работодатель')
         verbose_name_plural = _('Работодатели')
 
@@ -46,6 +50,14 @@ class Branch(models.Model):
         return self.name
 
     class Meta:
+
+        indexes = [
+            models.Index(fields=['city',]),
+            models.Index(fields=['company',]),
+
+        ]
+
+
         verbose_name = _('Филиал')
         verbose_name_plural = _('Филиалы')
 
@@ -60,6 +72,10 @@ class ReviewBranch(models.Model):
         return self.review
 
     class Meta:
+        indexes = [
+            models.Index(fields=['branch',]),
+            models.Index(fields=['user',]),
+        ]
         verbose_name = _('Отзыв филиала')
         verbose_name_plural = _('Отзывы филиалов')
 
@@ -94,6 +110,11 @@ class PositionEmployee(models.Model):
     
 
     class Meta:
+        indexes = [
+            models.Index(fields=['employer',]),
+
+        ]
+
         verbose_name = _('Позиция работника')
         verbose_name_plural = _('Позиция работников')
 
@@ -143,6 +164,10 @@ class Vacancy(models.Model):
         return self.employer_company.name
 
     class Meta:
+        indexes = [
+            models.Index(fields=['employer_company',]),
+
+        ]
         verbose_name = _('Вакансия')
         verbose_name_plural = _('Вакансии')
 
@@ -162,5 +187,10 @@ class Invitation(models.Model):
     
 
     class Meta:
+        indexes = [
+            models.Index(fields=['employer',]),
+            models.Index(fields=['vacancy',]),
+            models.Index(fields=['user',]),
+        ]
         verbose_name = _('Приглашение на вакансию')
         verbose_name_plural = _('Приглашения на вакансии')

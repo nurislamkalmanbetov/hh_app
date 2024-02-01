@@ -21,11 +21,13 @@ from rest_framework.permissions import IsAuthenticated
 
 from drf_yasg2.utils import swagger_auto_schema
 from random import randint
-
+from django.shortcuts import get_object_or_404
+from django.db.models import F
 from .permissions import IsEmployeePermisson
 from applications.core.permissions import IsEmployerPermisson
 from .serializers import *
 from .filters import ProfileFilter
+from applications.core.models import Vacancy, Invitation
 
 
 User = get_user_model()
@@ -114,7 +116,7 @@ class ResetPasswordAPIView(APIView):
         user = User.objects.filter(email=email).first()
 
         if user is None:
-            return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         verification_code = randint(10000, 99999)
         user.verification_code = verification_code
         user.verification_code_created_at = timezone.now()
@@ -148,11 +150,11 @@ class VerifyEmailAPIView(APIView):
             verification_code = serializer.data['verification_code']
             user = User.objects.filter(email=email).first()
             if user is None:
-                return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
             if user.verification_code != verification_code:
-                return Response({"error": "Неверный код"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Incorrect code"}, status=status.HTTP_400_BAD_REQUEST)
             if user.verification_code_created_at + timezone.timedelta(minutes=5) < timezone.now():
-                return Response({"error": "Код истек"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Registration code expired. Please request a new code and try again"}, status=status.HTTP_400_BAD_REQUEST)
             
             user.is_active = True
             
@@ -180,10 +182,10 @@ class SetPasswordAPIView(APIView):
             password_confirm = serializer.data['password_confirm']
             user = User.objects.filter(email=email).first()
             if password != password_confirm:
-                return Response({"error": "Пароли не совпадают"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "The entered passwords do not match"}, status=status.HTTP_400_BAD_REQUEST)
             user = User.objects.filter(email=serializer.data['email']).first()
             if user is None:
-                return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
             
             user.set_password(password)
@@ -199,7 +201,7 @@ class SetPasswordAPIView(APIView):
                 "access": str(refresh.access_token),
             })
         
-        return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class UserLoginView(generics.GenericAPIView):
@@ -215,7 +217,7 @@ class UserLoginView(generics.GenericAPIView):
         user = authenticate(request, username=email, password=password)
         if user:  
             if not user.is_verified_email:
-                return Response({"error": "Почта не подтверждена"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Please verify your email address by clicking on the confirmation link sent to your inbox"}, status=status.HTTP_400_BAD_REQUEST)
             
             refresh = RefreshToken.for_user(user)
             return Response({
@@ -227,7 +229,7 @@ class UserLoginView(generics.GenericAPIView):
                 'access': str(refresh.access_token)
             }, status=status.HTTP_200_OK)
         else:
-            return Response({"error": "Неправильный Email или пароль"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -257,120 +259,40 @@ class ProfileDetailView(ListAPIView):
         return Profile.objects.filter(id=profile_id)
     
 
-class ProfileListAllView(ListAPIView):
+class ProfileFilterListView(ListAPIView):
     serializer_class = ProfileAllSerializer
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+
+    def get_queryset(self):
+        vacancy_id = self.kwargs.get('pk')
+        employer = self.request.user.id
+
+        vacancy = get_object_or_404(Vacancy, id=vacancy_id)
+
+        profiles_for_vacancy = Profile.objects.annotate(
+            vacancy_language_de=F('german'),
+            vacancy_language_en=F('english')
+        ).filter(
+            vacancy_language_de__gte=vacancy.language_german,
+            vacancy_language_en__gte=vacancy.language_english
+        )
+
+        invited_users = Invitation.objects.filter(employer__id=employer, vacancy__id=vacancy_id).values_list('user', flat=True)
+
+        if vacancy.gender != 'Any':
+            # Если пол важен, фильтруем по указанному полу в вакансии
+            profiles_for_vacancy = profiles_for_vacancy.filter(gender_en=vacancy.gender)
+
+        queryset = profiles_for_vacancy.exclude(id__in=invited_users)
+
+        return queryset
+
+
+class ProfileListView(ListAPIView):
+    serializer_class = ProfileAllSerializer
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filter_fields = ['gender_en', 'nationality_en', 'german', 'english',]
-    permission_classes = [IsAuthenticated,IsEmployerPermisson]
 
     def get_queryset(self):
         return Profile.objects.all()
-
-
-
-# class UniversityListView(ListAPIView):
-#     queryset = University.objects.all()
-#     serializer_class = UniversitySerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-#     parser_classes = (MultiPartParser, FormParser)
-
-
-# class PassportAndTermListView(ListAPIView):
-#     queryset = PassportAndTerm.objects.all()
-#     serializer_class = PassportAndTermSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-
-
-
-# class PaymentListView(ListAPIView):
-#     queryset = Payment.objects.all()
-#     serializer_class = PaymentSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-
-
-# class DealListView(ListAPIView):
-#     queryset = Deal.objects.all()
-#     serializer_class = DealSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-
-
-
-
-# class RatingListView(ListAPIView):
-#     serializer_class = RatingSerializer
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     parser_classes = (MultiPartParser, FormParser)
-#     filterset_fields = ['value_rating',]
-
-#     def get_queryset(self):
-#         user_id = self.request.user.id
-#         return Rating.objects.filter(user=user_id)
-    
-
-# class RatingCreateView(CreateAPIView):
-#     queryset = Rating.objects.all()
-#     serializer_class = RatingSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     parser_classes = (MultiPartParser, FormParser)
-
-
-#     def post(self, request, *args, **kwargs):
-#         try:
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
-#             headers = self.get_success_headers(serializer.data)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-#         except ValidationError as e:
-#             # Если ошибка валидации связана с дублированием рейтинга
-#             if 'Рейтинг от этого работодателя для данного пользователя уже существует' in str(e):
-#                 return Response({'detail': str(e)}, status=status.HTTP_200_OK)
-#             # Все остальные ошибки валидации
-#             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
-
-# class RatingRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Rating.objects.all()
-#     serializer_class = RatingSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-#     filterset_fields = ['value_rating', ]
-#     parser_classes = (MultiPartParser, FormParser)
-
-
-
-# class ReviewCreateAPIView(generics.ListCreateAPIView):
-#     serializer_class = ReviewSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-#     filterset_fields = ['rating__value_rating', ]
-#     parser_classes = (MultiPartParser, FormParser)
-
-#     def get_queryset(self):
-#         user_id = self.request.user.id
-#         return Review.objects.filter(user=user_id)
-
-
-# class WorkExperienceAPIView(generics.ListCreateAPIView):
-#     queryset = WorkExperience.objects.all()
-#     serializer_class = WorkExperienceSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-#     filterset_fields = ['type_company', 'company', 'position', 'country', ]
-#     parser_classes = (MultiPartParser, FormParser)
-
-
-# class WorkScheduleAPIView(generics.ListCreateAPIView):
-#     queryset = WorkSchedule.objects.all()
-#     serializer_class = WorkScheduleSerializer
-#     permission_classes = [IsAuthenticated, IsEmployeePermisson]
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-#     filterset_fields = ['custom',]
-#     parser_classes = (MultiPartParser, FormParser)
-
-
-
