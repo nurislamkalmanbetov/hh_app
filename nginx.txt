@@ -8,23 +8,23 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
+    location /media/ {
+    alias /home/iwex-crm-test-server/media/;
+}
+
     ssl_certificate /etc/letsencrypt/live/crm.iwex.kg/fullchain.pem; # managed by Certbot
- # Путь к сертификату
     ssl_certificate_key /etc/letsencrypt/live/crm.iwex.kg/privkey.pem; # managed by Certbot
- # Путь к приватному ключу
     include /etc/letsencrypt/options-ssl-nginx.conf; # Дополнительные SSL настройки
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # DH параметры
-
 }
 
 server {
-
     listen 80;
     server_name crm.iwex.kg;
     return 301 https://$host$request_uri; # Перенаправление HTTP на HTTPS
-
-
 }
+
+
 
 server {
     listen 443 ssl;
