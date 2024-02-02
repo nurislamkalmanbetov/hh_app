@@ -8,43 +8,30 @@ services:
       POSTGRES_DB: ${NAME_DB}
       POSTGRES_USER: ${USER_DB}
       POSTGRES_PASSWORD: ${PASSWORD_DB}
-      
     restart: always
-
     ports:
       - "5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  # nginx:
-  #   image: nginx:1.15
-  #   restart: always
-  #   volumes:
-  #     - ./etc/nginx.conf:/etc/nginx/nginx.conf
-  #     - ./etc/ssl/:/etc/nginx/ssl/
-  #     - medias:/media
-  #     - statics:/static
-  #     - common_files:/common_files
-  #   ports:
-  #     - 443:443
-  #     - 80:80
+
 
   app:
     build: . 
     restart: always
-    command: >
-          bash -c "python manage.py migrate && python  manage.py runserver 0.0.0.0:8005"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8005"
     ports:
-          - "8005:8005"
+      - "8005:8005"
     env_file:
       - .env
     depends_on:
+
       - db 
     volumes:
       - .:/app
 
-
 volumes:
   pgdata:
-  project:
-
+  # medias:
+  # statics:
+  # common_files:

@@ -2,9 +2,9 @@ FROM python:3.9.12
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-WORKDIR /iwex
+WORKDIR /app
 
-COPY requirements.txt /iwex/
+COPY requirements.txt /app/
 RUN python -m pip install --upgrade pip
 
 # Добавьте 'apt-get update' перед установкой пакетов
