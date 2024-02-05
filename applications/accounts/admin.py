@@ -24,7 +24,7 @@ class UserAdmin(ImportExportModelAdmin, BaseUserAdmin):
     )
     list_display = ['id','email','verification_code', 'phone',  'is_staff', 'is_delete', 'is_active','role', 'is_superuser', ]
     search_fields = ['email', 'phone',  ]
-    list_editable = ['is_staff', 'is_delete', 'is_active','role',  'is_superuser',]
+    list_editable = ['is_staff', 'is_delete', 'is_active','is_superuser',]
     ordering = ('id',)
     filter_horizontal = ('groups', 'user_permissions')
 
