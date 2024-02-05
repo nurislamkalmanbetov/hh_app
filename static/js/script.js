@@ -4,21 +4,21 @@ const data = [
     title: 'Employment',
     title2: 'vacancies',
     description: 'Discover new career opportunities in Germany. Find the perfect job opportunity that matches your skills and experience. We provide unique opportunities for work and development in one of the most developed countries in the world.',
-    image: 'https://migronium.com/wp-content/uploads/2023/10/obuchenie-v-germanii-1.jpg'
+    image: '/static/image/flag_germeny.jpeg'
   },
   {
     place: 'IWEX-JOOBO-MOBILE',
     title: 'MOBILE',
     title2: 'FIND JOB',
     description: 'Explore the IWEX-JOOBO-MOBILE mobile app and discover a convenient and efficient way to search for jobs. Our app provides a wide range of job opportunities, helping you find the perfect offer for your career. Join us and start your path to a successful career now!',
-    image: '/static/image/job-search4.jpeg'
+    image: '/static/image/job_mobile1.jpeg'
   },
   {
     place: 'Inter Work Exchange',
     title: 'over +2000',
     title2: 'Vacancies🇩🇪',
     description: 'A website where you can get the opportunity to have a limitless experience in Germany with the best Professionals in the business',
-    image: 'https://iwex.kg/courses/images/course1.webp'
+    image: '/static/image/course_iwex.webp'
   },
   // {
   //     place:'Вюрцбург',
