@@ -40,6 +40,7 @@ services:
       - .env
     depends_on:
       - db 
+
     volumes:
       - .:/app
 
@@ -47,4 +48,3 @@ services:
 volumes:
   pgdata:
   project:
-
