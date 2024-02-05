@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include, re_path
 from rest_framework import permissions
 from drf_yasg2.views import get_schema_view
+from .views import main_page
 
 from drf_yasg2 import openapi
 
@@ -28,12 +29,13 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
-    # url='https://crm.iwex.kg',
+    url='https://crm.iwex.kg',
 )
 
 urlpatterns = [
 #     path("i18n/", include("django.conf.urls.i18n")),
     path('admin/', admin.site.urls),
+    path('', main_page, name='main-page'),
     path('i18n/', set_language, name='set_language'),
     path('chaining/', include('smart_selects.urls')),
     path('accounts/', include('applications.accounts.urls')),
@@ -51,11 +53,11 @@ urlpatterns = [
           name="schema-swagger-ui",
      ),
      path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # handler404 = error_404_page
 # handler500 = error_500_page
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
-                   static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
+#                    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
