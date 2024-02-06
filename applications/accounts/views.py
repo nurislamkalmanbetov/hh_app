@@ -28,22 +28,12 @@ from applications.core.permissions import IsEmployerPermisson
 from .serializers import *
 from .filters import ProfileFilter
 from applications.core.models import Vacancy, Invitation
-
+from .tasks import send_custom_email_task
 
 User = get_user_model()
 
 
-def send_custom_email(email, subject, template_name, context):
-    html_message = render_to_string(template_name, context)
-    send_mail(
-        subject,
-        None,
-        'kalmanbetovnurislam19@gmail.com', 
-        [email],
-        html_message=html_message,
-        fail_silently=False,
-    )
-    print("Письмо отправлено")
+
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -63,7 +53,7 @@ class RegistrationAPIView(generics.CreateAPIView):
                 'verification_code': verification_code,
             }
 
-            send_custom_email(
+            send_custom_email_task.delay(
                 user.email,
                 'Подтверждение регистрации',
                 'email_template.html',
@@ -94,7 +84,7 @@ class RegistrationAPIView(generics.CreateAPIView):
                 'verification_code': verification_code,
             }
 
-            send_custom_email(
+            send_custom_email_task.delay(
                 user.email,
                 'Подтверждение регистрации',
                 'email_template.html',
@@ -125,7 +115,7 @@ class ResetPasswordAPIView(APIView):
             'verification_code': verification_code,
         }
 
-        send_custom_email(
+        send_custom_email_task.delay(
             user.email,
             'Сброс пароля',
             'password_reset_email.html',
