@@ -14,3 +14,4 @@ def send_custom_email_task(email, subject, template_name, context):
         fail_silently=False,
     )
     print("Письмо отправлено")
+    
