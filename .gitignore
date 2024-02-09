@@ -129,5 +129,8 @@ dmypy.json
 .idea/
 
 .vscode/
+.iwex_crm/urls.py
+.iwex_crm/settings.py
+.migrations/
 
 .migrations/
