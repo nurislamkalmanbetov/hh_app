@@ -216,7 +216,6 @@ class VacancyUpdateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VacancyListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = VacancyListSerializers
     filter_backends = [filters.SearchFilter]
     search_fields = ['position__name', 'branch__name',]
@@ -224,6 +223,9 @@ class VacancyListAPIView(ListAPIView):
     def get_queryset(self):
         queryset = Vacancy.objects.all().select_related('employer_company', 'branch', 'position')
         return queryset
+    
+
+
 
 class VacancyDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
