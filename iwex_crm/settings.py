@@ -256,10 +256,8 @@ CELERY_RESULT_SERIALIZER = env.str('CELERY_RESULT_SERIALIZER')
 
 # Настройки для статических файлов
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 # Настройки для медиа-файлов
 MEDIA_URL = 'https://crm.iwex.kg/media/'
