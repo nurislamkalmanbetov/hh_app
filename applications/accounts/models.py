@@ -253,7 +253,7 @@ class Payment(models.Model):
     debt = models.IntegerField(_('Долг'), blank=True, null=True)
     debt_in_words = models.CharField(_('Долг прописью'), max_length=255, blank=True)
     payment_date = models.DateTimeField(_('Дата оплаты'), blank=True, null=True)
-    payment_accepted_by = models.ForeignKey(User, verbose_name=_('Оплату принял'), related_name='payments_accepted', on_delete=models.CASCADE, blank=True, null=True, validators=[is_staff_or_superuser])
+    payment_accepted_by = models.ForeignKey(User, verbose_name=_('Оплату принял'), related_name='payments_accepted', on_delete=models.CASCADE,blank=True, null=True)
     
     payment_accepted_date = models.DateTimeField(_('Дата принятия оплаты'), blank=True, null=True)
     payment_accepted = models.BooleanField(_('Оплата принята'), default=False)

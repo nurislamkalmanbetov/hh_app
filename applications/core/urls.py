@@ -23,7 +23,7 @@ urlpatterns = [
     
     path('vacancy-create/', VacancyCreateAPIView.as_view(), name='vacancycreate'),
     path('vacancy-update/<int:pk>/', VacancyUpdateAPIView.as_view(), name='vacancyupdate'),
-    # path('vacancy-list/', VacancyListAPIView.as_view(), name='vacancylist'),
+    path('vacancy-list/', VacancyListAPIView.as_view(), name='vacancylist'),
     path('vacancy-detail/<int:pk>/', VacancyDetailAPIView.as_view(), name='vacancydetail'),
     path('vacancy-employer/', EmployerVacancyListAPIView.as_view(), name='vacancy-employer'),
 

@@ -67,6 +67,7 @@ class RegistrationAPIView(generics.CreateAPIView):
             })
 
         serializer = self.get_serializer(data=request.data)
+        print(serializer)
         if serializer.is_valid():
             user = User.objects.filter(email=serializer.validated_data['email']).first()
 

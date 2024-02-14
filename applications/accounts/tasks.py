@@ -8,7 +8,7 @@ def send_custom_email_task(email, subject, template_name, context):
     send_mail(
         subject,
         None,
-        'kalmanbetovnurislam19@gmail.com', 
+        'nurislam.iwex@gmail.com',
         [email],
         html_message=html_message,
         fail_silently=False,
