@@ -194,3 +194,46 @@ class Invitation(models.Model):
         ]
         verbose_name = _('Приглашение на вакансию')
         verbose_name_plural = _('Приглашения на вакансии')
+
+
+class Interviews(models.Model):
+    employer = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name=_('Вакансия'))
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name = 'interviews_profile',verbose_name=_('Пользователь'))
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+    interviews_date = models.DateTimeField(_('Дата собеседования'),)
+    is_accepted = models.BooleanField(_('Принято'), default=False)
+    is_work = models.BooleanField(_('Работает'), default=False)
+    is_rejected = models.BooleanField(_('Не прошел'), default=False)
+    is_passed = models.BooleanField(_('Прошел'), default=False)
+
+    def __str__(self):
+        return self.vacancy.employer_company.name
+    
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['employer',]),
+            models.Index(fields=['vacancy',]),
+            models.Index(fields=['user',]),
+        ]
+        verbose_name = _('Собеседование')
+        verbose_name_plural = _('Собеседования')
+
+
+class Favorite(models.Model):
+    employer = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, verbose_name=_('Пользователь'))
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+
+    def __str__(self):
+        return self.employer.name
+    
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['employer',]),
+            models.Index(fields=['user',]),
+        ]
+        verbose_name = _('Избранное')
+        verbose_name_plural = _('Избранные')

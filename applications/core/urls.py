@@ -29,6 +29,12 @@ urlpatterns = [
 
     path('invitation/', InvitationAPIView.as_view(), name='invitation'),
 
+    path('interviews-list/', InterviewsModelViewsets.as_view(
+        {'get': 'list', }), name='interviews-list'),
     
+    path('interviews-create/', InterviewsAPIView.as_view(), name='interviews-create'),
+   
+    path('favorite-list/', FavoriteListAPIView.as_view(), name='favorite-list'),
+    path('favorite-create/', FavoriteAPIView.as_view(), name='favorite-create'),
 ]
     

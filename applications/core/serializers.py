@@ -340,3 +340,64 @@ class InvitationSerializers(serializers.ModelSerializer):
         url_icon = obj.user.icon.url
         return request.build_absolute_uri(url_icon)
 
+
+class InterviewsListSerializers(serializers.ModelSerializer):
+    user_profile = ProfileAllSerializer(source='user', read_only=True)
+    created_date = serializers.SerializerMethodField(read_only=True)
+    interviews_date = serializers.SerializerMethodField(read_only=True)
+    vacancy_review = VacancyListSerializers(source='vacancy', read_only=True)
+
+    class Meta:
+        model = Interviews
+        fields = [
+            'id',
+            'vacancy_review',
+            'user_profile',
+            'created_date',
+            'interviews_date',
+        ]
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime("%d.%m.%Y")
+
+    def get_interviews_date(self, obj):
+        return obj.interviews_date.strftime("%d.%m.%Y %H:%M")
+    
+
+class InterviewsSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Interviews
+        fields = [
+            'id',
+            'vacancy',
+            'user',
+            'created_date',
+            'interviews_date',
+            'is_accepted',
+            'is_work',
+        ]
+
+
+class FavoriteListSerializers(serializers.ModelSerializer):
+    user_profile = ProfileAllSerializer(source='user', read_only=True)
+
+
+    class Meta:
+        model = Favorite
+        fields = [
+            'id',
+            'user_profile',
+            'created_date',
+        ]
+
+
+class FavoriteSerializers(serializers.ModelSerializer):
+    
+        class Meta:
+            model = Favorite
+            fields = [
+                'id',
+                'user',
+            ]
+    

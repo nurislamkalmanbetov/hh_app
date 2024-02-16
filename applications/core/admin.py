@@ -49,7 +49,7 @@ class InvitationAdmin(admin.ModelAdmin):
     class Meta:
         model = Invitation
 
-
+admin.site.register(Favorite)
 admin.site.register(City)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(ReviewBranch)
@@ -57,3 +57,4 @@ admin.site.register(PositionEmployee, PositionEmployeeAdmin)
 admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)
 admin.site.register(Invitation, InvitationAdmin)
+admin.site.register(Interviews)

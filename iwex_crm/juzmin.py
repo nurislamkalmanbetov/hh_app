@@ -116,7 +116,7 @@ JAZZMIN_SETTINGS = {
     # Related Modal #
     #################
     # Use modals instead of popups
-    "related_modal_active": True,
+    "related_modal_active": False,
     #############
     # UI Tweaks #
     ############## Relative paths to custom CSS/JS scripts (must be present in static files)

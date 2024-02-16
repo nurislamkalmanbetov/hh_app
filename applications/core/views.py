@@ -25,7 +25,7 @@ class EmployerProfileListAPIView(ListAPIView):
     serializer_class = EmployerProfileSerializers
     def get_queryset(self, *args, **kwargs):
         user_id = self.request.user.id
-        queryset = EmployerCompany.objects.filter(user__id=user_id).select_related('user')
+        queryset = EmployerCompany.objects.filter(user__id=user_id)
         return queryset
 
 
@@ -36,7 +36,7 @@ class EmployerCompanyAPIView(APIView):
     def get(self, request, *args, **kwargs):
         user_id = request.user.id
 
-        employer_company = EmployerCompany.objects.select_related('user').filter(user__id=user_id)
+        employer_company = EmployerCompany.objects.filter(user__id=user_id)
         serializer = EmployerCompanySerialzers(employer_company, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -288,3 +288,76 @@ class InvitationAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+
+
+
+class InterviewsModelViewsets(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    serializer_class = InterviewsListSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['vacancy',]
+
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = Interviews.objects.filter(employer__user__id=user_id).select_related('vacancy', 'user',)
+        return queryset
+
+class InterviewsAPIView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    serializer_class = InterviewsSerializers
+
+
+
+    @swagger_auto_schema(request_body=InterviewsSerializers)
+    def post(self, request, *args, **kwargs):
+        serializer = InterviewsSerializers(data=request.data)
+        if serializer.is_valid():
+            user_id = request.user.id
+            vacancy = request.data.get('vacancy')
+            user = request.data.get('user')
+            invitation = Interviews.objects.filter(employer__user__id=user_id).filter(vacancy=vacancy).filter(user=user).first()
+            if invitation is not None:
+                return Response({'error': 'You have already invited this applicant'}, status=status.HTTP_400_BAD_REQUEST)
+            user = EmployerCompany.objects.get(user__id=user_id)
+            vacancy = Vacancy.objects.filter(employer_company=user).filter(id=vacancy).first()
+            if vacancy is None:
+                return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer.save(employer=user, vacancy=vacancy)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FavoriteListAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    serializer_class = FavoriteListSerializers
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = Favorite.objects.filter(employer__user__id=user_id).select_related('user',)
+        return queryset
+    
+
+
+class FavoriteAPIView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    serializer_class = FavoriteSerializers
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.user.id
+        serializer = self.get_serializer(data=request.data)
+        user = request.data.get('user')
+        
+        # Проверяем, не добавлен ли уже этот пользователь в избранное
+        if Favorite.objects.filter(employer__user__id=user_id, user=user).exists():
+            return Response({'error': 'You have already added this user to favorites'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Получаем работодателя и сохраняем в избранное
+        employer = EmployerCompany.objects.get(user__id=user_id)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(employer=employer)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
