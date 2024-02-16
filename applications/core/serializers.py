@@ -140,59 +140,7 @@ class BranchListSerializers(serializers.ModelSerializer):
             'city',
             'name',
         ]
-
-    
-
-# class ReviewBranchSerializers(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = ReviewBranch
-#         fields = [
-#             'id',
-#             'branch',
-#             'user',
-#             'review',
-#             'created_date',
-#         ]
-
-
-# class RatingEmployerCompanySerializers(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model = RatingEmployerCompany
-#         fields = [
-#             'id',
-#             'company',
-#             'user',
-#             'rating',
-#         ]   
-
-
-# class RatingEmployerCompanySerializers(serializers.ModelSerializer):
         
-#         class Meta:
-#             model = RatingEmployerCompany
-#             fields = [
-#                 'id',
-#                 'company',
-#                 'user',
-#                 'rating',
-#             ]
-
-
-class PositionEmployeeSerializers(serializers.ModelSerializer):
-    
-    class Meta:
-        model = PositionEmployee
-        fields = [
-            'id',
-            'name',
-
-        ]
-
-
-    
-
 
 class VacancySerializers(serializers.ModelSerializer):
 
@@ -239,7 +187,6 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
     branch = serializers.CharField(source='branch.name')
     branch_city = serializers.CharField(source='branch.city.name')
     branch_address = serializers.CharField(source='branch.address')
-    position = serializers.CharField(source='position.name')
     created_date = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -284,7 +231,6 @@ class VacancyListSerializers(serializers.ModelSerializer):
     branch = serializers.CharField(source='branch.name')
     branch_city = serializers.CharField(source='branch.city.name')
     branch_address = serializers.CharField(source='branch.address')
-    position = serializers.CharField(source='position.name')
     created_date = serializers.SerializerMethodField(read_only=True)
 
 
@@ -315,7 +261,6 @@ class VacancyListSerializers(serializers.ModelSerializer):
 class InvitationSerializers(serializers.ModelSerializer):
     user_profile = ProfileAllSerializer(source='user', read_only=True)
     created_date = serializers.SerializerMethodField(read_only=True)
-    position = PositionEmployeeSerializers(source='vacancy.position', read_only=True)
     branch = BranchListSerializers(source='vacancy.branch', read_only=True)
     
 

@@ -20,13 +20,6 @@ class BranchAdmin(admin.ModelAdmin):
     class Meta:
         model = Branch
 
-class PositionEmployeeAdmin(admin.ModelAdmin):
-    list_display = ['id','employer','name',]
-    search_fields = ['name',]
-
-    ordering = ('id',)
-    class Meta:
-        model = PositionEmployee
 
 
 class VacancyAdmin(admin.ModelAdmin):
@@ -52,8 +45,6 @@ class InvitationAdmin(admin.ModelAdmin):
 admin.site.register(Favorite)
 admin.site.register(City)
 admin.site.register(Branch, BranchAdmin)
-admin.site.register(ReviewBranch)
-admin.site.register(PositionEmployee, PositionEmployeeAdmin)
 admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)
 admin.site.register(Invitation, InvitationAdmin)

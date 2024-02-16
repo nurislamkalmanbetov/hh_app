@@ -137,34 +137,6 @@ class BranchDetailListAPIView(ListAPIView):
 
     
 
-class PositionEmployeeAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
-    def get(self, request, *args, **kwargs):
-        user_id = request.user.id
-        position_employee = PositionEmployee.objects.select_related('employer').filter(employer__id=user_id)
-
-        serializer = PositionEmployeeSerializers(position_employee, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=PositionEmployeeSerializers)
-    def post(self, request, *args, **kwargs):
-        serializer = PositionEmployeeSerializers(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            serializer.save(employer=user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class PositionEmployeeDeleteAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
-
-    def delete(self, request, *args, **kwargs):
-        position_employee_id = kwargs['pk']
-        position_employee = PositionEmployee.objects.get(id=position_employee_id)
-        position_employee.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class VacancyCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
@@ -175,14 +147,11 @@ class VacancyCreateAPIView(APIView):
         if serializer.is_valid():
             user_id  = request.user.id
             branch = request.data.get('branch')
-            position = request.data.get('position')
-  
+
             user = EmployerCompany.objects.get(user__id=user_id)
         
             #выводим только его филлиалы и проверяем есть ли у него такой филлиал
             branch = Branch.objects.filter(company=user).filter(id=branch).first()
-            position = PositionEmployee.objects.filter(employer=user_id).filter(id=position).first()
-         
 
             if user is None:
                 return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
@@ -190,10 +159,7 @@ class VacancyCreateAPIView(APIView):
             if branch is None:
                 return Response({'error': 'Branch is missing.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            if position is None:
-                return Response({'error': 'Position is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            serializer.save(employer_company=user, branch=branch, position=position)
+            serializer.save(employer_company=user, branch=branch,)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -218,10 +184,10 @@ class VacancyUpdateAPIView(APIView):
 class VacancyListAPIView(ListAPIView):
     serializer_class = VacancyListSerializers
     filter_backends = [filters.SearchFilter]
-    search_fields = ['position__name', 'branch__name',]
+    search_fields = ['branch__name',]
 
     def get_queryset(self):
-        queryset = Vacancy.objects.all().select_related('employer_company', 'branch', 'position')
+        queryset = Vacancy.objects.all().select_related('employer_company', 'branch', )
         return queryset
     
 
@@ -235,7 +201,6 @@ class VacancyDetailAPIView(APIView):
         vacancy = Vacancy.objects.filter(id=vacancy_id).select_related(
             'employer_company',
             'branch',
-            'position',
         ).first()
 
         if vacancy is None:
@@ -255,7 +220,7 @@ class EmployerVacancyListAPIView(ListAPIView):
         user_id = self.request.user.id
         
         user = get_object_or_404(EmployerCompany, user__id=user_id)
-        queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch', 'position',)
+        queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch',)
         return queryset
 
 

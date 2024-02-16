@@ -62,63 +62,6 @@ class Branch(models.Model):
         verbose_name_plural = _('Филиалы')
 
 
-class ReviewBranch(models.Model):
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name=_('Филиал'))
-    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Пользователь'))
-    review = models.TextField(_('Отзыв'), blank=True, default='')
-    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
-
-    def __str__(self):
-        return self.review
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['branch',]),
-            models.Index(fields=['user',]),
-        ]
-        verbose_name = _('Отзыв филиала')
-        verbose_name_plural = _('Отзывы филиалов')
-
-
-
-class RatingEmployerCompany(models.Model):
-    RATING_CHOICES = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-    )
-    company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Компания'))
-    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Пользователь'))
-    rating = models.PositiveIntegerField(_('Рейтинг'), choices=RATING_CHOICES, default=1)
-    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
-
-    def __str__(self):
-        return self.rating
-
-    class Meta:
-        verbose_name = _('Рейтинг компании')
-        verbose_name_plural = _('Рейтинги компаний')
-
-class PositionEmployee(models.Model):
-    employer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, verbose_name=_('Работодатель'))
-    name = models.CharField(_('Название позиции'), max_length=255)
-
-    def __str__(self):
-        return self.name
-    
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['employer',]),
-
-        ]
-
-        verbose_name = _('Позиция работника')
-        verbose_name_plural = _('Позиция работников')
-
-
 
 
 
@@ -141,7 +84,7 @@ class Vacancy(models.Model):
     employer_company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
   
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL,null=True, verbose_name=_('Филиал'))
-    position = models.ForeignKey(PositionEmployee, on_delete=models.SET_NULL,null=True, verbose_name=_('Позиция'))
+    position = models.CharField(max_length=255, verbose_name=_('Позиция'))
     duty = models.TextField(_('Обязанности'),)
     experience = models.TextField(_('Опыт работы'),)
     clothingform = models.CharField(max_length=255, verbose_name=_('Форма одежды'))
