@@ -43,7 +43,7 @@ class InvitationAdmin(admin.ModelAdmin):
         model = Invitation
 
 admin.site.register(Favorite)
-admin.site.register(City)
+admin.site.register(Country)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)

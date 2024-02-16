@@ -74,10 +74,10 @@ class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
     
     
 
-class CityListAPIView(ListAPIView):
+class CountryListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = City.objects.all()
-    serializer_class = CitySerializers
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializers
     filter_backends = [filters.SearchFilter]
     search_fields = ['name'] 
 
@@ -118,7 +118,7 @@ class BranchListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     def get_queryset(self):
         user_id = self.request.user.id
-        queryset = Branch.objects.filter(company__user__id=user_id).select_related('city', 'company')
+        queryset = Branch.objects.filter(company__user__id=user_id).select_related('country', 'company')
         return queryset
         
 class BranchDetailListAPIView(ListAPIView):
@@ -132,7 +132,7 @@ class BranchDetailListAPIView(ListAPIView):
         
         # Используйте filter(id=branch_id) вместо filter(branch=branch)
         branch = get_object_or_404(Branch, id=branch_id)
-        queryset = Branch.objects.filter(id=branch.id).select_related('city', 'company')
+        queryset = Branch.objects.filter(id=branch.id).select_related('country', 'company')
         return queryset
 
     

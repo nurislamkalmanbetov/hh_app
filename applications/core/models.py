@@ -27,23 +27,24 @@ class EmployerCompany(models.Model):
         verbose_name_plural = _('Работодатели')
 
 
-class City(models.Model):
+class Country(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
     
     class Meta:
-        verbose_name = _('Город')
-        verbose_name_plural = _('Города')
+        verbose_name = _('Земля')
+        verbose_name_plural = _('Земли')
 
 class Branch(models.Model):
-    city = models.ForeignKey(City, on_delete=models.SET_NULL,null=True, verbose_name=_('Город'))
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL,null=True, verbose_name=_('Земля'))
+    city = models.CharField(_('Название города'), max_length=255, blank=True,)
     company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Компания'))
     name = models.CharField(_('Название филлиала'), max_length=255)
-    address = models.CharField(_('Текстовый адрес'), max_length=255, blank=True, default='')
-    link_address = models.CharField(_('Ссылка на адрес'), max_length=255, blank=True, default='')    
-    description = models.TextField(_('Описание как добраться'), blank=True, default='')
+    address = models.CharField(_('Текстовый адрес'), max_length=255,)
+    link_address = models.CharField(_('Ссылка на адрес'), max_length=255,)    
+    description = models.TextField(_('Описание как добраться'), blank=True,)
 
 
     def __str__(self):
@@ -52,7 +53,7 @@ class Branch(models.Model):
     class Meta:
 
         indexes = [
-            models.Index(fields=['city',]),
+            models.Index(fields=['country',]),
             models.Index(fields=['company',]),
 
         ]
@@ -81,22 +82,30 @@ class Vacancy(models.Model):
         ('C2', 'C2'),
     )
 
+
     employer_company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
   
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL,null=True, verbose_name=_('Филиал'))
     position = models.CharField(max_length=255, verbose_name=_('Позиция'))
     duty = models.TextField(_('Обязанности'),)
     experience = models.TextField(_('Опыт работы'),)
-    clothingform = models.CharField(max_length=255, verbose_name=_('Форма одежды'))
+    type_of_housing = models.BooleanField(_('Тип жилья'),default=False)
+    housing_cost = models.PositiveIntegerField(_('Стоимость жилья'), default=0)
+    clothingform = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('Форма одежды'))
+    salary = models.PositiveIntegerField(_('Зарплата'), default=0)
+    vehicle = models.CharField(max_length=100, null=True, blank=True,verbose_name=_('Транспорт'))
+    insurance = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('Страховка'))
+    requirements = models.TextField(_('Требования работы'),null=True, blank=True,)
+    conditions = models.TextField(_('Условия работы'),null=True, blank=True,)
     employee_count = models.PositiveIntegerField(_('Количество работников'), default=1)
     employee_count_hired = models.PositiveIntegerField(_('Количество нанятых работников'), default=0)
     gender = models.CharField(_('Пол'),choices=GENDER_CHOICES,max_length=50)
     time_start = models.TimeField(_('Время начала работы'))
     time_end = models.TimeField(_('Время окончания работы'))
-    salary = models.PositiveIntegerField(_('Зарплата'))
+    contact_person = models.CharField(_('Контактное лицо'), max_length=255,)
+    email_info = models.EmailField(_('Email'),)
+    phone = models.CharField(_('Телефон'), max_length=50,blank=True,)
     description = models.TextField(_('Коментарий'), blank=True, default='')
-    views_vacancy = models.PositiveIntegerField(_('Количество просмотров'), default=0)
-    increase_choices = models.BooleanField(_('Повышение зарплаты'), default=False)
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
     updated_date = models.DateTimeField(auto_now=True, verbose_name=_('Дата обновления'))
     language_german = models.CharField(_('Знание немецкого языка'), max_length=50,   choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True, null=True)
