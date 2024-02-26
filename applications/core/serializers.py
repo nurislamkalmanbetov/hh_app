@@ -33,14 +33,18 @@ class EmployerCompanySerialzers(serializers.ModelSerializer):
         model = EmployerCompany
         fields = [
             'id',
-            'user',
             'first_name',
             'last_name',
+            'position',
+            'contact_info',
+            'contact_person',
+            'icon',
             'name',
             'iin',
+            'payment_info',
             'description',
-            'icon',
         ]
+
 
 
     def get_url_icon(self, obj):  
@@ -54,8 +58,12 @@ class EmployerCompanySerialzers(serializers.ModelSerializer):
 class EmployerUpdateSerialzers(serializers.ModelSerializer):
         first_name = serializers.CharField(required=False)
         last_name = serializers.CharField(required=False)
+        position = serializers.CharField(required=False)
+        contact_info = serializers.CharField(required=False, allow_blank=True)
+        contact_person = serializers.CharField(required=False, allow_blank=True)
         name = serializers.CharField(required=False)
         iin = serializers.CharField(required=False, allow_blank=True)
+        payment_info = serializers.CharField(required=False, allow_blank=True)
         description = serializers.CharField(required=False, allow_blank=True)
         icon = serializers.ImageField(required=False, use_url=True,allow_null=True)
 
@@ -67,8 +75,12 @@ class EmployerUpdateSerialzers(serializers.ModelSerializer):
                 'id',
                 'first_name',
                 'last_name',
+                'position',
+                'contact_info',
+                'contact_person',
                 'name',
                 'iin',
+                'payment_info',
                 'description',
                 'icon',
             ]
@@ -76,8 +88,12 @@ class EmployerUpdateSerialzers(serializers.ModelSerializer):
         def update(self, instance, validated_data):
             instance.first_name = validated_data.get('first_name', instance.first_name)
             instance.last_name = validated_data.get('last_name', instance.last_name)
+            instance.position = validated_data.get('position', instance.position)
+            instance.contact_info = validated_data.get('contact_info', instance.contact_info)
+            instance.contact_person = validated_data.get('contact_person', instance.contact_person)
             instance.name = validated_data.get('name', instance.name)
             instance.iin = validated_data.get('iin', instance.iin)
+            instance.payment_info = validated_data.get('payment_info', instance.payment_info)
             instance.description = validated_data.get('description', instance.description)
             instance.icon = validated_data.get('icon', instance.icon)
             instance.save()
@@ -134,6 +150,37 @@ class BranchListSerializers(serializers.ModelSerializer):
         ]
         
 
+
+class FilesHousingSerializers(serializers.ModelSerializer):
+            
+            class Meta:
+                model = FilesHousing
+                fields = [
+                    'id',
+                    'files',
+                ]
+
+class HousingSerializers(serializers.ModelSerializer):
+
+    files = FilesHousingSerializers(many=True, required=False)
+
+    class Meta:
+        model = Housing
+        fields = [
+            'id',
+            'employer',
+            'housing_type',
+            'housing_cost',
+            'additional_expenses',
+            'deposit',
+            'cleaning',
+            'files',
+        ]
+
+
+
+
+
 class VacancySerializers(serializers.ModelSerializer):
 
     class Meta:
@@ -142,9 +189,8 @@ class VacancySerializers(serializers.ModelSerializer):
             'branch',
             'position', 
             'duty', 
+            'is_excperience',
             'experience', 
-            'type_of_housing',
-            'housing_cost',
             'clothingform', 
             'salary', 
             'vehicle', 
@@ -155,10 +201,12 @@ class VacancySerializers(serializers.ModelSerializer):
             'gender',
             'time_start', 
             'time_end', 
-            'contact_person', 
-            'email_info', 
             'phone', 
             'description',
+            'housing_status',
+            'housing',
+            'start_holidays_date',
+            'end_holidays_date',
             'language_german',
             'language_english',
 
@@ -169,6 +217,7 @@ class VacancySerializers(serializers.ModelSerializer):
         instance.branch = validated_data.get('branch', instance.branch)
         instance.position = validated_data.get('position', instance.position)
         instance.duty = validated_data.get('duty', instance.duty)
+        instance.is_excperience = validated_data.get('is_excperience', instance.is_excperience)
         instance.experience = validated_data.get('experience', instance.experience)
         instance.clothingform = validated_data.get('clothingform', instance.clothingform)
         instance.employee_count = validated_data.get('employee_count', instance.employee_count)
@@ -177,6 +226,10 @@ class VacancySerializers(serializers.ModelSerializer):
         instance.salary = validated_data.get('salary', instance.salary)
         instance.increase_choices = validated_data.get('increase_choices', instance.increase_choices)
         instance.description = validated_data.get('description', instance.description)
+        instance.start_holidays_date = validated_data.get('start_holidays_date', instance.start_holidays_date)
+        instance.end_holidays_date = validated_data.get('end_holidays_date', instance.end_holidays_date)
+        instance.language_german = validated_data.get('language_german', instance.language_german)
+        instance.language_english = validated_data.get('language_english', instance.language_english)
         instance.save()
         return instance
 
@@ -201,9 +254,8 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
             'branch_address',
             'position', 
             'duty', 
-            'experience', 
-            'type_of_housing',
-            'housing_cost',
+            'experience',
+            'is_excperience', 
             'clothingform', 
             'salary', 
             'vehicle', 
@@ -215,10 +267,11 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
             'gender',
             'time_start', 
             'time_end', 
-            'contact_person', 
             'email_info', 
             'phone', 
             'description',
+            'start_holidays_date',
+            'end_holidays_date',
             'created_date',
             'language_german',
             'language_english',

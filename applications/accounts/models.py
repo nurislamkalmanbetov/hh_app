@@ -15,7 +15,7 @@ from applications.accounts.managers import *
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
         (('is_employer'), _('Работодатель')),
-        (('is_employee'), _('Соискатель')),
+        (('is_student'), _('Соискатель')),
     )
 
     email = models.EmailField(_('Email адрес'), unique=True, db_index=True)

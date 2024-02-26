@@ -22,6 +22,15 @@ class BranchAdmin(admin.ModelAdmin):
 
 
 
+class FilesInline(admin.StackedInline):
+    model = FilesHousing
+    extra = 1
+
+class HousingAdmin(admin.ModelAdmin):
+    list_display = ['id','housing_type',]
+
+    inlines = [FilesInline]
+
 class VacancyAdmin(admin.ModelAdmin):
     list_display = [
         'id','employer_company','branch','position','salary',
@@ -32,6 +41,7 @@ class VacancyAdmin(admin.ModelAdmin):
         ]
 
     ordering = ('id',)
+
     class Meta:
         model = Vacancy
 
@@ -42,6 +52,9 @@ class InvitationAdmin(admin.ModelAdmin):
     class Meta:
         model = Invitation
 
+
+
+
 admin.site.register(Favorite)
 admin.site.register(Country)
 admin.site.register(Branch, BranchAdmin)
@@ -49,3 +62,4 @@ admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)
 admin.site.register(Invitation, InvitationAdmin)
 admin.site.register(Interviews)
+admin.site.register(Housing, HousingAdmin)

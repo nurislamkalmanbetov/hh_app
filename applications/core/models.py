@@ -8,10 +8,14 @@ from django.utils.translation import gettext_lazy as _
 class EmployerCompany(models.Model):
     first_name = models.CharField(_('Имя'), max_length=50, )
     last_name = models.CharField(_('Фамилия'), max_length=50,)
+    position = models.CharField(_('Должность'), max_length=50, )
+    contact_info = models.CharField(_('Контактные данные'), max_length=200,blank=True,)
+    contact_person = models.CharField(_('Контактное лицо'), max_length=50,blank=True, )
     icon = models.ImageField(upload_to='company_icons/', blank=True, verbose_name=_('Изображение'))
     user = models.OneToOneField('accounts.User', on_delete=models.CASCADE, blank=True, verbose_name=_('Работодатель'))
     name = models.CharField(verbose_name=_('Название'), max_length=255)
-    iin = models.CharField(_('ИИН/БИН'), max_length=50)
+    iin = models.CharField(_('ИИН/БИН'), max_length=50, blank=True,)
+    payment_info = models.CharField(_('Реквезиты компании'), blank=True,max_length=255)
     description = models.TextField(_('Описание'), blank=True, default='')
     
 
@@ -36,6 +40,7 @@ class Country(models.Model):
     class Meta:
         verbose_name = _('Земля')
         verbose_name_plural = _('Земли')
+
 
 class Branch(models.Model):
     country = models.ForeignKey(Country, on_delete=models.SET_NULL,null=True, verbose_name=_('Земля'))
@@ -63,8 +68,39 @@ class Branch(models.Model):
         verbose_name_plural = _('Филиалы')
 
 
+class Housing(models.Model):
+    employer = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
+    
+    housing_type = models.CharField(_('Тип жилья'), max_length=100)
+    housing_cost = models.PositiveIntegerField(_('Стоимость жилья'), default=0)
+    additional_expenses = models.TextField(_('Дополнительные расходы'), blank=True)
+    deposit = models.PositiveIntegerField(_('Залог'), default=0)
+    cleaning = models.CharField(_('Уборка'), max_length=255, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
+
+    def __str__(self):
+        return self.employer.name
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['employer',]),
+
+        ]
+        verbose_name = _('Жилье')
+        verbose_name_plural = _('Жилье')
 
 
+
+class FilesHousing(models.Model):
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE, verbose_name=_('Жилье'))
+    files = models.FileField(upload_to='housing_files/', blank=True, verbose_name=_('Файлы жилья'))
+
+    def __str__(self):
+        return self.files.url
+    
+    class Meta:
+        verbose_name = _('Файл жилья')
+        verbose_name_plural = _('Файлы жилья')
 
 class Vacancy(models.Model):
     GENDER_CHOICES = (
@@ -88,9 +124,8 @@ class Vacancy(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL,null=True, verbose_name=_('Филиал'))
     position = models.CharField(max_length=255, verbose_name=_('Позиция'))
     duty = models.TextField(_('Обязанности'),)
+    is_excperience = models.BooleanField(_('Опыт работы требуется'), default=False)
     experience = models.TextField(_('Опыт работы'),)
-    type_of_housing = models.BooleanField(_('Тип жилья'),default=False)
-    housing_cost = models.PositiveIntegerField(_('Стоимость жилья'), default=0)
     clothingform = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('Форма одежды'))
     salary = models.PositiveIntegerField(_('Зарплата'), default=0)
     vehicle = models.CharField(max_length=100, null=True, blank=True,verbose_name=_('Транспорт'))
@@ -102,15 +137,18 @@ class Vacancy(models.Model):
     gender = models.CharField(_('Пол'),choices=GENDER_CHOICES,max_length=50)
     time_start = models.TimeField(_('Время начала работы'))
     time_end = models.TimeField(_('Время окончания работы'))
-    contact_person = models.CharField(_('Контактное лицо'), max_length=255,)
-    email_info = models.EmailField(_('Email'),)
+    housing = models.ForeignKey(Housing, on_delete=models.SET_NULL, null=True, verbose_name=_('Жилье'))
     phone = models.CharField(_('Телефон'), max_length=50,blank=True,)
     description = models.TextField(_('Коментарий'), blank=True, default='')
+    start_holidays_date = models.DateField(_('Дата начала каникул'),)
+    end_holidays_date = models.DateField(_('Дата окончания каникул'),)
+    housing_status = models.BooleanField(_('Жилье предоставляется'), default=False)
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
     updated_date = models.DateTimeField(auto_now=True, verbose_name=_('Дата обновления'))
     language_german = models.CharField(_('Знание немецкого языка'), max_length=50,   choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True, null=True)
     language_english = models.CharField(_('Знание английского языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True,null=True)
     is_active = models.BooleanField(_('Активный'), default=True)
+    
 
     def __str__(self):
         return self.employer_company.name
@@ -122,6 +160,7 @@ class Vacancy(models.Model):
         ]
         verbose_name = _('Вакансия')
         verbose_name_plural = _('Вакансии')
+
 
 
 

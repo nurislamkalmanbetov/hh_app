@@ -18,7 +18,8 @@ urlpatterns = [
     
     path('country/', CountryListAPIView.as_view(), name='city'),
 
-    
+    path('housing/', HousingAPIView.as_view(), name='housing'),
+
     path('vacancy-create/', VacancyCreateAPIView.as_view(), name='vacancycreate'),
     path('vacancy-update/<int:pk>/', VacancyUpdateAPIView.as_view(), name='vacancyupdate'),
     path('vacancy-list/', VacancyListAPIView.as_view(), name='vacancylist'),

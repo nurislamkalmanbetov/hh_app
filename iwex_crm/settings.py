@@ -136,7 +136,7 @@ WSGI_APPLICATION = 'iwex_crm.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': env('NAME_DB'),
+       'NAME': env('NAME_DB1'),
        'USER': env('USER_DB'),
        'PASSWORD':  env('PASSWORD_DB'),
        'HOST': env('HOST_DB'),
@@ -260,7 +260,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # Настройки для медиа-файлов
-MEDIA_URL = 'https://crm.iwex.kg/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
