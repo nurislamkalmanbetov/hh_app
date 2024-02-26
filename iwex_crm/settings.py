@@ -260,7 +260,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # Настройки для медиа-файлов
-MEDIA_URL = '/media/'
+MEDIA_URL = 'https://crm.iwex.kg/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
