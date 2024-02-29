@@ -19,6 +19,7 @@ urlpatterns = [
     path('country/', CountryListAPIView.as_view(), name='city'),
 
     path('housing/', HousingAPIView.as_view(), name='housing'),
+    path('housing-list/', HousingListAPIView.as_view(), name='housinglist'),
 
     path('vacancy-create/', VacancyCreateAPIView.as_view(), name='vacancycreate'),
     path('vacancy-update/<int:pk>/', VacancyUpdateAPIView.as_view(), name='vacancyupdate'),

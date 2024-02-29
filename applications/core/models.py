@@ -138,7 +138,6 @@ class Vacancy(models.Model):
     time_start = models.TimeField(_('Время начала работы'))
     time_end = models.TimeField(_('Время окончания работы'))
     housing = models.ForeignKey(Housing, on_delete=models.SET_NULL, null=True, verbose_name=_('Жилье'))
-    phone = models.CharField(_('Телефон'), max_length=50,blank=True,)
     description = models.TextField(_('Коментарий'), blank=True, default='')
     start_holidays_date = models.DateField(_('Дата начала каникул'),)
     end_holidays_date = models.DateField(_('Дата окончания каникул'),)

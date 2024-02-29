@@ -110,8 +110,7 @@ class CountrySerializers(serializers.ModelSerializer):
         ]
 
 class BranchSerializers(serializers.ModelSerializer):
-    country = serializers.CharField(source='country.name', required=False, allow_null=True)
-    
+
 
     class Meta:
         model = Branch
@@ -168,7 +167,6 @@ class HousingSerializers(serializers.ModelSerializer):
         model = Housing
         fields = [
             'id',
-            'employer',
             'housing_type',
             'housing_cost',
             'additional_expenses',
@@ -177,7 +175,14 @@ class HousingSerializers(serializers.ModelSerializer):
             'files',
         ]
 
+class HousingListSerializers(serializers.ModelSerializer):
 
+    class Meta:
+        model = Housing
+        fields = [
+             'id',
+             'housing_type',
+        ]
 
 
 
@@ -201,7 +206,7 @@ class VacancySerializers(serializers.ModelSerializer):
             'gender',
             'time_start', 
             'time_end', 
-            'phone', 
+          
             'description',
             'housing_status',
             'housing',
@@ -268,7 +273,6 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
             'time_start', 
             'time_end', 
             'email_info', 
-            'phone', 
             'description',
             'start_holidays_date',
             'end_holidays_date',

@@ -444,3 +444,6 @@ def is_staff_or_superuser(user_id):
     if not user.is_staff and not user.is_superuser:
         raise ValidationError("Only staff or superuser can be assigned as 'Оплату принял'")
 
+
+
+

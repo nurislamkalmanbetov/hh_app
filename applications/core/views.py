@@ -89,9 +89,10 @@ class BranchAPIView(APIView):
         serializer = BranchSerializers(data=request.data)
         if serializer.is_valid():
             user_id = request.user.id
-            employer_company = EmployerCompany.objects.get(user__id=user_id)
+            employer_company = get_object_or_404(EmployerCompany, user__id=user_id)
+
+         
             serializer.save(company=employer_company)
-            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -138,14 +139,13 @@ class BranchDetailListAPIView(ListAPIView):
 
 class HousingAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
     def post(self, request, *args, **kwargs):
         serializer = HousingSerializers(data=request.data)
         if serializer.is_valid():
-            user_id = request.data.get('employer')
+            user_id = request.user.id
             employer_company = EmployerCompany.objects.get(id=user_id)
-            print(request.data)
-            # Сохраняем объект жилья
+
             housing = serializer.save(employer=employer_company)
         
 
@@ -153,11 +153,17 @@ class HousingAPIView(APIView):
             for file_data in files_data:
                 FilesHousing.objects.create(housing=housing, files=file_data)
             
-            # Возвращаем успешный ответ
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+class HousingListAPIView(ListAPIView):
+    serializer_class = HousingListSerializers
+    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = Housing.objects.filter(employer__user__id=user_id).select_related('employer',)
+        return queryset
 
 class VacancyCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
@@ -283,7 +289,7 @@ class InterviewsModelViewsets(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = InterviewsListSerializers
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['vacancy',]
+    filterset_fields = ['vacancy', ]
 
 
     def get_queryset(self):
