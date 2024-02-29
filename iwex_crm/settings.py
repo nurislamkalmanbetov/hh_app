@@ -136,7 +136,7 @@ WSGI_APPLICATION = 'iwex_crm.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': env('NAME_DB1'),
+       'NAME': env('NAME_DB'),
        'USER': env('USER_DB'),
        'PASSWORD':  env('PASSWORD_DB'),
        'HOST': env('HOST_DB'),
