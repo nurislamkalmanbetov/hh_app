@@ -67,11 +67,13 @@ INSTALLED_APPS = [
     # 'schedule',
     'easy_thumbnails',
     'storages',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     'applications.accounts',
     'applications.core',
     # 'applications.bot',
-    'applications.common',
-    'drf_yasg2',
+    # 'applications.common',
+ 
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -81,9 +83,8 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [

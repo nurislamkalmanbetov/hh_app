@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 from applications.accounts.models import User
 from django_filters import rest_framework as django_filters
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg2.utils import swagger_auto_schema
+
 from rest_framework import filters, generics, status
 from rest_framework.generics import (GenericAPIView, ListAPIView,
                                      UpdateAPIView, mixins)
@@ -40,7 +40,7 @@ class EmployerCompanyAPIView(APIView):
         serializer = EmployerCompanySerialzers(employer_company, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=EmployerCompanySerialzers)
+
     def post(self, request, *args, **kwargs):
         serializer = EmployerCompanySerialzers(data=request.data)
    
@@ -57,7 +57,7 @@ class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
 
-    @swagger_auto_schema(request_body=EmployerUpdateSerialzers)
+
     def patch(self, request, *args, **kwargs):
         user_id = request.user.id
         user = User.objects.get(id=user_id)
@@ -84,7 +84,7 @@ class CountryListAPIView(ListAPIView):
 
 class BranchAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
-    @swagger_auto_schema(request_body=BranchSerializers)
+ 
     def post(self, request, *args, **kwargs):
         serializer = BranchSerializers(data=request.data)
         if serializer.is_valid():
@@ -100,7 +100,7 @@ class BranchAPIView(APIView):
 
 class BranchUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
-    @swagger_auto_schema(request_body=BranchSerializers)
+
     def patch(self, request, *args, **kwargs):
         branch_id = self.kwargs['pk']
         branch = Branch.objects.get(id=branch_id)
@@ -144,8 +144,11 @@ class HousingAPIView(APIView):
         serializer = HousingSerializers(data=request.data)
         if serializer.is_valid():
             user_id = request.user.id
-            employer_company = EmployerCompany.objects.get(id=user_id)
+            try:
 
+                employer_company = EmployerCompany.objects.get(id=user_id)
+            except EmployerCompany.DoesNotExist:
+                return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
             housing = serializer.save(employer=employer_company)
         
 
@@ -168,7 +171,7 @@ class HousingListAPIView(ListAPIView):
 class VacancyCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
 
-    @swagger_auto_schema(request_body=VacancySerializers)
+
     def post(self, request, *args, **kwargs):
         serializer = VacancySerializers(data=request.data)
         if serializer.is_valid():
@@ -195,7 +198,7 @@ class VacancyCreateAPIView(APIView):
 class VacancyUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
 
-    @swagger_auto_schema(request_body=VacancySerializers)
+
     def patch(self, request, *args, **kwargs):
         vacancy_id = kwargs['pk']
         vacancy = Vacancy.objects.get(id=vacancy_id)
@@ -246,7 +249,6 @@ class EmployerVacancyListAPIView(ListAPIView):
 
     def get_queryset(self):
         user_id = self.request.user.id
-        
         user = get_object_or_404(EmployerCompany, user__id=user_id)
         queryset = Vacancy.objects.filter(employer_company=user).select_related('employer_company', 'branch',)
         return queryset
@@ -255,13 +257,14 @@ class EmployerVacancyListAPIView(ListAPIView):
 class InvitationAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
 
+
     def get(self, request, *args, **kwargs):
         user_id = request.user.id
         invitation = Invitation.objects.filter(employer__user__id=user_id).select_related('employer', 'vacancy', 'user',)
         serializer = InvitationSerializers(invitation, many=True,  context={'request': request})
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=InvitationSerializers)
+
     def post(self, request, *args, **kwargs):
         serializer = InvitationSerializers(data=request.data)
         if serializer.is_valid():
@@ -303,7 +306,7 @@ class InterviewsAPIView(generics.CreateAPIView):
 
 
 
-    @swagger_auto_schema(request_body=InterviewsSerializers)
+   
     def post(self, request, *args, **kwargs):
         serializer = InterviewsSerializers(data=request.data)
         if serializer.is_valid():

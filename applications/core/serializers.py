@@ -272,7 +272,6 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
             'gender',
             'time_start', 
             'time_end', 
-            'email_info', 
             'description',
             'start_holidays_date',
             'end_holidays_date',
@@ -370,7 +369,7 @@ class InterviewsListSerializers(serializers.ModelSerializer):
         return obj.created_date.strftime("%d.%m.%Y")
 
     def get_interviews_date(self, obj):
-        return obj.interviews_date.strftime("%d.%m.%Y %H:%M")
+        return obj.interviews_date.strftime("%Y,%m,%d, %H,%M")
     
 
 class InterviewsSerializers(serializers.ModelSerializer):

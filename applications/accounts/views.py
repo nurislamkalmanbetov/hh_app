@@ -19,7 +19,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
 
-from drf_yasg2.utils import swagger_auto_schema
+
 from random import randint
 from django.shortcuts import get_object_or_404
 from django.db.models import F
@@ -133,7 +133,7 @@ class ResetPasswordAPIView(APIView):
 class VerifyEmailAPIView(APIView):
     serializer_class = VerifyEmailSerializer
     
-    @swagger_auto_schema(request_body=VerifyEmailSerializer)
+
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -163,7 +163,7 @@ class VerifyEmailAPIView(APIView):
 class SetPasswordAPIView(APIView):
     serializer_class = SetPasswordSerializer
 
-    @swagger_auto_schema(request_body=SetPasswordSerializer)
+
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         
