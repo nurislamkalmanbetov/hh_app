@@ -54,9 +54,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'smart_selects',
     'rangefilter',
-    # 'applications.apps.SuitConfig',
-    # 'applications.apps.JazzminConfig',
-
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,6 +68,9 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'applications.accounts',
     'applications.core',
+    
+    # 'applications.staff',
+    # 'appiclations.chat',
     # 'applications.bot',
     # 'applications.common',
  
@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'import_export',
-    
+    'channels',
 ]
 
 REST_FRAMEWORK = {
@@ -274,7 +274,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
-
+ASGI_APPLICATION = 'iwex_crm.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),

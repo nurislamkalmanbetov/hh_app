@@ -15,6 +15,7 @@ from applications.accounts.managers import *
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
         (('is_employer'), _('Работодатель')),
+        (('is_employee'), _('Сотрудник')),
         (('is_student'), _('Соискатель')),
     )
 

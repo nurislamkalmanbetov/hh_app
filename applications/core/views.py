@@ -18,7 +18,8 @@ from rest_framework import viewsets
 from .models import *
 from .serializers import *
 from .permissions import IsEmployerPermisson
-
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 class EmployerProfileListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
@@ -280,6 +281,7 @@ class InvitationAPIView(APIView):
                 return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
             
             serializer.save(employer=user, vacancy=vacancy)
+     
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -322,6 +324,17 @@ class InterviewsAPIView(generics.CreateAPIView):
                 return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
             
             serializer.save(employer=user, vacancy=vacancy)
+            channel_layer = get_channel_layer()
+            
+            async_to_sync(channel_layer.group_send)(
+                f'notification_{user_id}', {
+                    'type': 'interviews_message',
+                    'message': 'You have a new invitation',
+                    'user_id': "test"
+                }
+            )
+
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
