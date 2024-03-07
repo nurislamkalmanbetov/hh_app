@@ -2,7 +2,7 @@ from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from .models import *
-
+from applications.staff.models import Notification
 
 class EmployerCompanyAdmin(admin.ModelAdmin):
     list_display = ['id','user','first_name','last_name','name','iin','description','icon',]

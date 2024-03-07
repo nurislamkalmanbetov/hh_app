@@ -68,8 +68,7 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'applications.accounts',
     'applications.core',
-    
-    # 'applications.staff',
+    'applications.staff',
     # 'appiclations.chat',
     # 'applications.bot',
     # 'applications.common',

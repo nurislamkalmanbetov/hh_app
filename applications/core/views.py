@@ -20,6 +20,7 @@ from .serializers import *
 from .permissions import IsEmployerPermisson
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from applications.staff.models import Notification
 
 class EmployerProfileListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
@@ -302,6 +303,8 @@ class InterviewsModelViewsets(viewsets.ModelViewSet):
         queryset = Interviews.objects.filter(employer__user__id=user_id).select_related('vacancy', 'user',)
         return queryset
 
+
+
 class InterviewsAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = InterviewsSerializers
@@ -315,26 +318,42 @@ class InterviewsAPIView(generics.CreateAPIView):
             user_id = request.user.id
             vacancy = request.data.get('vacancy')
             user = request.data.get('user')
+         
             invitation = Interviews.objects.filter(employer__user__id=user_id).filter(vacancy=vacancy).filter(user=user).first()
             if invitation is not None:
                 return Response({'error': 'You have already invited this applicant'}, status=status.HTTP_400_BAD_REQUEST)
-            user = EmployerCompany.objects.get(user__id=user_id)
-            vacancy = Vacancy.objects.filter(employer_company=user).filter(id=vacancy).first()
+            employer = EmployerCompany.objects.get(user__id=user_id)
+
+            vacancy = Vacancy.objects.filter(employer_company=employer).filter(id=vacancy).first()
             if vacancy is None:
                 return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            serializer.save(employer=user, vacancy=vacancy)
             channel_layer = get_channel_layer()
             
-            async_to_sync(channel_layer.group_send)(
-                f'notification_{user_id}', {
-                    'type': 'interviews_message',
-                    'message': 'You have a new invitation',
-                    'user_id': "test"
-                }
-            )
 
+            serializer.save(employer=employer, vacancy=vacancy)
+            notification_data = {
+                    'notification': 'Запрос на собеседование',
+                    'vacancy_id': vacancy.id,
+                    'employer': f'{employer.first_name}-{employer.last_name}',
+                    'employer_id': employer.id,
+                    'user_profile_id': user,
 
+                
+            }
+            
+            # Сохраняем уведомление в модель Notification
+            notification_save = Notification.objects.create(data=notification_data)
+            notification_save.save()
+            result = {
+                'type': 'interviews_message',
+                'id': notification_save.id,
+                'message': notification_save.data,
+                'read': notification_save.read,
+                'notification_date': notification_save.created_at.strftime('%Y-%m-%d %H:%M'),
+            }
+            
+            async_to_sync(channel_layer.group_send)('notification', result)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
