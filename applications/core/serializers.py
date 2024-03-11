@@ -4,7 +4,7 @@ from .models import *
 from applications.accounts.serializers import ProfileAllSerializer
 from django.contrib.auth import get_user_model
 # from schedule.models import Event
-
+from applications.accounts.models import Profile
 
 
 User = get_user_model()
@@ -350,7 +350,7 @@ class InvitationSerializers(serializers.ModelSerializer):
 
 
 class InterviewsListSerializers(serializers.ModelSerializer):
-    user_profile = ProfileAllSerializer(source='user', read_only=True)
+    users = ProfileAllSerializer(many=True, read_only=True, source='user')
     created_date = serializers.SerializerMethodField(read_only=True)
     interviews_date = serializers.SerializerMethodField(read_only=True)
     vacancy_review = VacancyListSerializers(source='vacancy', read_only=True)
@@ -360,7 +360,7 @@ class InterviewsListSerializers(serializers.ModelSerializer):
         fields = [
             'id',
             'vacancy_review',
-            'user_profile',
+            'users',
             'created_date',
             'interviews_date',
         ]
@@ -373,6 +373,7 @@ class InterviewsListSerializers(serializers.ModelSerializer):
     
 
 class InterviewsSerializers(serializers.ModelSerializer):
+    user = serializers.ListField(write_only=True,child=serializers.IntegerField())
 
     class Meta:
         model = Interviews
@@ -385,6 +386,29 @@ class InterviewsSerializers(serializers.ModelSerializer):
             'is_accepted',
             'is_work',
         ]
+
+    def validate_user(self, value):
+        users = Profile.objects.filter(id__in=value)
+        if len(value) > 15:
+            raise serializers.ValidationError("Максимальное количество студентов 15")
+        
+        if len(users) != len(value):
+            raise serializers.ValidationError("Не все студенты найдены")
+        
+        return value
+    
+
+    def validate(self, data):
+        vacancy = data['vacancy']
+        users = data['user']
+        for user in users:
+            if Interviews.objects.filter(vacancy=vacancy, user=user).exists():
+                raise serializers.ValidationError("Вы уже приглашали этого студента на эту вакансию")
+        return data
+    
+
+    
+        
 
 
 class FavoriteListSerializers(serializers.ModelSerializer):

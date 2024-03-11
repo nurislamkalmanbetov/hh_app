@@ -189,7 +189,7 @@ class Invitation(models.Model):
 class Interviews(models.Model):
     employer = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Работодатель'))
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name=_('Вакансия'))
-    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name = 'interviews_profile',verbose_name=_('Пользователь'))
+    user = models.ManyToManyField('accounts.Profile', verbose_name=_('Профиль студента'))
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата публикации'))
     interviews_date = models.DateTimeField(_('Дата собеседования'),)
     is_accepted = models.BooleanField(_('Принято'), default=False)
@@ -205,7 +205,6 @@ class Interviews(models.Model):
         indexes = [
             models.Index(fields=['employer',]),
             models.Index(fields=['vacancy',]),
-            models.Index(fields=['user',]),
         ]
         verbose_name = _('Собеседование')
         verbose_name_plural = _('Собеседования')

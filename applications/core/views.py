@@ -300,7 +300,7 @@ class InterviewsModelViewsets(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user_id = self.request.user.id
-        queryset = Interviews.objects.filter(employer__user__id=user_id).select_related('vacancy', 'user',)
+        queryset = Interviews.objects.filter(employer__user__id=user_id).select_related('vacancy',).prefetch_related('user',)
         return queryset
 
 
@@ -315,13 +315,11 @@ class InterviewsAPIView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = InterviewsSerializers(data=request.data)
         if serializer.is_valid():
+            
             user_id = request.user.id
             vacancy = request.data.get('vacancy')
             user = request.data.get('user')
-         
-            invitation = Interviews.objects.filter(employer__user__id=user_id).filter(vacancy=vacancy).filter(user=user).first()
-            if invitation is not None:
-                return Response({'error': 'You have already invited this applicant'}, status=status.HTTP_400_BAD_REQUEST)
+            print('user', user)
             employer = EmployerCompany.objects.get(user__id=user_id)
 
             vacancy = Vacancy.objects.filter(employer_company=employer).filter(id=vacancy).first()
@@ -353,7 +351,6 @@ class InterviewsAPIView(generics.CreateAPIView):
             }
             
             async_to_sync(channel_layer.group_send)('notification', result)
-            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
