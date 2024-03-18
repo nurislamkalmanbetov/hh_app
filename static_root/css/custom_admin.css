@@ -1,6 +1,0 @@
-body {
-    background-image: url('/static/image/flag_germeny.jpeg'); /* Путь к вашему изображению */
-    background-size: cover; /* Изображение будет растянуто, чтобы занять всю доступную площадь */
-    background-position: center; /* Центрируем изображение */
-    background-color: black;
-}

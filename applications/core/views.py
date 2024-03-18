@@ -420,15 +420,18 @@ class FavoriteModelViewsets(viewsets.ModelViewSet):
             return Response({'error': 'Profile with given ID does not exist'}, status=status.HTTP_400_BAD_REQUEST)
         
         # Проверяем, не добавлен ли уже этот пользователь в избранное
-        if Favorite.objects.filter(employer__user__id=user_id, user=profile).exists():
-            return Response({'error': 'You have already added this user to favorites'}, status=status.HTTP_400_BAD_REQUEST)
+        favorite = Favorite.objects.filter(employer__user__id=user_id, user=profile).exists()
+        if favorite:
+            # Если пользователь уже добавлен в избранное, удаляем его
+            favorite = Favorite.objects.filter(employer__user__id=user_id, user=profile).delete()
+            return Response({'is_favorite':False}, status=status.HTTP_200_OK)
         
         # Получаем работодателя и сохраняем в избранное
         employer = EmployerCompany.objects.get(user__id=user_id)
         serializer.is_valid(raise_exception=True)
         serializer.save(employer=employer, user=profile)  # передаем profile вместо user
         
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'is_favorite':True}, status=status.HTTP_201_CREATED)
     
     
 

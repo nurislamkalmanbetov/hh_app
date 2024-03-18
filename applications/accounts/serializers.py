@@ -116,7 +116,7 @@ class ProfileSerializer(serializers.ModelSerializer):
      
         favorite = Favorite.objects.filter(employer__user=request.user, user=obj)
         if favorite.exists():
-            return {'id': favorite.first().id, 'is_favorite': True}
+            return True
         return False
 
         
