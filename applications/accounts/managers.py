@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.tokens import default_token_generator
 
 
 class UserManager(BaseUserManager):
@@ -26,7 +27,6 @@ class UserManager(BaseUserManager):
 
     
     def create_superuser(self, email=None,  password=None, **extra_fields):
-        from applications.accounts.models import Profile
 
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -39,8 +39,15 @@ class UserManager(BaseUserManager):
 
         user = self.create_user(email, password, **extra_fields)
 
-        Profile.objects.create(user=user)
         return user
+    
+    def get_user_by_token(self, token):
+        try:
+            user = self.get(token=token)
+            return user
+        except ObjectDoesNotExist:
+            return None
+        
 
 
 

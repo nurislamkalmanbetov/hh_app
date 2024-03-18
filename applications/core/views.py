@@ -21,6 +21,7 @@ from .permissions import IsEmployerPermisson
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from applications.staff.models import Notification
+from drf_spectacular.utils import extend_schema
 
 class EmployerProfileListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
@@ -173,7 +174,7 @@ class HousingListAPIView(ListAPIView):
 class VacancyCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
 
-
+    @extend_schema(request=VacancySerializers)
     def post(self, request, *args, **kwargs):
         serializer = VacancySerializers(data=request.data)
         if serializer.is_valid():
@@ -192,6 +193,32 @@ class VacancyCreateAPIView(APIView):
                 return Response({'error': 'Branch is missing.'}, status=status.HTTP_400_BAD_REQUEST)
             
             serializer.save(employer_company=user, branch=branch,)
+            channel_layer = get_channel_layer()
+            notification_data = {
+                 
+                'notification': 'Новый заказ',
+                'employer': f'{user.first_name}-{user.last_name}',
+                'employer_id': user.id,
+                'branch': branch.name,
+                'employee_count': serializer.data['employee_count'],
+                'branch_id': branch.id,
+            }
+
+            # Сохраняем уведомление в модель Notification
+            notification_save = Notification.objects.create(data=notification_data, type_notification='vacancy_notification')
+            notification_save.save()
+            result = {
+                'type': 'interviews_message',
+                'type_notification': 'vacancy_notification',
+                'id': notification_save.id,
+                'message': notification_save.data,
+                'read': notification_save.read,
+                'notification_date': notification_save.created_at.strftime('%Y-%m-%d %H:%M'),
+            }
+
+            async_to_sync(channel_layer.group_send)('notification', result)
+
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -310,8 +337,6 @@ class InterviewsAPIView(generics.CreateAPIView):
     serializer_class = InterviewsSerializers
 
 
-
-   
     def post(self, request, *args, **kwargs):
         serializer = InterviewsSerializers(data=request.data)
         if serializer.is_valid():
@@ -330,6 +355,7 @@ class InterviewsAPIView(generics.CreateAPIView):
 
             serializer.save(employer=employer, vacancy=vacancy)
             notification_data = {
+                    
                     'notification': 'Запрос на собеседование',
                     'vacancy_id': vacancy.id,
                     'employer': f'{employer.first_name}-{employer.last_name}',
@@ -340,10 +366,11 @@ class InterviewsAPIView(generics.CreateAPIView):
             }
             
             # Сохраняем уведомление в модель Notification
-            notification_save = Notification.objects.create(data=notification_data)
+            notification_save = Notification.objects.create(data=notification_data, type_notification='interviews_notification')
             notification_save.save()
             result = {
                 'type': 'interviews_message',
+                'type_notification': 'interviews_notification',
                 'id': notification_save.id,
                 'message': notification_save.data,
                 'read': notification_save.read,
@@ -356,33 +383,52 @@ class InterviewsAPIView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FavoriteListAPIView(ListAPIView):
+class FavoriteModelViewsets(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = FavoriteListSerializers
+    @extend_schema(
+            description='Получение списка избранных студентов',
+            responses=FavoriteListSerializers,
+            
 
+    )
     def get_queryset(self):
         user_id = self.request.user.id
         queryset = Favorite.objects.filter(employer__user__id=user_id).select_related('user',)
         return queryset
     
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+            description='Добавление в избранное',
+            request=FavoriteSerializers,
+            
 
-class FavoriteAPIView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
-    serializer_class = FavoriteSerializers
-
-    def post(self, request, *args, **kwargs):
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = FavoriteSerializers(data=request.data)
         user_id = request.user.id
-        serializer = self.get_serializer(data=request.data)
         user = request.data.get('user')
         
+        # Получаем объект Profile, соответствующий переданному идентификатору пользователя
+        try:
+            profile = Profile.objects.get(id=user)
+        except Profile.DoesNotExist:
+            return Response({'error': 'Profile with given ID does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        
         # Проверяем, не добавлен ли уже этот пользователь в избранное
-        if Favorite.objects.filter(employer__user__id=user_id, user=user).exists():
+        if Favorite.objects.filter(employer__user__id=user_id, user=profile).exists():
             return Response({'error': 'You have already added this user to favorites'}, status=status.HTTP_400_BAD_REQUEST)
         
         # Получаем работодателя и сохраняем в избранное
         employer = EmployerCompany.objects.get(user__id=user_id)
         serializer.is_valid(raise_exception=True)
-        serializer.save(employer=employer)
+        serializer.save(employer=employer, user=profile)  # передаем profile вместо user
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+

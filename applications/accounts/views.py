@@ -248,6 +248,12 @@ class ProfileDetailView(ListAPIView):
     def get_queryset(self):
         profile_id = self.kwargs['id']
         return Profile.objects.filter(id=profile_id)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+        return context
+
     
 
 class ProfileFilterListView(ListAPIView):

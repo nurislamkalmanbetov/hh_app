@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     'applications.accounts',
     'applications.core',
     'applications.staff',
-    # 'appiclations.chat',
+    'applications.chat',
     # 'applications.bot',
     # 'applications.common',
  
@@ -257,7 +257,6 @@ CELERY_RESULT_SERIALIZER = env.str('CELERY_RESULT_SERIALIZER')
 # Настройки для статических файлов
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 
 # Настройки для медиа-файлов
 MEDIA_URL = 'https://crm.iwex.kg/media/'

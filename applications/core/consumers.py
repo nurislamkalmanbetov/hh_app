@@ -18,6 +18,7 @@ class InterviewsConsumer(AsyncWebsocketConsumer):
                     'message': n.data, 
                     'id': n.id, 
                     'read': n.read,
+                    'type_notification': n.type_notification,
                     'notification_date': n.created_at.strftime('%Y-%m-%d %H:%M'),
                     'unread_count': unread_count
                     }
@@ -44,6 +45,7 @@ class InterviewsConsumer(AsyncWebsocketConsumer):
             'read': notification.read,
             'notification_date': notification.created_at.strftime('%Y-%m-%d %H:%M'),
             'unread_count': self.unread_count
+
             }))
 
             
@@ -53,6 +55,7 @@ class InterviewsConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({
             'id': event['id'],
+            'type_notification': event['type_notification'],
             'message': event['message'], 
             'read': event['read'],
             'notification_date': event['notification_date'],

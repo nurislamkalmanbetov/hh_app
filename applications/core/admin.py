@@ -52,10 +52,15 @@ class InvitationAdmin(admin.ModelAdmin):
     class Meta:
         model = Invitation
 
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ['id','user',]
+    search_fields = ['user',]
+    ordering = ('id',)
+    class Meta:
+        model = Favorite
 
 
-
-admin.site.register(Favorite)
+admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(Country)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Vacancy, VacancyAdmin)

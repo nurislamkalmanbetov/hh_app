@@ -1,12 +1,14 @@
 from django.urls import path, include
 from .views import *
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers
+app_name = 'core'
+router = routers.SimpleRouter()
+router.register(r'favorite', FavoriteModelViewsets, basename='favorite')
 
 
-# router = DefaultRouter()
-# router.register(r'events', EventViewSet)
-
+urlpatterns = router.urls
 urlpatterns = [ 
+    path('',include(router.urls)),
     path('employer-profile/', EmployerProfileListAPIView.as_view(), name='employerprofile'),
     path('employercompany/', EmployerCompanyAPIView.as_view(), name='employercompany'),
     path('employercompany-update/', EmployerCompanyUpdateView.as_view(), name='employercompany-update'),
@@ -33,8 +35,8 @@ urlpatterns = [
         {'get': 'list', }), name='interviews-list'),
     
     path('interviews-create/', InterviewsAPIView.as_view(), name='interviews-create'),
-   
-    path('favorite-list/', FavoriteListAPIView.as_view(), name='favorite-list'),
-    path('favorite-create/', FavoriteAPIView.as_view(), name='favorite-create'),
+
+
+    
 ]
     
