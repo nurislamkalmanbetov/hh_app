@@ -6,7 +6,7 @@ from .serializers import *
 from ..accounts.models import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import (ListAPIView)
-from applications.core.permissions import IsEmployerPermission
+from applications.accounts.permissions import IsEmployerPermission
 from rest_framework import generics, status
 # from drf_yasg2.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
