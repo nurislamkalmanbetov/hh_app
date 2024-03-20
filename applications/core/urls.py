@@ -30,10 +30,6 @@ urlpatterns = [
 
     path('interviews-list/', InterviewsModelViewsets.as_view(
         {'get': 'list', }), name='interviews-list'),
-    
     path('interviews-create/', InterviewsAPIView.as_view(), name='interviews-create'),
-
-
-    
 ]
     

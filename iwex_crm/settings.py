@@ -233,13 +233,6 @@ DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
 
 default_app_config = 'applications.core.apps.CoreConfig'
 
-# SENDGRID SMTP
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'IWEX'
 
 AUTH_USER_MODEL = env.str('AUTH_USER_MODEL')
 
@@ -260,6 +253,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Настройки для медиа-файлов
 MEDIA_URL = 'https://crm.iwex.kg/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 CORS_ORIGIN_ALLOW_ALL = env.bool('CORS_ORIGIN_ALLOW_ALL')

@@ -344,12 +344,14 @@ class InterviewsListSerializers(serializers.ModelSerializer):
     created_date = serializers.SerializerMethodField(read_only=True)
     interviews_date = serializers.SerializerMethodField(read_only=True)
     vacancy_review = VacancyListSerializers(source='vacancy', read_only=True)
+    employer_company = EmployerCompanySerialzers(source='employer', read_only=True)
 
     class Meta:
         model = Interviews
         fields = [
             'id',
             'vacancy_review',
+            'employer_company',
             'users',
             'created_date',
             'interviews_date',

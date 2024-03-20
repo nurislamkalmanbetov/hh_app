@@ -6,7 +6,6 @@ from .serializers import *
 from ..accounts.models import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import (ListAPIView)
-from applications.accounts.permissions import IsEmployerPermission
 from rest_framework import generics, status
 # from drf_yasg2.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
@@ -64,3 +63,35 @@ class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
     # )
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+    
+
+from applications.staff.permissions import IsEmployeePermission
+
+from applications.core.serializers import InterviewsListSerializers
+
+
+class InterviewsListAPIView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsEmployeePermission]
+    serializer_class = InterviewsListSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['vacancy', 'is_accepted', 'is_work', 'is_rejected', 'is_passed']
+
+    def get_queryset(self):
+        """
+        Возвращает все объекты интервью.
+        """
+        return Interviews.objects.all()
+
+
+
+# from rest_framework.response import Response
+
+# class InterviewsListAPIView(generics.ListAPIView):
+#     permission_classes = [IsAuthenticated, IsEmployeePermission]
+#     serializer_class = InterviewsListSerializers
+
+#     def get(self, request, *args, **kwargs):
+#         vacancy_id = self.kwargs.get('vacancy_id')
+#         interviews = Interviews.objects.filter(vacancy__id=vacancy_id)
+#         serializer = self.serializer_class(interviews, many=True)
+#         return Response(serializer.data)
