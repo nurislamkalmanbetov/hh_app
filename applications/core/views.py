@@ -17,7 +17,7 @@ from rest_framework import viewsets
 # from schedule.models import Event
 from .models import *
 from .serializers import *
-from .permissions import IsEmployerPermisson
+from applications.accounts.permissions import IsEmployerPermission
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from applications.staff.models import Notification
@@ -25,7 +25,7 @@ from drf_spectacular.utils import extend_schema
 
 
 class EmployerProfileListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
     serializer_class = EmployerProfileSerializers
     def get_queryset(self, *args, **kwargs):
         user_id = self.request.user.id
@@ -35,7 +35,7 @@ class EmployerProfileListAPIView(ListAPIView):
 
 class EmployerCompanyAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
     def get(self, request, *args, **kwargs):
         user_id = request.user.id
@@ -59,7 +59,7 @@ class EmployerCompanyAPIView(APIView):
 class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = EmployerUpdateSerialzers
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
 
     def patch(self, request, *args, **kwargs):
@@ -81,7 +81,7 @@ class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
 
 
 class BranchAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
  
     def post(self, request, *args, **kwargs):
         serializer = BranchSerializers(data=request.data)
@@ -97,7 +97,7 @@ class BranchAPIView(APIView):
 
 
 class BranchUpdateAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
     def patch(self, request, *args, **kwargs):
         branch_id = self.kwargs['pk']
@@ -114,14 +114,14 @@ class BranchUpdateAPIView(APIView):
 
 class BranchListAPIView(ListAPIView):
     serializer_class = BranchListSerializers
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
     def get_queryset(self):
         user_id = self.request.user.id
         queryset = Branch.objects.filter(company__user__id=user_id).select_related( 'company')
         return queryset
         
 class BranchDetailListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
     serializer_class = BranchSerializers
 
     def get_queryset(self):
@@ -134,94 +134,93 @@ class BranchDetailListAPIView(ListAPIView):
         queryset = Branch.objects.filter(id=branch.id).select_related('company')
         return queryset
 
-
-class HousingAPIView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
-    @extend_schema(request=HousingSerializers)
-    def post(self, request, *args, **kwargs):
-        serializer = HousingSerializers(data=request.data)
-        if serializer.is_valid():
-            user_id = request.user.id
-            try:
-
-                employer_company = EmployerCompany.objects.get(id=user_id)
-            except EmployerCompany.DoesNotExist:
-                return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
-            housing = serializer.save(employer=employer_company)
-        
-
-            files_data = request.FILES.getlist('files')  # Получаем список видео
-            for file_data in files_data:
-                FilesHousing.objects.create(housing=housing, files=file_data)
-            
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class HousingListAPIView(ListAPIView):
+class HousingViewSet(viewsets.ModelViewSet):
     serializer_class = HousingListSerializers
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
+    parser_classes = [MultiPartParser, FormParser]
+    
+    @extend_schema(
+        description='Добавление жилья',
+        request=HousingSerializers,
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = HousingSerializers(data=request.data)
+     
+        user_id = request.user.id
+        try:
+            employer_company = EmployerCompany.objects.get(user__id=user_id)
+        except EmployerCompany.DoesNotExist:
+            return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        housing = serializer.save(employer=employer_company)
+        print(serializer.data)
+
+        files_data = request.FILES.getlist('files')  # Получаем список видео
+        print(files_data, 'files_data')
+        for file_data in files_data:
+            print('-------', file_data)
+            FilesHousing.objects.create(housing=housing, files=file_data)
+    
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
     def get_queryset(self):
         user_id = self.request.user.id
         queryset = Housing.objects.filter(employer__user__id=user_id).select_related('employer',)
         return queryset
 
 class VacancyCreateAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
     @extend_schema(request=VacancySerializers)
     def post(self, request, *args, **kwargs):
         serializer = VacancySerializers(data=request.data)
-        if serializer.is_valid():
-            user_id  = request.user.id
-            branch = request.data.get('branch')
+        user_id  = request.user.id
+        branch = request.data.get('branch')
 
-            user = EmployerCompany.objects.get(user__id=user_id)
+        user = EmployerCompany.objects.get(user__id=user_id)
+    
+        #выводим только его филлиалы и проверяем есть ли у него такой филлиал
+        branch = Branch.objects.filter(company=user).filter(id=branch).first()
+
+        if user is None:
+            return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
         
-            #выводим только его филлиалы и проверяем есть ли у него такой филлиал
-            branch = Branch.objects.filter(company=user).filter(id=branch).first()
+        if branch is None:
+            return Response({'error': 'Branch is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(employer_company=user, branch=branch,)
+        channel_layer = get_channel_layer()
+        notification_data = {
+                
+            'notification': 'Новый заказ',
+            'employer': f'{user.first_name}-{user.last_name}',
+            'employer_id': user.id,
+            'branch': branch.name,
+            'employee_count': serializer.data['employee_count'],
+            'branch_id': branch.id,
+        }
 
-            if user is None:
-                return Response({'error': 'Add a company to add applications'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            if branch is None:
-                return Response({'error': 'Branch is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            serializer.save(employer_company=user, branch=branch,)
-            channel_layer = get_channel_layer()
-            notification_data = {
-                 
-                'notification': 'Новый заказ',
-                'employer': f'{user.first_name}-{user.last_name}',
-                'employer_id': user.id,
-                'branch': branch.name,
-                'employee_count': serializer.data['employee_count'],
-                'branch_id': branch.id,
-            }
+        # Сохраняем уведомление в модель Notification
+        notification_save = Notification.objects.create(data=notification_data, type_notification='vacancy_notification')
+        notification_save.save()
+        result = {
+            'type': 'interviews_message',
+            'type_notification': 'vacancy_notification',
+            'id': notification_save.id,
+            'message': notification_save.data,
+            'read': notification_save.read,
+            'notification_date': notification_save.created_at.strftime('%Y-%m-%d %H:%M'),
+        }
 
-            # Сохраняем уведомление в модель Notification
-            notification_save = Notification.objects.create(data=notification_data, type_notification='vacancy_notification')
-            notification_save.save()
-            result = {
-                'type': 'interviews_message',
-                'type_notification': 'vacancy_notification',
-                'id': notification_save.id,
-                'message': notification_save.data,
-                'read': notification_save.read,
-                'notification_date': notification_save.created_at.strftime('%Y-%m-%d %H:%M'),
-            }
-
-            async_to_sync(channel_layer.group_send)('notification', result)
+        async_to_sync(channel_layer.group_send)('notification', result)
 
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class VacancyUpdateAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
 
     def patch(self, request, *args, **kwargs):
@@ -268,7 +267,7 @@ class VacancyDetailAPIView(APIView):
 
 
 class EmployerVacancyListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
     serializer_class = VacancyListSerializers
 
@@ -280,7 +279,7 @@ class EmployerVacancyListAPIView(ListAPIView):
 
 
 class InvitationAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
 
     def get(self, request, *args, **kwargs):
@@ -315,7 +314,7 @@ class InvitationAPIView(APIView):
 
 
 class InterviewsModelViewsets(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    # permission_classes = [IsAuthenticated, IsEmployerPermission]
     serializer_class = InterviewsListSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['vacancy', ]
@@ -329,7 +328,7 @@ class InterviewsModelViewsets(viewsets.ModelViewSet):
 
 
 class InterviewsAPIView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
     serializer_class = InterviewsSerializers
     
 
@@ -380,7 +379,7 @@ class InterviewsAPIView(generics.CreateAPIView):
 
 
 class FavoriteModelViewsets(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
     serializer_class = FavoriteListSerializers
     @extend_schema(
             description='Получение списка избранных студентов',

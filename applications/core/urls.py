@@ -4,7 +4,7 @@ from rest_framework import routers
 app_name = 'core'
 router = routers.SimpleRouter()
 router.register(r'favorite', FavoriteModelViewsets, basename='favorite')
-
+router.register(r'housing', HousingViewSet, basename='housing')
 
 urlpatterns = router.urls
 urlpatterns = [ 
@@ -18,8 +18,7 @@ urlpatterns = [
     path('branch-detail/', BranchDetailListAPIView.as_view(), name='branchlistdetail'),
     
 
-    path('housing/', HousingAPIView.as_view(), name='housing'),
-    path('housing-list/', HousingListAPIView.as_view(), name='housinglist'),
+
 
     path('vacancy-create/', VacancyCreateAPIView.as_view(), name='vacancycreate'),
     path('vacancy-update/<int:pk>/', VacancyUpdateAPIView.as_view(), name='vacancyupdate'),

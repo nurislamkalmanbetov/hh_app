@@ -1,33 +1,26 @@
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth import authenticate, login
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
+from django.contrib.auth import authenticate
 
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import (exceptions, filters, generics, mixins, status, viewsets)
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework import (filters, generics, status,)
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
 
 
 from random import randint
 from django.shortcuts import get_object_or_404
-from django.db.models import F
-from .permissions import IsEmployeePermisson
-from applications.core.permissions import IsEmployerPermisson
+from .permissions import IsEmployerPermission
 from .serializers import *
 from applications.core.models import Vacancy, Invitation
 from .tasks import send_custom_email_task
+from django.db.models import Q, Exists, OuterRef
 
 User = get_user_model()
 
@@ -242,7 +235,7 @@ class AccessTokenView(ObtainAuthToken):
 
 class ProfileDetailView(ListAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
     def get_queryset(self):
         profile_id = self.kwargs['id']
@@ -257,36 +250,66 @@ class ProfileDetailView(ListAPIView):
 
 class ProfileFilterListView(ListAPIView):
     serializer_class = ProfileAllSerializer
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
 
     def get_queryset(self):
-        vacancy_id = self.kwargs.get('pk')
+        vacancy_id = self.kwargs.get("pk")
         employer = self.request.user.id
 
         vacancy = get_object_or_404(Vacancy, id=vacancy_id)
 
         profiles_for_vacancy = Profile.objects.annotate(
-            vacancy_language_de=F('german'),
-            vacancy_language_en=F('english')
-        ).filter(
-            vacancy_language_de__gte=vacancy.language_german,
-            vacancy_language_en__gte=vacancy.language_english
+            has_work_experience=Exists(
+                WorkExperience.objects.filter(user=OuterRef("pk"))
+            )
+            #     vacancy_language_de=F('german_level'),
+            #     vacancy_language_en=F('english_level')
+            # ).filter(
+            #     vacancy_language_de__gte=vacancy.language_german,
+            #     vacancy_language_en__gte=vacancy.language_english
         )
+        invited_users = Invitation.objects.filter(
+            employer__id=employer, vacancy__id=vacancy_id
+        ).values_list("user", flat=True)
 
-        invited_users = Invitation.objects.filter(employer__id=employer, vacancy__id=vacancy_id).values_list('user', flat=True)
-
-        if vacancy.gender != 'Any':
-            # Если пол важен, фильтруем по указанному полу в вакансии
+        if vacancy.gender != "Any":
             profiles_for_vacancy = profiles_for_vacancy.filter(gender_en=vacancy.gender)
+
+        if vacancy.has_experience:
+            profiles_for_vacancy = profiles_for_vacancy.filter(has_work_experience=True)
 
         queryset = profiles_for_vacancy.exclude(id__in=invited_users)
 
+        holiday_start_date = vacancy.holiday_start_date
+        holiday_end_date = vacancy.holiday_end_date
+
+        if holiday_start_date and holiday_end_date:
+            profiles_for_vacancy = profiles_for_vacancy.filter(
+                Q(
+                    universities__start_holiday__lte=holiday_start_date,
+                    universities__end_holiday__gte=holiday_start_date,
+                )
+                | Q(
+                    universities__start_holiday__lte=holiday_end_date,
+                    universities__end_holiday__gte=holiday_end_date,
+                )
+                | Q(
+                    universities__start_holiday__gte=holiday_start_date,
+                    universities__end_holiday__lte=holiday_end_date,
+                )
+            )
+        queryset = profiles_for_vacancy.exclude(id__in=invited_users)
         return queryset
+
+    # @swagger_auto_schema(operation_summary="Получить список профилей с фильтрами")
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 
 
 class ProfileListView(ListAPIView):
     serializer_class = ProfileAllSerializer
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    permission_classes = [IsAuthenticated, IsEmployerPermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filter_fields = ['gender_en', 'nationality_en', 'german', 'english',]
 
