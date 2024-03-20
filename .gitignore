@@ -132,4 +132,3 @@ dmypy.json
 media/
 settings.py
 iwex_crm/urls.py
-migrations/
