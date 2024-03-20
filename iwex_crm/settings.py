@@ -70,7 +70,6 @@ INSTALLED_APPS = [
     'applications.core',
     'applications.staff',
     'applications.chat',
-    # 'applications.bot',
     # 'applications.common',
  
     'rest_framework',

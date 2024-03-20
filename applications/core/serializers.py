@@ -373,7 +373,7 @@ class InterviewsListSerializers(serializers.ModelSerializer):
     
 
 class InterviewsSerializers(serializers.ModelSerializer):
-    user = serializers.ListField(write_only=True,child=serializers.IntegerField())
+    user = serializers.PrimaryKeyRelatedField(many=True, queryset=Profile.objects.all(),)
 
     class Meta:
         model = Interviews
@@ -386,15 +386,15 @@ class InterviewsSerializers(serializers.ModelSerializer):
             'is_accepted',
             'is_work',
         ]
+    def create(self, validated_data):
+        users_data = validated_data.pop('user', [])  # Получаем данные пользователей
+        interviews = Interviews.objects.create(**validated_data)
+        interviews.user.set(users_data)  # Устанавливаем связи с пользователями
+        return interviews
 
     def validate_user(self, value):
-        users = Profile.objects.filter(id__in=value)
-        if len(value) > 15:
-            raise serializers.ValidationError("Максимальное количество студентов 15")
-        
-        if len(users) != len(value):
-            raise serializers.ValidationError("Не все студенты найдены")
-        
+        if len(value) > 3:
+            raise serializers.ValidationError("Вы не можете пригласить больше 3 студентов")
         return value
     
 

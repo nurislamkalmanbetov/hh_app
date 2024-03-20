@@ -52,6 +52,23 @@ services:
     volumes:
       - .:/app
 
+  channels:
+    build: .
+    command: bash -c "daphne iwex_crm.asgi:application -b 0.0.0.0 -p 8001"
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+      - app
+    ports:
+      - "8001:8001"
+
+    volumes:
+      - .:/app
+    
+
 volumes:
   pgdata:
   project:

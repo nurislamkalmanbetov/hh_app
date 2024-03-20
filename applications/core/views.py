@@ -23,6 +23,7 @@ from asgiref.sync import async_to_sync
 from applications.staff.models import Notification
 from drf_spectacular.utils import extend_schema
 
+
 class EmployerProfileListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = EmployerProfileSerializers
@@ -319,7 +320,7 @@ class InvitationAPIView(APIView):
 
 
 class InterviewsModelViewsets(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    # permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = InterviewsListSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['vacancy', ]
@@ -335,35 +336,35 @@ class InterviewsModelViewsets(viewsets.ModelViewSet):
 class InterviewsAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     serializer_class = InterviewsSerializers
+    
 
 
     def post(self, request, *args, **kwargs):
         serializer = InterviewsSerializers(data=request.data)
+        print('data', request.data)
         if serializer.is_valid():
-            
             user_id = request.user.id
             vacancy = request.data.get('vacancy')
-            user = request.data.get('user')
+            user = serializer.validated_data.get('user')
             print('user', user)
             employer = EmployerCompany.objects.get(user__id=user_id)
 
-            vacancy = Vacancy.objects.filter(employer_company=employer).filter(id=vacancy).first()
-            if vacancy is None:
+            vacancy = Vacancy.objects.filter(employer_company=employer, id=vacancy).first()
+            if not vacancy:
                 return Response({'error': 'Vacancy is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-            channel_layer = get_channel_layer()
             
+            channel_layer = get_channel_layer()
 
             serializer.save(employer=employer, vacancy=vacancy)
+            
             notification_data = {
-                    
-                    'notification': 'Запрос на собеседование',
-                    'vacancy_id': vacancy.id,
-                    'employer': f'{employer.first_name}-{employer.last_name}',
-                    'employer_id': employer.id,
-                    'user_profile_id': user,
-
-                
+                'notification': 'Запрос на собеседование',
+                'vacancy_id': vacancy.id,
+                'employer': f'{employer.first_name}-{employer.last_name}',
+                'employer_id': employer.id,
+                'user_profile_id': [user.id for user in user],  # Передаем список идентификаторов пользователей
             }
+            print(serializer.data)
             
             # Сохраняем уведомление в модель Notification
             notification_save = Notification.objects.create(data=notification_data, type_notification='interviews_notification')

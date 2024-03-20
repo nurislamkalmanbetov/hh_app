@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import (
-    User, Profile, Rating, WorkExperience,
-    Review, WorkSchedule, University, PassportAndTerm, 
+    User, Profile, WorkExperience, University, PassportAndTerm, 
     Payment, Deal,
 )
 from import_export.admin import ImportExportModelAdmin
@@ -78,21 +77,6 @@ class ProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     inlines = [
         UniversityInline, PassportAndTermInline, 
         Payment, Deal,]  # Добавляем в профиль инлайн университета
-
-
-
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'value_rating', 'rating_date', 'employer',)
-    search_fields = ('user__email', 'value_rating', 'employer',)
-
-
-
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('employer', 'user', 'text', 'creation_date')
-    search_fields = ('user__email', 'text')
 
 
 

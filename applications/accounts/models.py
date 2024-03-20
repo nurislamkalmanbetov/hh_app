@@ -6,7 +6,6 @@ from django.core.validators import validate_image_file_extension
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from datetime import date, timedelta
-from applications.accounts.utils import user_directory_path
 from applications.accounts.managers import *
 
 
@@ -43,8 +42,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if not self.email:
             raise ValueError('User must have an email')
-        # if self.pk is None:  # если это новый объект
-        #     self.set_password(self.password)
         super(User, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -93,7 +90,7 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User, verbose_name=_('Пользователь'), related_name='profile', on_delete=models.CASCADE)
-    profile_photo = models.ImageField(_('Фото профиля'), upload_to=user_directory_path, blank=True, null=True, validators=[validate_image_file_extension])
+    profile_photo = models.ImageField(_('Фото профиля'), upload_to='document/profile_photo', blank=True, null=True, validators=[validate_image_file_extension])
 
     first_name = models.CharField(_('Имя на латинице'), max_length=255, default='', blank=True)
     first_name_ru = models.CharField(_('Имя на кириллице'), max_length=255, default='', blank=True)
@@ -219,7 +216,7 @@ class PassportAndTerm(models.Model):
     passport_date_of_issue = models.DateField(_('Дата выдачи паспорта'), blank=True, null=True)
     passport_end_time = models.DateField(_('Дата окончания загранпаспорта'), blank=True, null=True)
     pnr_code = models.CharField(_('PNR код'), max_length=50, blank=True)
-    pdf_file = models.FileField(_('PDF файл'), upload_to=user_directory_path, blank=True, null=True)
+    pdf_file = models.FileField(_('PDF файл'), upload_to='document/PDF file', blank=True, null=True)
     term_date_time = models.DateTimeField(_('Дата и время термина'), blank=True, null=True)
 
     def __str__(self):
@@ -235,10 +232,7 @@ class PassportAndTerm(models.Model):
 
 
 
-def is_staff_or_superuser(user):
-    if isinstance(user, int):
-        user = User.objects.get(pk=user)
-    return user.is_staff or user.is_superuser
+
 
 
 class Payment(models.Model):
@@ -290,85 +284,6 @@ class Deal(models.Model):
 
 
 
-class WorkSchedule(models.Model):
-
-    TIME_CHOICES = (
-        ('DAY', _('День (08:00-20:00)')),
-        ('EVENING', _('Ночь (17:00-01:00)')),
-        ('NIGHT', _('Вечер (20:00-08:00)')),
-        ('ANY', _('Свой график')),
-    )
-
-    user = models.ForeignKey(Profile, verbose_name=_('Соискатель'), related_name='working_times', on_delete=models.CASCADE)
-    
-    monday = models.CharField(_('Понедельник'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    tuesday = models.CharField(_('Вторник'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    wednesday = models.CharField(_('Среда'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    thursday = models.CharField(_('Четверг'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    friday = models.CharField(_('Пятница'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    saturday = models.CharField(_('Суббота'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    sunday = models.CharField(_('Воскресенье'), max_length=50, choices=TIME_CHOICES, blank=True, default='DAY')
-    custom = models.CharField(_('Свой график'), max_length=50, choices=TIME_CHOICES, blank=True)
-
-    custom_start_time = models.TimeField(_('Начало работы (Свой график)'), blank=True, null=True, help_text=_('Введите время в формате HH:MM'))
-    custom_end_time = models.TimeField(_('Окончание работы (Свой график)'), blank=True, null=True, help_text=_('Введите время в формате HH:MM'))
-
-
-    def save(self, *args, **kwargs):
-        if self.custom == 'ANY' and (self.custom_start_time is None or self.custom_end_time is None):
-            raise ValueError('When custom schedule is selected, start and end times must be provided.')
-        super().save(*args, **kwargs)
-        
-    
-    def __str__(self):
-        return self.user.email
-    
-    class Meta:
-        verbose_name = _('График работы')
-        verbose_name_plural = _('Графики работ')
-
-
-class Rating(models.Model):
-    STAR_CHOICES = [
-        (1, _('1 звезда')),
-        (2, _('2 звезды')),
-        (3, _('3 звезды')),
-        (4, _('4 звезды')),
-        (5, _('5 звезд')),
-    ]
-
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ratings_received', verbose_name=_('Соискатель'))
-    value_rating = models.IntegerField(_('Значение рейтинга'), choices=STAR_CHOICES, default=1)
-    rating_date = models.DateTimeField(_('Дата рейтинга'), auto_now_add=True)
-    employer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings_given', verbose_name=_('Работодатель'))
-
-    # def __str__(self):
-    #     return f"{self.employer.email} rated {self.user.email} - {self.get_value_rating_display()}"
-
-    def get_star_display(self):
-        return f"{self.value_rating} звезд"
-    
-    class Meta:
-        verbose_name = _('Рейтинг')
-        verbose_name_plural = _('Рейтинги')
-
-
-
-class Review(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews', verbose_name=_('Соискатель'))
-    employer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='given_reviews', verbose_name=_('Работодатель'))
-    rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name='reviews')  
-    text = models.TextField(_('Текст отзыва'), blank=True)
-    creation_date = models.DateTimeField(_('Дата создания'), auto_now_add=True)
-
-    # def __str__(self):
-    #     return f"{self.user.email} - {self.rating.value_rating}"
-
-    class Meta:
-        verbose_name = _('Отзыв')
-        verbose_name_plural = _('Отзывы')
-
-
 class WorkExperience(models.Model):
 
     TYPE_OF_COMPANY_CHOICES = (
@@ -410,40 +325,6 @@ class WorkExperience(models.Model):
     class Meta:
         verbose_name = _('Опыт работы')
         verbose_name_plural = _('Опыт работы')
-
-
-
-def get_due_date():
-    return date.today() + timedelta(days=60)
-
-
-def is_staff_or_superuser(user_id):
-    user = User.objects.get(pk=user_id)
-    if not user.is_staff and not user.is_superuser:
-        raise ValidationError("Only staff or superuser can be assigned as 'Оплату принял'")
-    
-
-
-
-class City(models.Model):
-    name = models.CharField(max_length=100)
-
-    def str(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = _('Город')
-        verbose_name_plural = _('Города')
-
-
-def get_due_date():
-    return date.today() + timedelta(days=60)
-
-
-def is_staff_or_superuser(user_id):
-    user = User.objects.get(pk=user_id)
-    if not user.is_staff and not user.is_superuser:
-        raise ValidationError("Only staff or superuser can be assigned as 'Оплату принял'")
 
 
 
