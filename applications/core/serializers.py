@@ -163,6 +163,8 @@ class HousingSerializers(serializers.ModelSerializer):
             'files',
         ]
 
+
+
 class HousingListSerializers(serializers.ModelSerializer):
 
     class Meta:
@@ -232,7 +234,7 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
     employer_company_icon = serializers.ImageField(source='employer_company.icon')
     employer_company_name = serializers.CharField(source='employer_company.name')
     branch = serializers.CharField(source='branch.name')
-    branch_city = serializers.CharField(source='branch.land_name ')
+    branch_city = serializers.CharField(source='branch.land_name')
     branch_address = serializers.CharField(source='branch.address')
     created_date = serializers.SerializerMethodField(read_only=True)
 
@@ -282,7 +284,7 @@ class VacancyListSerializers(serializers.ModelSerializer):
     employer_company_icon = serializers.ImageField(source='employer_company.icon')
     employer_company_name = serializers.CharField(source='employer_company.name')
     branch = serializers.CharField(source='branch.name')
-    branch_city = serializers.CharField(source='branch.land_name ')
+    branch_city = serializers.CharField(source='branch.land_name')
     branch_address = serializers.CharField(source='branch.address')
     created_date = serializers.SerializerMethodField(read_only=True)
 
@@ -342,12 +344,14 @@ class InterviewsListSerializers(serializers.ModelSerializer):
     created_date = serializers.SerializerMethodField(read_only=True)
     interviews_date = serializers.SerializerMethodField(read_only=True)
     vacancy_review = VacancyListSerializers(source='vacancy', read_only=True)
+    employer_company = EmployerCompanySerialzers(source='employer', read_only=True)
 
     class Meta:
         model = Interviews
         fields = [
             'id',
             'vacancy_review',
+            'employer_company',
             'users',
             'created_date',
             'interviews_date',

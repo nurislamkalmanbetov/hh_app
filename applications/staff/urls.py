@@ -12,5 +12,5 @@ urlpatterns = [
 
   path('employer/company/update/', EmployerCompanyUpdateView.as_view(), name='employer-company-update'),
 
-
+  path('interview-vacancies/interviews/', InterviewsListAPIView.as_view(), name='interviews-list'),
 ]
