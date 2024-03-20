@@ -12,13 +12,11 @@ urlpatterns = [
     path('employer-profile/', EmployerProfileListAPIView.as_view(), name='employerprofile'),
     path('employercompany/', EmployerCompanyAPIView.as_view(), name='employercompany'),
     path('employercompany-update/', EmployerCompanyUpdateView.as_view(), name='employercompany-update'),
-
     path('branch/', BranchAPIView.as_view(), name='branch'),
     path('branch-update/<int:pk>/', BranchUpdateAPIView.as_view(), name='branch'),
     path('branch-list/', BranchListAPIView.as_view(), name='branchlist'),
     path('branch-detail/', BranchDetailListAPIView.as_view(), name='branchlistdetail'),
     
-    path('country/', CountryListAPIView.as_view(), name='city'),
 
     path('housing/', HousingAPIView.as_view(), name='housing'),
     path('housing-list/', HousingListAPIView.as_view(), name='housinglist'),

@@ -26,7 +26,6 @@ from django.db.models import F
 from .permissions import IsEmployeePermisson
 from applications.core.permissions import IsEmployerPermisson
 from .serializers import *
-from .filters import ProfileFilter
 from applications.core.models import Vacancy, Invitation
 from .tasks import send_custom_email_task
 

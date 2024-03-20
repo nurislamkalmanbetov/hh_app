@@ -61,7 +61,6 @@ class FavoriteAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Favorite, FavoriteAdmin)
-admin.site.register(Country)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(EmployerCompany, EmployerCompanyAdmin)

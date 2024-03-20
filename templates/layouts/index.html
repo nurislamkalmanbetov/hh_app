@@ -1,159 +1,437 @@
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/hamburgers.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/student.css' %}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <title>Iwex</title>
-    <link rel="stylesheet" href="{% static 'css/home.css'%}" />
   </head>
   <body>
-    <div class="indicator"></div>
-    <nav class='nav'>
-      <div class="logo">
-        <div style="color: white;">Iwex - 
-          <span>
-            jobi
-          </span>
-        </div>
-      </div>
-      <div class="button-wrap">
-        <div>
-          <button class="bubbly-button"> <p>Mobile</p>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-              <path
-                d="M80 0C44.7 0 16 28.7 16 64V448c0 35.3 28.7 64 64 64H304c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H80zm80 432h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H160c-8.8 0-16-7.2-16-16s7.2-16 16-16z"
-              />
-            </svg>
-          </button>
-        </div>
-       <a href="https://vacancies.iwex.kg/">
-        <button class="bubbly-button"> 
-          <p>
-            Website
-          </p>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path
-              d="M266.3 48.3L232.5 73.6c-5.4 4-8.5 10.4-8.5 17.1v9.1c0 6.8 5.5 12.3 12.3 12.3c2.4 0 4.8-.7 6.8-2.1l41.8-27.9c2-1.3 4.4-2.1 6.8-2.1h1c6.2 0 11.3 5.1 11.3 11.3c0 3-1.2 5.9-3.3 8l-19.9 19.9c-5.8 5.8-12.9 10.2-20.7 12.8l-26.5 8.8c-5.8 1.9-9.6 7.3-9.6 13.4c0 3.7-1.5 7.3-4.1 10l-17.9 17.9c-6.4 6.4-9.9 15-9.9 24v4.3c0 16.4 13.6 29.7 29.9 29.7c11 0 21.2-6.2 26.1-16l4-8.1c2.4-4.8 7.4-7.9 12.8-7.9c4.5 0 8.7 2.1 11.4 5.7l16.3 21.7c2.1 2.9 5.5 4.5 9.1 4.5c8.4 0 13.9-8.9 10.1-16.4l-1.1-2.3c-3.5-7 0-15.5 7.5-18l21.2-7.1c7.6-2.5 12.7-9.6 12.7-17.6c0-10.3 8.3-18.6 18.6-18.6H400c8.8 0 16 7.2 16 16s-7.2 16-16 16H379.3c-7.2 0-14.2 2.9-19.3 8l-4.7 4.7c-2.1 2.1-3.3 5-3.3 8c0 6.2 5.1 11.3 11.3 11.3h11.3c6 0 11.8 2.4 16 6.6l6.5 6.5c1.8 1.8 2.8 4.3 2.8 6.8s-1 5-2.8 6.8l-7.5 7.5C386 262 384 266.9 384 272s2 10 5.7 13.7L408 304c10.2 10.2 24.1 16 38.6 16H454c6.5-20.2 10-41.7 10-64c0-111.4-87.6-202.4-197.7-207.7zm172 307.9c-3.7-2.6-8.2-4.1-13-4.1c-6 0-11.8-2.4-16-6.6L396 332c-7.7-7.7-18-12-28.9-12c-9.7 0-19.2-3.5-26.6-9.8L314 287.4c-11.6-9.9-26.4-15.4-41.7-15.4H251.4c-12.6 0-25 3.7-35.5 10.7L188.5 301c-17.8 11.9-28.5 31.9-28.5 53.3v3.2c0 17 6.7 33.3 18.7 45.3l16 16c8.5 8.5 20 13.3 32 13.3H248c13.3 0 24 10.7 24 24c0 2.5 .4 5 1.1 7.3c71.3-5.8 132.5-47.6 165.2-107.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM187.3 100.7c-6.2-6.2-16.4-6.2-22.6 0l-32 32c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0l32-32c6.2-6.2 6.2-16.4 0-22.6z"
-            />
-          </svg>
-        </button>
-       </a>
-        <a href="https://crm.iwex.kg/admin/">
-          <button class="bubbly-button"> <p> Signin admin</p>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path
-                d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
-              />
-            </svg>
-        </div>
-        </button>
-      </a>
-    </nav>
-    <div id="demo"></div>
-    <div class="details" id="details-even">
-      <div class="block_title_wrap">
-        <div class="place-box">
-          <div class="text">Work in Germany</div>
-        </div>
-        <div class="title-box-1"><div class="title-1">Employment</div></div>
-        <div class="title-box-2"><div class="title-2">vacancies</div></div>
-        <div class="desc">
-          Discover new career opportunities in Germany. Find the perfect job
-          opportunity that matches your skills and experience. We provide unique
-          opportunities for work and development in one of the most developed
-          countries in the world.
-        </div>
-      </div>
-      {% comment %}
-      <div class="cta">
-        <button class="bookmark">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
+    <div class="wrapper">
+      <div class="container">
+        <!-- Header -->
+        <header class="header">
+          <div class="header_container">
+            <a href="#" class="logo">
+              <img src="{% static 'image/iwex_logo2.png'%}" alt="Iwex Logo" width="auto" height="60"/>
+            </a>
+            <nav class="nav">
+              <a href="https://vacancies.iwex.kg/login" class="nav_link"
+                >{% trans "Работа-Германия" %}</a>
+              <a href="https://www.iwex.kg/" class="nav_link">Iwex.kg</a>
+              <a href="https://crm.iwex.kg/admin" class="nav_link">{%trans "Админ"%}</a>
+              <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}">
+                <select name="language" onchange="this.form.submit()">
+                  {% get_current_language as LANGUAGE_CODE %}
+                  {% get_available_languages as LANGUAGES %}
+                  {% get_language_info_list for LANGUAGES as languages %}
+                  {% for lang in languages %}
+                    <option value="{{ lang.code }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %}>
+                      {{ lang.name_local }} ({{ lang.code }})
+                    </option>
+                  {% endfor %}
+                </select>
+              </form>
+            </nav>
+            <button class="hamburger hamburger--emphatic" type="button">
+              <span class="hamburger-box"
+                ><span class="hamburger-inner"></span>
+              </span>
+            </button>
+          </div>
+        </header>
+        <!-- end -->
+        <!--Home page -->
+        <section class="backdrop" style="background-image: url('{% static 'image/home_page/gulmira.jpeg' %}');">
+          <div
+            class="main"
+            data-wow-duration="1s"
+            data-wow-delay="0.2s"
           >
-            <path
-              fill-rule="evenodd"
-              d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <button class="discover">
-          <a href="https://iwex.kg/" class="href">IWEX-Vacancies</a>
-        </button>
+            <h1 class="main_title">
+              {% trans "Добро пожаловать в нашу платформу для найма студентов в Германии!" %}
+            </h1>
+            <p class="main_subTitle">
+              {% trans "Мы - ваш надежный партнер в поиске талантливых и мотивированных студентов для вашего бизнеса в Германии. Наша платформа предоставляет удобный и эффективный способ нахождения кандидатов, которые подходят под ваши требования и готовы присоединиться к вашей команде."%}
+            </p>
+            <div class="buttons">
+              <a href="https://vacancies.iwex.kg/login" class="btn">{%trans "Работа-Германия"%}</a>
+              <a href="#" class="btn2">{% trans "joobi-мобильный"%}</a>
+            </div>
+          </div> 
+      </section>
+      <!--End-->
+    <section class="section_services_card">
+      <div class="section_services_container">
+        <h2 class="section_title_services">{%trans "Вакансии"%}</h2>
+        <div class="card__student">
+          <div class="cards__student__container">
+           <div class="card__student-cards">
+            <img src="{% static 'image/home_page/dostafka.jpeg' %}" alt="candidate_img">
+            <div class="card__student-info">
+                 <p>Lieferando</p>
+                 <p><strong>{%trans "Мест"%}: </strong>27</p>
+                 <p><strong>{%trans "Языки"%}</strong> German (C1)</p>
+                 <p><strong> {%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+             </div>
+           </div>
+           <div class="card__student-cards">
+            <img src="{% static 'image/home_page/povar.jpeg' %}" alt="candidate_img">
+            <div class="card__student-info">
+                 <p>Ritz-Carlton </p>
+                 <p><strong>{%trans "Мест"%}: </strong>10</p>
+                 <p><strong>{%trans "Языки"%}:</strong> {%trans ""%}German (C1), Russian (C1)</p>
+                 <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+             </div>
+           </div>
+           <div class="card__student-cards">
+            <img src="{% static 'image/home_page/macdonald.jpeg' %}" alt="candidate_img">
+            <div class="card__student-info">
+                 <p>Macdonalds</p>
+                 <p><strong>{%trans "Мест"%}:</strong> 27</p>
+                 <p><strong>{%trans "Языки"%}:</strong> English (B2), German (C1)</p>
+                 <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+             </div>
+           </div>
+           <div class="card__student-cards">
+             <img src="{% static 'image/home_page/cofe.jpeg' %}" alt="candidate_img">
+             <div class="card__student-info">
+                 <p>Starbucks</p>
+                 <p><strong>{%trans "Мест"%}:</strong> 27</p>
+                 <p><strong>{%trans "Языки"%}:</strong> English (B2),  German (C1), Russian (C1)</p>
+                 <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+             </div>
+           </div>
+          </div>
+         </div>
       </div>
-      {% endcomment %}
-      <div class="cta">
-        <a href="" style="margin-right: 10px;">
-          <img src="{% static 'image/app_store.svg'%}" alt="App store" />
-        </a>
-        <a href="">
-          <img src="{% static 'image/play_market1.svg'%}" alt="Play Market" />
-        </a>
+    </section>
+        <section 
+          class="section_services wow slideInLeft content4"
+          data-wow-duration="2s"
+          data-wow-delay="0.3s"
+        >
+          <div class="section_services_container">
+            <h2 class="section_title_services">
+              {%trans "Мы предлагаем вам инновационные решения"%}
+            </h2>
+            <div class="stages_box">
+              <div class="section_cards">
+                <div class="section_card">
+                  <div class="section_card_info">
+                    <h3 class="section_card_title">{%trans "Поиск талантов"%}</h3>
+                    <p class="section_card_desc">
+                      {%trans "Наша база данных студентов содержит профили с подробной информацией о навыках, образовании и опыте работы. Мы помогаем вам найти идеального кандидата для вашей вакансии."%}
+                    </p>
+                  </div>
+                  <div class="section_card_img">
+                    <img
+                      src="{% static 'image/home_page/search_stud.png'%}"
+                      alt=""
+                      class="img"
+                    />
+                  </div>
+                </div>
+                <div class="section_card">
+                  <div class="section_card_img">
+                    <img
+                      src="{% static 'image/home_page/search_stud.png'%}"
+                      alt=""
+                      class="img"
+                    />
+                  </div>
+                  <div class="section_card_info">
+                    <h3 class="section_card_title">{%trans "Размещение вакансий"%}</h3>
+                    <p class="section_card_desc">
+                      {%trans "Наша платформа позволяет быстро и легко размещать ваши вакансии, привлекая внимание студентов, ищущих работу в Германии."%}
+                    </p>
+                  </div>
+                </div>
+                <div class="section_card">
+                  <div class="section_card_info">
+                    <h3 class="section_card_title">{%trans "Мобильное приложение"%}</h3>
+                    <p class="section_card_desc">
+                      {%trans "Наше мобильное приложение обеспечивает удобный доступ к вакансиям в любое время и в любом месте. Студенты могут легко просматривать и откликаться на вакансии прямо с своего смартфона."%}
+                      
+                    </p>
+                  </div>
+                  <div class="section_card_img">
+                    <img
+                      src="{% static 'image/home_page/search_stud.png'%}"
+                      alt=""
+                      class="img"
+                    />
+                  </div>
+                </div>
+                <div class="section_card">
+                  <div class="section_card_img">
+                    <img
+                      src="{% static 'image/home_page/admin.png'%}"
+                      alt=""
+                      class="img"
+                    />
+                  </div>
+                  <div class="section_card_info">
+                    <h3 class="section_card_title">{%trans "Административный интерфейс"%}</h3>
+                    <p class="section_card_desc">
+                      {%trans "Наша административная панель предоставляет вам полный контроль над вашими вакансиями и кандидатами. Вы можете управлять вашими объявлениями, просматривать отклики студентов и управлять процессом найма."%}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        </section>
+        <!-- Student-->
+        <section
+          class="chooseUs wow slideInRight"
+          data-wow-duration="1s"
+          data-wow-delay="0.2s"
+        >
+          <div class="chooseUs_container">
+            <h2 class="choose_title">{%trans "Почему выбирают нас"%}</h2>
+            <div class="choose_cards">
+              <div class="card">
+                <i class="fa-solid fa-1"></i>
+                <h3 class="card_title">{%trans "Специализация на студенческом найме"%}</h3>
+                <p class="card_desc">
+                  {%trans "Наша платформа разработана специально для потребностей работодателей, ищущих студентов для временных или сезонных вакансий. Мы уверены, что каждый студент - это потенциальный и ценный актив для вашей компании."%}
+                </p>
+              </div>
+              <div class="card">
+                <i class="fa-solid fa-2"></i>
+                <h3 class="card_title">{%trans "Качественные кандидаты"%}</h3>
+                <p class="card_desc">
+                  {%trans "Мы проводим тщательный отбор студентов, чтобы убедиться, что они соответствуют вашим требованиям и ожиданиям. Наши алгоритмы подбора помогают найти кандидатов с соответствующими навыками и опытом."%}
+                  
+                </p>
+              </div>
+              <div class="card">
+                <i class="fa-solid fa-3"></i>
+                <h3 class="card_title">{%trans "Поддержка на всех этапах"%}</h3>
+                <p class="card_desc">
+                  {%trans "Мы не просто предоставляем платформу для размещения вакансий - мы предлагаем полную поддержку на всех этапах найма. Наша команда готова помочь вам с формулированием вакансий, оптимизацией процесса найма и даже вопросами визового оформления для иностранных студентов."%}
+                </p>
+              </div>
+              <div class="card">
+                <i class="fa-solid fa-4"></i>
+                <h3 class="card_title">{%trans "Сообщество работодателей"%}</h3>
+                <p class="card_desc">
+                  {%trans "Присоединившись к нашей платформе, вы становитесь частью активного сообщества работодателей, которые делятся опытом и лучшими практиками по найму студентов. Мы организуем встречи, вебинары и форумы для обмена знаниями и идеями."%}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="about_us">
+          <div
+            class="sub_content_cards wow slideInLeft"
+            data-wow-duration="1s"
+            data-wow-delay="0.2s"
+          >
+          <div class="sub_content_cards_img_wrap">
+            <img
+              src="{% static 'image/home_page/send.svg'%}"
+              alt=""
+              class="sub_content_cards_img"
+            />
+          </div>
+          <div class="xfull">
+            <div class="card__action">
+              <img src="{%static 'image/flag_germeny.jpeg'%}" alt="Avatar" style="width:100%">
+              <div class="container">
+                <h4><b>{%trans "Вераника"%}</b></h4> 
+                <p>{%trans "20 лет"%}</p> 
+              </div>
+            </div>
+            <div class="card__action">
+              <img src="{%static 'image/home_page/student.png'%}" alt="Avatar" style="width:100%">
+              <div class="container">
+                <h4><b>{%trans "Нурмахан"%}</b></h4> 
+                <p>{%trans "20 лет, Студент МУКР"%}</p> 
+              </div>
+            </div>
+            <div class="card__action">
+              <img src="{%static 'image/home_page/student_1.png'%}" alt="Avatar" style="width:100%">
+              <div class="container">
+                <h4><b>{%trans "Сыймык"%}</b></h4> 
+                <p>{%trans "21 лет"%}</p> 
+              </div>
+            </div>
+            <div class="card__action">
+              <img src="{%static 'image/home_page/student_3.png'%}" alt="Avatar" style="width:100%">
+              <div class="container">
+                <h4><b>{%trans "Айнура"%}</b></h4> 
+                <p>{%trans "23 лет, Студентка Манаса"%}</p> 
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="sub_content_cards_title">
+          {%trans "Присоединяйтесь к нашей платформе уже сегодня и"%} <br />
+          <b>{%trans "обеспечьте своему бизнесу доступ к лучшим студентам в Германии!"%}</b>
+        </h2>
+        </section>
+        <!--End-->
+        <footer class="footer">
+          <div class="container">
+              <nav class="footer__menu">
+                  <ul class="footer__menu-list">
+                      <li class="footer__menu-item">
+                          <p class="footer__menu-title">IWEX-JOOBOO</p>
+                      </li>
+                      <li class="footer__menu-item">
+                          <a href="#" class="footer__menu-link">AUSBILDUNG</a>
+                      </li>
+                      <li class="footer__menu-item">
+                          <a href="#" class="footer__menu-link">AU_PAIR</a>
+                      </li>
+                      <li class="footer__menu-item">
+                          <a href="#" class="footer__menu-link">FSJ/FOJ</a>
+                      </li>
+                  </ul>
+                  <ul class="footer__menu-list">
+                      <li class="footer__menu-item">
+                          <p class="footer__menu-title">{%trans "Контакты"%}</p>
+                      </li>
+                      <li class="footer__menu-item">
+                          <a href="#" class="footer__menu-link">+996 552 919 155</a>
+                      </li>
+                      <li class="footer__menu-item">
+                          <a href="#" class="footer__menu-link">+996 701 919 155</a>
+                      </li>
+                      <li class="footer__menu-item">
+                          <a href="#" class="footer__menu-link">+996 770 919 155</a>
+                      </li>
+                  </ul>
+                  <ul class="footer__menu-list">
+                    <li class="footer__menu-item">
+                        <p class="footer__menu-title">{%trans "Адрес"%}</p>
+                    </li>
+                    <li class="footer__menu-item">
+                        <a href="#" class="footer__menu-link">📍 Бишкек, Исанова 39</a>
+                    </li>
+                    <li class="footer__menu-item">
+                        <a href="#" class="footer__menu-link">📍 Бишкек, Тыналиева 3/3</a>
+                    </li>
+                    <li class="footer__menu-item">
+                        <a href="#" class="footer__menu-link">📍 Бишкек, Джунусалиева 99</a>
+                    </li>
+                    <li class="footer__menu-item">
+                      <a href="#" class="footer__menu-link">📍 Ош, Пушкина 4</a>
+                    </li>
+                    <li class="footer__menu-item">
+                      <a href="#" class="footer__menu-link">📍 Каракол, Жамансариева 173</a>
+                    </li>
+                  </ul>
+                  <ul class="footer__menu-list">
+                    <div class="footer__menu_list__wrap">
+
+                      <li class="footer__menu-item">
+                        <p class="footer__menu-title">{%trans "Социальные сети"%}</p>
+                    </li>
+                    <div class="footer__menu-item-flex">
+                      <li class="footer__menu-item-contacts">
+                        <a href="#" class="footer__menu-link">Instagram</a>
+                        <a href="#" class="app__item-link">
+                          <img src="{% static 'image/footer_page/instagram.png' %}" alt="" class="app__item-img">
+                        </a>  
+                      </li>
+                    </div>
+                    <div class="footer__menu-item-flex">
+                      <li class="footer__menu-item-contacts">
+                        <a href="#" class="footer__menu-link">Whatsapp</a>
+                        <a href="#" class="app__item-link">
+                          <img src="{% static 'image/footer_page/whatsapp.png' %}" alt="" class="app__item-img">
+                        </a>  
+                      </li>
+                    </div>
+                    <div class="footer__menu-item-flex">
+                      <li class="footer__menu-item-contacts">
+                        <a href="#" class="footer__menu-link">TikTok</a>
+                        <a href="#" class="app__item-link">
+                          <img src="{% static 'image/footer_page/tiktok.png' %}" alt="" class="app__item-img">
+                        </a>  
+                      </li>
+                    </div>
+                    </div>
+                  </ul>
+              </nav>
+              <nav class="copy__nav">
+                  <ul class="copy__nav-list">
+                      <li class="copy__nav-item">
+                          <a href="" class="cope__nav-link" herf="#">{%trans "Термин и сервис"%}</a>
+                      </li>
+                      <li class="copy__nav-item">
+                          <a href="" class="cope__nav-link" herf="#">{%trans "Приват и полиция"%}</a>
+                      </li>
+                      <li class="copy__nav-item">
+                          <a href="" class="cope__nav-link" herf="#">{%trans "Не продавать мои данные"%}</a>
+                      </li>
+                      <li class="copy__nav-item">
+                        <a href="" class="cope__nav-link" herf="#">© IWEX. 2024 Registry court: AG Frankfurt am Main, HRA 30640</a>
+                      </li>
+                    </ul>
+              </nav>
+              <ul class="app">
+                <li class="app__item">
+                    <a href="#" class="app__item-link">
+                        <img src="{% static 'image/footer_page/app_store.svg' %}" alt="" class="app__item-img">
+                    </a>          
+                </li>
+                <li class="app__item">
+                    <a href="#" class="app__item-link">
+                      <img src="{% static 'image/footer_page/play_market2.svg' %}" alt="" class="app__item-img">
+                    </a>
+                </li>
+              </ul>
+          </div>
+        </footer>
       </div>
     </div>
 
-    <div class="details" id="details-odd">
-      <div class="block_title_wrap">
-        <div class="place-box">
-          <div class="text">Work in Germany</div>
-        </div>
-        <div class="title-box-1">
-          <div class="title-1">Employment</div>
-        </div>
-        <div class="title-box-2">
-          <div class="title-2">vacancies</div>
-        </div>
-        <div class="desc">
-          Discover new career opportunities in Germany. Find the perfect job
-          opportunity that matches your skills and experience. We provide unique
-          opportunities for work and development in one of the most developed
-          countries in the world
-        </div>
-      </div>
-      {% comment %}
-      <div class="cta">
-        <button class="bookmark">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <button class="discover">
-          <a href="https://iwex.kg/" class="href">Inter Work Exchange</a>
-        </button>
-      </div>
-      {% endcomment %}
-      <div class="cta">
-        <a href="" style="margin-right: 10px;">
-          <img src="{% static 'image/app_store.svg'%}" alt="App store" />
-        </a>
-        <a href="">
-          <img src="{% static 'image/play_market1.svg'%}" alt="Play Market" />
-        </a>
-      </div>
-    </div>
-    <div class="pagination" id="pagination">
-      <div class="progress-sub-container">
-        <div class="progress-sub-background">
-          <div class="progress-sub-foreground"></div>
-        </div>
-      </div>
-      <div class="slide-numbers" id="slide-numbers"></div>
-    </div>
-    <div class="cover"></div>
-    <!-- partial -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script scr="https://unpkg.com/gsap@3.9.2/dist/gsap.min.js"></script>
-    <script type="text/javascript " src="{% static 'js/script.js' %}"></script>
+{% comment %} JavaScript {% endcomment %}
+    <script>
+      new WOW().init();
+    </script>
+    <script>
+      let hamburger = document.querySelector(".hamburger");
+      let menu = document.querySelector(".nav");
+      const toggleMenu = () => {
+        menu.classList.toggle("is-active");
+        hamburger.classList.toggle("is-active");
+      };
+
+      hamburger.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        toggleMenu();
+      });
+      document.addEventListener("click", (e) => {
+        let target = e.target;
+        let its_menu = target == menu || menu.contains(target);
+        let its_hamburger = target == hamburger;
+        let menu_is_active = menu.classList.contains("is-active");
+
+        if (!its_menu && !its_hamburger && menu_is_active) {
+          toggleMenu();
+        }
+      });
+    </script>
   </body>
 </html>

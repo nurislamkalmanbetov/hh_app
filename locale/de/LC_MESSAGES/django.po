@@ -896,3 +896,133 @@ msgstr "Adresse"
 
 msgid "Текст для футера"
 msgstr "Text in der Fußzeile"
+
+msgid "Дата начала каникул"
+msgstr "Startdatum des Urlaubs"
+
+msgid "Дата конца каникул"
+msgstr "Datum des Endes des Urlaubs"
+
+msgid "Работа-Германия"
+msgstr "Arbeit-Deutschland"
+
+msgid "Админ"
+msgstr "Verwaltung"
+
+msgid "Добро пожаловать в нашу платформу для найма студентов в Германии!"
+msgstr "Willkommen auf unserer Plattform für die Studentenrekrutierung in Deutschland!"
+
+msgid "Мы - ваш надежный партнер в поиске талантливых и мотивированных студентов для вашего бизнеса в Германии. Наша платформа предоставляет удобный и эффективный способ нахождения кандидатов, которые подходят под ваши требования и готовы присоединиться к вашей команде."
+msgstr "Wir sind Ihr zuverlässiger Partner bei der Suche nach talentierten und motivierten Studenten für Ihr Unternehmen in Deutschland. Unsere Plattform bietet eine bequeme und effiziente Möglichkeit, Kandidaten zu finden, die Ihren Anforderungen entsprechen und bereit sind, sich Ihrem Team anzuschließen."
+
+msgid "joobi-мобильный"
+msgstr "joobi-mobile"
+
+msgid "Мест"
+msgstr "Standorte"
+
+msgid "Языки"
+msgstr "Sprachen"
+
+msgid "Ищу работу в качестве разработчика программного обеспечения"
+msgstr "Ich suche eine Stelle als Softwareentwickler"
+
+msgid "Мы предлагаем вам инновационные решения"
+msgstr "Wir bieten Ihnen innovative Lösungen"
+
+msgid "Поиск талантов"
+msgstr "Talentsuche"
+
+msgid "Наша база данных студентов содержит профили с подробной информацией о навыках, образовании и опыте работы. Мы помогаем вам найти идеального кандидата для вашей вакансии."
+msgstr "Unsere Studentendatenbank enthält Profile mit detaillierten Informationen zu Fähigkeiten, Ausbildung und Berufserfahrung. Wir helfen Ihnen, den perfekten Kandidaten für Ihre offene Stelle zu finden."
+
+msgid "Размещение вакансий"
+msgstr "Veröffentlichung von Stellenangeboten"
+
+msgid "Наша платформа позволяет быстро и легко размещать ваши вакансии, привлекая внимание студентов, ищущих работу в Германии."
+msgstr "Unsere Plattform ermöglicht es Ihnen, Ihre Stellenangebote schnell und einfach zu veröffentlichen. Unsere Plattform ermöglicht es Ihnen, schnell und einfach Ihre Stellenangebote zu veröffentlichen und so die Aufmerksamkeit von Studenten auf sich zu ziehen, die in Deutschland Arbeit suchen. Deutschland."
+
+msgid "Мобильное приложение"
+msgstr "Mobile App"
+
+msgid "Наше мобильное приложение обеспечивает удобный доступ к вакансиям в любое время и в любом месте. Студенты могут легко просматривать и откликаться на вакансии прямо с своего смартфона."
+msgstr "Unsere mobile App bietet bequemen Zugang zu Stellenangeboten, jederzeit und überall. Studenten können und auf Stellenausschreibungen direkt von ihrem Smartphone aus reagieren. Smartphone."
+
+msgid "Административный интерфейс"
+msgstr "Administrative Schnittstelle"
+
+msgid "Наша административная панель предоставляет вам полный контроль над вашими вакансиями и кандидатами. Вы можете управлять вашими объявлениями, просматривать отклики студентов и управлять процессом найма."
+msgstr "Unser Verwaltungsbereich gibt Ihnen die vollständige Kontrolle über Ihre Jobs und Kandidaten. Sie können hre Anzeigen verwalten, das Feedback der Studenten einsehen. und den Einstellungsprozess verwalten."
+
+msgid "Почему выбирают нас"
+msgstr "Warum uns wählen"
+
+msgid "Специализация на студенческом найме"
+msgstr "Spezialisiert auf die Anwerbung von Studenten"
+
+msgid "Наша платформа разработана специально для потребностей работодателей, ищущих студентов для временных или сезонных вакансий. Мы уверены, что каждый студент - это потенциальный и ценный актив для вашей компании."
+msgstr "Unsere Plattform ist speziell auf die Bedürfnisse von Arbeitgeber, die Studenten für befristete oder saisonale freie Stellen suchen. Wir glauben, dass jeder Student ein potenzieller und wertvolles Kapital für Ihr Unternehmen ist."
+
+msgid "Качественные кандидаты"
+msgstr "Hochwertige Kandidaten"
+
+msgid "Мы проводим тщательный отбор студентов, чтобы убедиться, что они соответствуют вашим требованиям и ожиданиям. Наши алгоритмы подбора помогают найти кандидатов с соответствующими навыками и опытом."
+msgstr "Wir prüfen die Studenten sorgfältig, um sicherzustellen, dass dass sie Ihren Anforderungen und Erwartungen entsprechen. Unsere Rekrutierungsalgorithmen helfen Ihnen, Kandidaten mit relevanten Fähigkeiten und Erfahrungen."
+
+msgid "Поддержка на всех этапах"
+msgstr "Unterstützung in allen Phasen"
+
+msgid "Мы не просто предоставляем платформу для размещения вакансий - мы предлагаем полную поддержку на всех этапах найма. Наша команда готова помочь вам с формулированием вакансий, оптимизацией процесса найма и даже вопросами визового оформления для иностранных студентов."
+msgstr "Wir bieten nicht nur eine Plattform zum Einstellen von Stellen - wir bieten umfassende Unterstützung in jeder Phase des Einstellungsprozesses. Unser Team hilft Ihnen bei der Formulierung von Stellenangeboten, Optimierung des Rekrutierungsprozesses und sogar beim Visum für internationale Studenten."
+
+msgid "Сообщество работодателей"
+msgstr "Arbeitgebergemeinschaft"
+
+msgid "Присоединившись к нашей платформе, вы становитесь частью активного сообщества работодателей, которые делятся опытом и лучшими практиками по найму студентов. Мы организуем встречи, вебинары и форумы для обмена знаниями и идеями."
+msgstr "Wenn Sie unserer Plattform beitreten, werden Sie Teil einer einer lebendigen Gemeinschaft von Arbeitgebern, die ihre Erfahrungen und bewährten Verfahren bei der Anwerbung von Studenten austauschen. Best Practices bei der Anwerbung von Studenten. Wir organisieren Meetups, Webinare und Foren, um Wissen und Ideen auszutauschen."
+
+msgid "Вераника"
+msgstr "Veranika"
+
+msgid "20 лет"
+msgstr "20 Jahre"
+
+msgid "Нурмахан"
+msgstr "Nurmahan"
+
+msgid "20 лет, Студент МУКР"
+msgstr "20 Jahre alt, ICCR-Student"
+
+msgid "Сыймык"
+msgstr "Syymyk"
+
+msgid "21 лет"
+msgstr "21 Jahre alt"
+
+msgid "Айнура"
+msgstr "Ainura"
+
+msgid "23 лет, Студентка Манаса"
+msgstr "23 Jahre alt, Manas-Student"
+
+msgid "Присоединяйтесь к нашей платформе уже сегодня и"
+msgstr "Werden Sie noch heute Mitglied unserer Plattform und"
+
+msgid "обеспечьте своему бизнесу доступ к лучшим студентам в Германии!"
+msgstr "verschaffen Sie Ihrem Unternehmen Zugang zu den besten Studierenden in Deutschland!"
+
+msgid "Контакты"
+msgstr "Kontakte"
+
+msgid "Социальные сети"
+msgstr "Soziale Medien"
+
+msgid "Термин и сервис"
+msgstr "Laufzeit und Service"
+
+msgid "Приват и полиция"
+msgstr "Privat und die Polizei"
+
+msgid "Не продавать мои данные"
+msgstr "Verkaufen Sie meine Daten nicht"
+

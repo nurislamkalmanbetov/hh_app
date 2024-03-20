@@ -80,13 +80,20 @@ class Profile(models.Model):
         ('German', _('Немецкий')),
     )
 
-    KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES = (
-        ('A1', 'A1'),
-        ('A2', 'A2'),
-        ('B1', 'B1'),
-        ('B2', 'B2'),
-        ('C1', 'C1'),
-        ('C2', 'C2'),
+    LANGUAGE_LEVEL_CHOICES = (
+        ('1', 'Понимаю и разговариваю без проблем'),
+        ('2', 'Если что-то не понимаю, то переспрашиваю'),
+        ('3', 'Понимаю многое, но плохо говорю'),
+        ('4', 'Понимаю немного, когда говорят очень медленно, но плохо говорю'),
+        ('5', 'Не разговариваю совсем'),
+    )
+
+    LEVEL_CHOICES = (
+        ('a1', 'A1'),
+        ('a2', 'A2'),
+        ('b1', 'B1'),
+        ('b2', 'B2'),
+        ('c1', 'C1'),
     )
 
     user = models.OneToOneField(User, verbose_name=_('Пользователь'), related_name='profile', on_delete=models.CASCADE)
@@ -124,9 +131,16 @@ class Profile(models.Model):
     phone = models.CharField(_('Номер телефона'), max_length=50, blank=True, null=True, db_index=True)
     whatsapp_phone_number = models.CharField(_('Номер Whatsapp'), max_length=50, blank=True)
 
-    german = models.CharField(_('Знание немецкого языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
-    english = models.CharField(_('Знание английского языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
-    russian = models.CharField(_('Знание русского языка'), max_length=50, choices=KNOWLEGE_OF_LANGUAGES_LEVEL_CHOICES, blank=True)
+    german = models.CharField(_('Знание немецкого языка'),  max_length=30, choices=LANGUAGE_LEVEL_CHOICES, default='', blank=True)
+    german_level = models.CharField(_('Уровень знания немецкого'), choices=LEVEL_CHOICES, max_length=40, default='', blank=True)
+    english = models.CharField(_('Знание английского языка'),  max_length=30, choices=LANGUAGE_LEVEL_CHOICES, default='', blank=True)
+    english_level = models.CharField(_('Уровень знания английского'), choices=LEVEL_CHOICES, max_length=40, default='', blank=True)
+    turkish = models.CharField(_('Знание турецкого языка'),  max_length=30, choices=LANGUAGE_LEVEL_CHOICES, default='', blank=True)
+    turkish_level = models.CharField(_('Уровень знания турецкого'), choices=LEVEL_CHOICES, max_length=40, default='', blank=True)
+    russian = models.CharField(_('Знание русского языка'),  max_length=30, choices=LANGUAGE_LEVEL_CHOICES, default='', blank=True)
+    russian_level = models.CharField(_('Уровень знания русского'), choices=LEVEL_CHOICES, max_length=40, default='', blank=True)
+    chinese = models.CharField(_('Знание китайского языка'),  max_length=30, choices=LANGUAGE_LEVEL_CHOICES, default='', blank=True)
+    chinese_level = models.CharField(_('Уровень знания китайского'), choices=LEVEL_CHOICES, max_length=40, default='', blank=True)
 
 
     def __str__(self):
@@ -236,6 +250,10 @@ class PassportAndTerm(models.Model):
 
 
 class Payment(models.Model):
+    FULLY_PAID_CHOICES = [
+        ('ДА', _('ДА')),
+        ('НЕТ', _('НЕТ')),
+    ]
     user = models.ForeignKey(Profile, verbose_name=_('Соискатель'), related_name='payments', on_delete=models.CASCADE)
     total_amount = models.IntegerField(_('Общая сумма'), blank=True, null=True)
     total_amount_in_words = models.CharField(_('Общая сумма прописью'), max_length=255, blank=True)
@@ -249,7 +267,7 @@ class Payment(models.Model):
     debt_in_words = models.CharField(_('Долг прописью'), max_length=255, blank=True)
     payment_date = models.DateTimeField(_('Дата оплаты'), blank=True, null=True)
     payment_accepted_by = models.ForeignKey(User, verbose_name=_('Оплату принял'), related_name='payments_accepted', on_delete=models.CASCADE,blank=True, null=True)
-    
+    fully_paid = models.CharField(_('Полностью оплатил'), max_length=3, choices=FULLY_PAID_CHOICES, blank=True, null=True)
     payment_accepted_date = models.DateTimeField(_('Дата принятия оплаты'), blank=True, null=True)
     payment_accepted = models.BooleanField(_('Оплата принята'), default=False)
 
@@ -283,7 +301,6 @@ class Deal(models.Model):
         verbose_name_plural = _('Сделки')
 
 
-
 class WorkExperience(models.Model):
 
     TYPE_OF_COMPANY_CHOICES = (
@@ -309,23 +326,32 @@ class WorkExperience(models.Model):
         ('Other', _('Другое')),
     )
 
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='work_experiences', verbose_name=_('Соискатель'))
+    user = models.ForeignKey(Profile, verbose_name=_('Профиль'), related_name='work_experiences', on_delete=models.CASCADE)
+    company = models.CharField(_('Название компания'), max_length=255, blank=True)
     type_company = models.CharField(_('Тип компании'), max_length=50, choices=TYPE_OF_COMPANY_CHOICES, blank=True)
-    company = models.CharField(_('Компания'), max_length=255, blank=True)
     position = models.CharField(_('Должность'), max_length=50, choices=JOB_TITLE_CHOICES, blank=True)
-    start_date = models.DateField(_('Дата начала'), blank=True, null=True)
-    end_date = models.DateField(_('Дата окончания'), blank=True, null=True)
-    responsibilities = models.TextField(_('Обязанности'), blank=True)
-    country = models.CharField(_('Страна'), max_length=255, blank=True)
-
-    def __str__(self):
-        return f"{self.user.user.email} - {self.company}"
-
+    start_date = models.DateField(_('Дата начала работы'), null=True, blank=True)
+    end_date = models.DateField(_('Дата окончания работы'), null=True, blank=True) 
+    description_de = models.TextField(_('Описание (на немецком)'), blank=True)
+    description_ru = models.TextField(_('Описание (на кириллице)'), blank=True)
+    description_en = models.TextField(_('Описание (на латинице)'), blank=True)
+    achievements_de = models.TextField(_('Достижения и успехи (на немецком)'), blank=True)
+    achievements_ru = models.TextField(_('Достижения и успехи (на кириллице)'), blank=True)
+    achievements_en = models.TextField(_('Достижения и успехи (на латинице)'), blank=True)
+    location_city_de = models.CharField(_('Город работы (на немецком)'), max_length=255, blank=True)
+    location_city_ru = models.CharField(_('Город работы (на кириллице)'), max_length=255, blank=True)
+    location_city_en = models.CharField(_('Город работы (на латинице)'), max_length=255, blank=True)
+    location_country_de = models.CharField(_('Страна работы (на немецком)'), max_length=255, blank=True)
+    location_country_ru = models.CharField(_('Страна работы (на кириллице)'), max_length=255, blank=True)
+    location_country_en = models.CharField(_('Страна работы (на латинице)'), max_length=255, blank=True)
+    salary = models.CharField(_('Заработная плата'), max_length=255, null=True, blank=True)    
 
     class Meta:
         verbose_name = _('Опыт работы')
         verbose_name_plural = _('Опыт работы')
 
+    def __str__(self):
+        return f'{self.company} - {self.position}'
 
 
 

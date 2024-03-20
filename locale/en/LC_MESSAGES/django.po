@@ -900,3 +900,128 @@ msgstr "Site logo"
 
 msgid "Лого сайтов"
 msgstr "Website logos"
+
+
+msgid "Работа-Германия"
+msgstr "Work-Germany"
+
+msgid "Админ"
+msgstr "Admin"
+
+msgid "Добро пожаловать в нашу платформу для найма студентов в Германии!"
+msgstr "Welcome to our platform for student recruitment in Germany!"
+
+msgid "Мы - ваш надежный партнер в поиске талантливых и мотивированных студентов для вашего бизнеса в Германии. Наша платформа предоставляет удобный и эффективный способ нахождения кандидатов, которые подходят под ваши требования и готовы присоединиться к вашей команде."
+msgstr "We are your reliable partner in finding talented and motivated students for your business in Germany. Our platform provides a convenient and efficient way to find candidates who fit your requirements and are ready to join your team."
+
+msgid "joobi-мобильный"
+msgstr "joobi-mobile"
+
+msgid "Мест"
+msgstr "Places"
+
+msgid "Языки"
+msgstr "Languages"
+
+msgid "Ищу работу в качестве разработчика программного обеспечения"
+msgstr "Looking for a job as a software developer"
+
+msgid "Мы предлагаем вам инновационные решения"
+msgstr "We offer you innovative solutions"
+
+msgid "Поиск талантов"
+msgstr "Talent Search"
+
+msgid "Наша база данных студентов содержит профили с подробной информацией о навыках, образовании и опыте работы. Мы помогаем вам найти идеального кандидата для вашей вакансии."
+msgstr "Our student database contains profiles with detailed information on skills, education and work experience. We help you find the perfect candidate for your vacancy."
+
+msgid "Размещение вакансий"
+msgstr "Posting vacancies"
+
+msgid "Наша платформа позволяет быстро и легко размещать ваши вакансии, привлекая внимание студентов, ищущих работу в Германии."
+msgstr "Our platform makes it quick and easy to post your vacancies, attracting the attention of students looking for jobs in Germany."
+
+msgid "Мобильное приложение"
+msgstr "Mobile App"
+
+msgid "Наше мобильное приложение обеспечивает удобный доступ к вакансиям в любое время и в любом месте. Студенты могут легко просматривать и откликаться на вакансии прямо с своего смартфона."
+msgstr "Our mobile app provides convenient access to job openings anytime, anywhere. Students can easily view and respond to job openings right from their smartphone."
+
+msgid "Административный интерфейс"
+msgstr "Administrative interface"
+
+msgid "Наша административная панель предоставляет вам полный контроль над вашими вакансиями и кандидатами. Вы можете управлять вашими объявлениями, просматривать отклики студентов и управлять процессом найма."
+msgstr "Our administrative dashboard gives you complete control over your vacancies and candidates. You can manage your listings, view student responses and manage the hiring process."
+
+msgid "Почему выбирают нас"
+msgstr "Why choose us"
+
+msgid "Специализация на студенческом найме"
+msgstr "Specializing in student recruitment"
+
+msgid "Наша платформа разработана специально для потребностей работодателей, ищущих студентов для временных или сезонных вакансий. Мы уверены, что каждый студент - это потенциальный и ценный актив для вашей компании."
+msgstr "Our platform is designed specifically for the needs of employers looking for students for temporary or seasonal positions. We believe that every student is a potential and valuable asset for your company."
+
+msgid "Качественные кандидаты"
+msgstr "Quality candidates"
+
+msgid "Мы проводим тщательный отбор студентов, чтобы убедиться, что они соответствуют вашим требованиям и ожиданиям. Наши алгоритмы подбора помогают найти кандидатов с соответствующими навыками и опытом."
+msgstr "We screen students carefully to ensure they meet your requirements and expectations. Our recruitment algorithms help you find candidates with relevant skills and experience."
+
+msgid "Поддержка на всех этапах"
+msgstr "Support at all stages"
+
+msgid "Мы не просто предоставляем платформу для размещения вакансий - мы предлагаем полную поддержку на всех этапах найма. Наша команда готова помочь вам с формулированием вакансий, оптимизацией процесса найма и даже вопросами визового оформления для иностранных студентов."
+msgstr "We don't just provide a platform to post jobs - we offer full support at all stages of the hiring process. Our team is ready to help you with job formulation, optimizing the hiring process and even visa issues for international students."
+
+msgid "Сообщество работодателей"
+msgstr "Employer community"
+
+msgid "Присоединившись к нашей платформе, вы становитесь частью активного сообщества работодателей, которые делятся опытом и лучшими практиками по найму студентов. Мы организуем встречи, вебинары и форумы для обмена знаниями и идеями."
+msgstr "By joining our platform, you become part of an active community of employers who share experiences and best practices on student recruitment. We organize meetups, webinars and forums to share knowledge and ideas."
+
+msgid "Вераника"
+msgstr "Veranica"
+
+msgid "20 лет"
+msgstr "20 years"
+
+msgid "Нурмахан"
+msgstr "Nurmahan"
+
+msgid "20 лет, Студент МУКР"
+msgstr "20 years old, ICCR student"
+
+msgid "Сыймык"
+msgstr "Syymyk"
+
+msgid "21 лет"
+msgstr "21 years old"
+
+msgid "Айнура"
+msgstr "Ainura"
+
+msgid "23 лет, Студентка Манаса"
+msgstr "23 years old, Manas student"
+
+msgid "Присоединяйтесь к нашей платформе уже сегодня и"
+msgstr "Join our platform today and"
+
+msgid "обеспечьте своему бизнесу доступ к лучшим студентам в Германии!"
+msgstr "give your business access to the best students in Germany!"
+
+msgid "Контакты"
+msgstr "Contacts"
+
+msgid "Социальные сети"
+msgstr "Social media"
+
+msgid "Термин и сервис"
+msgstr "Term and service"
+
+msgid "Приват и полиция"
+msgstr "Privat and the police"
+
+msgid "Не продавать мои данные"
+msgstr "Don't sell my data"
+

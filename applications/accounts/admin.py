@@ -83,9 +83,9 @@ class ProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(WorkExperience)
 class WorkExperienceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'type_company', 'company', 'position', 'start_date', 'country',)
+    list_display = ('user', 'type_company', 'company', 'position', 'start_date', )
     search_fields = ('user__email', 'company', 'position', 'country',)
-    list_filter = ('type_company', 'position', 'country',)
+    list_filter = ('type_company', 'position', )
 
 
     fieldsets = (
@@ -97,15 +97,3 @@ class WorkExperienceAdmin(admin.ModelAdmin):
 
 
 
-
-# @admin.register(WorkSchedule)
-# class WorkScheduleAdmin(admin.ModelAdmin):
-#     list_display = ('id', 'user',)
-#     search_fields = ('user__email',)
-#     fields = (
-#         'user', 'monday', 'tuesday', 
-#         'wednesday', 'thursday', 'friday', 
-#         'saturday', 'sunday', 
-#         'custom', 
-#         'custom_start_time', 'custom_end_time',
-#         )

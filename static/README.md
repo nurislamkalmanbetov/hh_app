@@ -1,30 +1,43 @@
-# rollup-starter-app
+# Mobile backend headhunter
 
-This repo contains a bare-bones example of how to create an application using Rollup, including importing a module from `node_modules` and converting it from CommonJS.
+Этот проект представляет собой веб-приложение на основе Django 4.1, разделенное на два основных приложения:
 
-*See also https://github.com/rollup/rollup-starter-lib*
+- **accounts:** Приложение для управления пользователями, аутентификации и авторизации.
+- **blog:** Приложение для создания и отображения Вакансии
 
 
-## Getting started
+### Основные функции
 
-Clone this repository and install its dependencies:
+- Создание и публикация рецептов.
+- Авторизация пользователей и управление профилями.
+- Отображение списка и деталей рецептов.
 
-```bash
-git clone https://github.com/rollup/rollup-starter-app
-cd rollup-starter-app
-npm install
-```
+## Запуск проекта
 
-The `public/index.html` file contains a `<script src='bundle.js'>` tag, which means we need to create `public/bundle.js`. The `rollup.config.js` file tells Rollup how to create this bundle, starting with `src/main.js` and including all its dependencies, including [date-fns](https://date-fns.org).
+Чтобы запустить проект локально, выполните следующие шаги:
 
-`npm run build` builds the application to `public/bundle.js`, along with a sourcemap file for debugging.
+1. Установите необходимые зависимости:
+   ```bash
+   pip install -r requirements.txt
+   python manage.py migrate
+   python manage.py runserver
 
-`npm start` launches a server, using [serve](https://github.com/zeit/serve). Navigate to [localhost:3000](http://localhost:3000).
+2. После выполнения этих шагов вы сможете открыть приложение в вашем браузере по адресу 
+    http://127.0.0.1:8000/.
 
-`npm run watch` will continually rebuild the application as your source files change.
+![Главный сайт пример](media/work1.png)
 
-`npm run dev` will run `npm start` and `npm run watch` in parallel.
 
-## License
+## После выполнения этих шагов вы сможете открыть приложение в вашем браузере по адресу http://127.0.0.1:8000/.
 
-[MIT](LICENSE).
+
+## Запуск проекта с использованием Docker
+
+1. Для запуска проекта с использованием Docker, убедитесь, что у вас установлен Docker и Docker Compose. Затем выполните следующие шаги:
+    docker-compose run web python manage.py migrate
+
+2. Запустите контейнеры Docker:
+    docker-compose up --build
+
+## Приложение будет доступно по адресу http://127.0.0.1:8000/.
+

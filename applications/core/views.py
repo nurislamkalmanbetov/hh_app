@@ -78,12 +78,6 @@ class EmployerCompanyUpdateView(generics.RetrieveUpdateAPIView):
     
     
 
-class CountryListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Country.objects.all()
-    serializer_class = CountrySerializers
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name'] 
 
 
 class BranchAPIView(APIView):
@@ -123,7 +117,7 @@ class BranchListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
     def get_queryset(self):
         user_id = self.request.user.id
-        queryset = Branch.objects.filter(company__user__id=user_id).select_related('country', 'company')
+        queryset = Branch.objects.filter(company__user__id=user_id).select_related( 'company')
         return queryset
         
 class BranchDetailListAPIView(ListAPIView):
@@ -137,13 +131,14 @@ class BranchDetailListAPIView(ListAPIView):
         
         # Используйте filter(id=branch_id) вместо filter(branch=branch)
         branch = get_object_or_404(Branch, id=branch_id)
-        queryset = Branch.objects.filter(id=branch.id).select_related('country', 'company')
+        queryset = Branch.objects.filter(id=branch.id).select_related('company')
         return queryset
 
 
 class HousingAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAuthenticated, IsEmployerPermisson]
+    @extend_schema(request=HousingSerializers)
     def post(self, request, *args, **kwargs):
         serializer = HousingSerializers(data=request.data)
         if serializer.is_valid():

@@ -31,19 +31,30 @@ class EmployerCompany(models.Model):
         verbose_name_plural = _('Работодатели')
 
 
-class Country(models.Model):
-    name = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = _('Земля')
-        verbose_name_plural = _('Земли')
 
 
 class Branch(models.Model):
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL,null=True, verbose_name=_('Земля'))
+    LAND_NAME_CHOICES = (
+        ('Baden-Württemberg', 'Baden-Württemberg'),
+        ('Bavaria', 'Bavaria'),
+        ('Berlin', 'Berlin'),
+        ('Brandenburg', 'Brandenburg'),
+        ('Bremen', 'Bremen'),
+        ('Hamburg', 'Hamburg'),
+        ('Hesse', 'Hesse'),
+        ('Lower Saxony', 'Lower Saxony'),
+        ('Mecklenburg-Vorpommern', 'Mecklenburg-Vorpommern'),
+        ('North Rhine-Westphalia', 'North Rhine-Westphalia'),
+        ('Rhineland-Palatinate', 'Rhineland-Palatinate'),
+        ('Saarland', 'Saarland'),
+        ('Saxony', 'Saxony'),
+        ('Saxony-Anhalt', 'Saxony-Anhalt'),
+        ('Schleswig-Holstein', 'Schleswig-Holstein'),
+        ('Thuringia', 'Thuringia'),
+    )
+
+    land_name = models.CharField(max_length=100, choices=LAND_NAME_CHOICES)
     city = models.CharField(_('Название города'), max_length=255, blank=True,)
     company = models.ForeignKey(EmployerCompany, on_delete=models.CASCADE, verbose_name=_('Компания'))
     name = models.CharField(_('Название филлиала'), max_length=255)
@@ -58,7 +69,6 @@ class Branch(models.Model):
     class Meta:
 
         indexes = [
-            models.Index(fields=['country',]),
             models.Index(fields=['company',]),
 
         ]

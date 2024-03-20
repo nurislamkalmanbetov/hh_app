@@ -98,34 +98,23 @@ class EmployerUpdateSerialzers(serializers.ModelSerializer):
             instance.icon = validated_data.get('icon', instance.icon)
             instance.save()
             return instance
-
-
-class CountrySerializers(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Country
-        fields = [
-            'id',
-            'name',
-        ]
+        
 
 class BranchSerializers(serializers.ModelSerializer):
-
-
     class Meta:
         model = Branch
         fields = [
             'id',
-            'country',
             'city',
             'name',
             'address',
             'link_address',
             'description',
+            'land_name'
         ]
   
     def update(self, instance, validated_data):
-        instance.country = validated_data.get('country', instance.country)
+        instance.land_name = validated_data.get('land_name', instance.land_name)
         instance.city = validated_data.get('city', instance.city)
         instance.name = validated_data.get('name', instance.name)
         instance.address = validated_data.get('address', instance.address)
@@ -133,17 +122,16 @@ class BranchSerializers(serializers.ModelSerializer):
         instance.description = validated_data.get('description', instance.description)
     
         instance.save()
-        return instance
     
 
 #серилайзер для гет запроса где только название филиала и город
 class BranchListSerializers(serializers.ModelSerializer):
-    country = serializers.CharField(source='country.name')
+
     class Meta:
         model = Branch
         fields = [
             'id',
-            'country',
+            'land_name',
             'city',
             'name',
         ]
@@ -244,7 +232,7 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
     employer_company_icon = serializers.ImageField(source='employer_company.icon')
     employer_company_name = serializers.CharField(source='employer_company.name')
     branch = serializers.CharField(source='branch.name')
-    branch_city = serializers.CharField(source='branch.country.name')
+    branch_city = serializers.CharField(source='branch.land_name ')
     branch_address = serializers.CharField(source='branch.address')
     created_date = serializers.SerializerMethodField(read_only=True)
 
@@ -294,7 +282,7 @@ class VacancyListSerializers(serializers.ModelSerializer):
     employer_company_icon = serializers.ImageField(source='employer_company.icon')
     employer_company_name = serializers.CharField(source='employer_company.name')
     branch = serializers.CharField(source='branch.name')
-    branch_city = serializers.CharField(source='branch.country.name')
+    branch_city = serializers.CharField(source='branch.land_name ')
     branch_address = serializers.CharField(source='branch.address')
     created_date = serializers.SerializerMethodField(read_only=True)
 

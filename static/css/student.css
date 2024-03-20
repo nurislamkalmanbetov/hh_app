@@ -1,0 +1,55 @@
+.wrapper .sub_content_cards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding-top: 140px;
+}
+.wrapper .sub_content_cards .sub_content_cards_img_wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+.wrapper .sub_content_cards .sub_content_cards_img_wrap .sub_content_cards_img {
+  width: 700px;
+}
+.wrapper .about_us .sub_content_cards_title {
+  color: #050038;
+  font-size: 36px;
+  text-align: center;
+}
+.wrapper .sub_content_cards .sub_content_cards_title b {
+  color: #050038;
+}
+.xfull{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 20px 0 150px;
+}
+.card__action {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  max-width: 300px;
+  width: 48%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.card__action:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+container {
+  padding: 0 10px; /* Уменьшаем отступы внутри контейнера */
+}
+
+.blog_card {
+  padding: 2px 16px;
+}
+
+h4, p {
+  margin: 5px 0; /* Уменьшаем отступы для заголовка и абзаца */
+}
