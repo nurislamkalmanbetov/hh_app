@@ -156,9 +156,9 @@ class HousingViewSet(viewsets.ModelViewSet):
         print(serializer.data)
 
         files_data = request.FILES.getlist('files')  # Получаем список видео
-        print(files_data, 'files_data')
+  
         for file_data in files_data:
-            print('-------', file_data)
+          
             FilesHousing.objects.create(housing=housing, files=file_data)
     
         return Response(serializer.data, status=status.HTTP_201_CREATED)
