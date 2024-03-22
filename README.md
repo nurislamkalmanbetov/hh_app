@@ -24,4 +24,4 @@ s is a Customer Relationship Management System designed for Warehouses. To get s
   <li>Browse to one of the following links:       http://127.0.0.1       http://localhost</li>
 </ol>
 
-![1](/image/test.jpg)
+![1](static/image/test.jpg)
