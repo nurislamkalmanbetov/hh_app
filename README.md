@@ -1,5 +1,5 @@
-# IWEX CRM
-This is CRM system for recruiting agency.
+# Headhunter APP 
+This is work experience system for recruiting agency.
 s is a Customer Relationship Management System designed for Warehouses. To get started just clone this repo and keep the following steps.</p>
 
 <b>Development Version</b>
@@ -24,3 +24,4 @@ s is a Customer Relationship Management System designed for Warehouses. To get s
   <li>Browse to one of the following links:       http://127.0.0.1       http://localhost</li>
 </ol>
 
+![1](/images/test.jpg)
