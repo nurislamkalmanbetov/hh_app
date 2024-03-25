@@ -2,9 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 100vh;
-  padding-top: 140px;
+  /* min-height: 100vh;
+  p20 */
 }
+
+
+
 .wrapper .sub_content_cards .sub_content_cards_img_wrap {
   max-width: 600px;
   margin: 0 auto;

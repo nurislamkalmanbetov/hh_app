@@ -283,7 +283,7 @@ class VacancyDetailSerializers(serializers.ModelSerializer):
 class VacancyListSerializers(serializers.ModelSerializer):
     employer_company_icon = serializers.ImageField(source='employer_company.icon')
     employer_company_name = serializers.CharField(source='employer_company.name')
-    branch = serializers.CharField(source='branch.name')
+    branch_name = serializers.CharField(source='branch.name')
     branch_city = serializers.CharField(source='branch.land_name')
     branch_address = serializers.CharField(source='branch.address')
     created_date = serializers.SerializerMethodField(read_only=True)
@@ -295,7 +295,7 @@ class VacancyListSerializers(serializers.ModelSerializer):
             'id',
             'employer_company_name',
             'employer_company_icon',
-            'branch',
+            'branch_name',
             'branch_city',
             'branch_address',
             'position', 

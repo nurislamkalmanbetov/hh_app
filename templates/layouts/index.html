@@ -57,7 +57,7 @@
         </header>
         <!-- end -->
         <!--Home page -->
-        <section class="backdrop" style="background-image: url('{% static 'image/home_page/gulmira.jpeg' %}');">
+        <section class="backdrop" style="background-image: url('{% static 'image/germany.jpg' %}');">
           <div
             class="main"
             data-wow-duration="1s"
@@ -76,49 +76,57 @@
           </div> 
       </section>
       <!--End-->
+
     <section class="section_services_card">
-      <div class="section_services_container">
+      <div class="container">
         <h2 class="section_title_services">{%trans "Вакансии"%}</h2>
-        <div class="card__student">
-          <div class="cards__student__container">
-           <div class="card__student-cards">
-            <img src="{% static 'image/home_page/dostafka.jpeg' %}" alt="candidate_img">
-            <div class="card__student-info">
-                 <p>Lieferando</p>
-                 <p><strong>{%trans "Мест"%}: </strong>27</p>
-                 <p><strong>{%trans "Языки"%}</strong> German (C1)</p>
-                 <p><strong> {%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
-             </div>
-           </div>
-           <div class="card__student-cards">
-            <img src="{% static 'image/home_page/povar.jpeg' %}" alt="candidate_img">
-            <div class="card__student-info">
-                 <p>Ritz-Carlton </p>
-                 <p><strong>{%trans "Мест"%}: </strong>10</p>
-                 <p><strong>{%trans "Языки"%}:</strong> {%trans ""%}German (C1), Russian (C1)</p>
-                 <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
-             </div>
-           </div>
-           <div class="card__student-cards">
-            <img src="{% static 'image/home_page/macdonald.jpeg' %}" alt="candidate_img">
-            <div class="card__student-info">
-                 <p>Macdonalds</p>
-                 <p><strong>{%trans "Мест"%}:</strong> 27</p>
-                 <p><strong>{%trans "Языки"%}:</strong> English (B2), German (C1)</p>
-                 <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
-             </div>
-           </div>
-           <div class="card__student-cards">
-             <img src="{% static 'image/home_page/cofe.jpeg' %}" alt="candidate_img">
-             <div class="card__student-info">
-                 <p>Starbucks</p>
-                 <p><strong>{%trans "Мест"%}:</strong> 27</p>
-                 <p><strong>{%trans "Языки"%}:</strong> English (B2),  German (C1), Russian (C1)</p>
-                 <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
-             </div>
-           </div>
+          <div class="card__student">
+            <div class="cards__student__container">
+
+              <div class="cards__student__contaier_first">
+                <div class="card__student-cards">
+                  <img src="{% static 'image/home_page/dostafka.jpeg' %}" alt="candidate_img">
+                  <div class="card__student-info">
+                      <p>Lieferando</p>
+                      <p><strong>{%trans "Мест"%}: </strong>27</p>
+                      <p><strong>{%trans "Языки"%}</strong> German (C1)</p>
+                      <p><strong> {%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+                  </div>
+                </div>
+                <div class="card__student-cards">
+                  <img src="{% static 'image/home_page/povar.jpeg' %}" alt="candidate_img">
+                  <div class="card__student-info">
+                      <p>Ritz-Carlton </p>
+                      <p><strong>{%trans "Мест"%}: </strong>10</p>
+                      <p><strong>{%trans "Языки"%}:</strong> {%trans ""%}German (C1), Russian (C1)</p>
+                      <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cards__student__contaier_second">
+                <div class="card__student-cards">
+                  <img src="{% static 'image/home_page/macdonald.jpeg' %}" alt="candidate_img">
+                  <div class="card__student-info">
+                      <p>Macdonalds</p>
+                      <p><strong>{%trans "Мест"%}:</strong> 27</p>
+                      <p><strong>{%trans "Языки"%}:</strong> English (B2), German (C1)</p>
+                      <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+                  </div>
+                </div>
+                <div class="card__student-cards">
+                  <img src="{% static 'image/home_page/cofe.jpeg' %}" alt="candidate_img">
+                  <div class="card__student-info">
+                      <p>Starbucks</p>
+                      <p><strong>{%trans "Мест"%}:</strong> 27</p>
+                      <p><strong>{%trans "Языки"%}:</strong> English (B2),  German (C1), Russian (C1)</p>
+                      <p><strong>{%trans "Описание"%}:</strong> {%trans "Ищу работу в качестве разработчика программного обеспечения"%}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
-         </div>
       </div>
     </section>
         <section 
@@ -238,50 +246,48 @@
             </div>
           </div>
         </section>
+
+
         <section class="about_us">
-          <div
-            class="sub_content_cards wow slideInLeft"
-            data-wow-duration="1s"
-            data-wow-delay="0.2s"
-          >
-          <div class="sub_content_cards_img_wrap">
-            <img
-              src="{% static 'image/home_page/send.svg'%}"
-              alt=""
-              class="sub_content_cards_img"
-            />
-          </div>
-          <div class="xfull">
-            <div class="card__action">
-              <img src="{%static 'image/flag_germeny.jpeg'%}" alt="Avatar" style="width:100%">
-              <div class="container">
-                <h4><b>{%trans "Вераника"%}</b></h4> 
-                <p>{%trans "20 лет"%}</p> 
-              </div>
+          <div class="sub_content_cards wow slideInLeft" data-wow-duration="1s" data-wow-delay="0.2s">
+            <div class="sub_content_cards_img_wrap">
+              <img
+                src="{% static 'image/home_page/send.svg'%}"
+                alt=""
+                class="sub_content_cards_img"
+              />
             </div>
-            <div class="card__action">
-              <img src="{%static 'image/home_page/student.png'%}" alt="Avatar" style="width:100%">
-              <div class="container">
-                <h4><b>{%trans "Нурмахан"%}</b></h4> 
-                <p>{%trans "20 лет, Студент МУКР"%}</p> 
+            <div class="xfull">
+              <div class="card__action">
+                <img src="{%static 'image/flag_germeny.jpeg'%}" alt="Avatar" style="width:100%">
+                <div class="container">
+                  <h4><b>{%trans "Вераника"%}</b></h4> 
+                  <p>{%trans "20 лет"%}</p> 
+                </div>
               </div>
-            </div>
-            <div class="card__action">
-              <img src="{%static 'image/home_page/student_1.png'%}" alt="Avatar" style="width:100%">
-              <div class="container">
-                <h4><b>{%trans "Сыймык"%}</b></h4> 
-                <p>{%trans "21 лет"%}</p> 
+              <div class="card__action">
+                <img src="{%static 'image/home_page/student.png'%}" alt="Avatar" style="width:100%">
+                <div class="container">
+                  <h4><b>{%trans "Нурмахан"%}</b></h4> 
+                  <p>{%trans "20 лет, Студент МУКР"%}</p> 
+                </div>
               </div>
-            </div>
-            <div class="card__action">
-              <img src="{%static 'image/home_page/student_3.png'%}" alt="Avatar" style="width:100%">
-              <div class="container">
-                <h4><b>{%trans "Айнура"%}</b></h4> 
-                <p>{%trans "23 лет, Студентка Манаса"%}</p> 
+              <div class="card__action">
+                <img src="{%static 'image/home_page/student_1.png'%}" alt="Avatar" style="width:100%">
+                <div class="container">
+                  <h4><b>{%trans "Сыймык"%}</b></h4> 
+                  <p>{%trans "21 лет"%}</p> 
+                </div>
+              </div>
+              <div class="card__action">
+                <img src="{%static 'image/home_page/student_3.png'%}" alt="Avatar" style="width:100%">
+                <div class="container">
+                  <h4><b>{%trans "Айнура"%}</b></h4> 
+                  <p>{%trans "23 лет, Студентка Манаса"%}</p> 
+                </div>
               </div>
             </div>
           </div>
-        </div>
         <h2 class="sub_content_cards_title">
           {%trans "Присоединяйтесь к нашей платформе уже сегодня и"%} <br />
           <b>{%trans "обеспечьте своему бизнесу доступ к лучшим студентам в Германии!"%}</b>

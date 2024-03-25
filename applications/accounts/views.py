@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from random import randint
 from django.shortcuts import get_object_or_404
 from .permissions import IsEmployerPermission
+from applications.staff.permissions import IsEmployeePermission
 from .serializers import *
 from applications.core.models import Vacancy, Invitation
 from .tasks import send_custom_email_task
@@ -235,7 +236,7 @@ class AccessTokenView(ObtainAuthToken):
 
 class ProfileDetailView(ListAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated, IsEmployerPermission]
+    permission_classes = [IsAuthenticated, IsEmployerPermission | IsEmployeePermission]
 
     def get_queryset(self):
         profile_id = self.kwargs['id']
@@ -250,7 +251,7 @@ class ProfileDetailView(ListAPIView):
 
 class ProfileFilterListView(ListAPIView):
     serializer_class = ProfileAllSerializer
-    permission_classes = [IsAuthenticated, IsEmployerPermission]
+    permission_classes = [IsAuthenticated, IsEmployerPermission | IsEmployeePermission]
 
     def get_queryset(self):
         vacancy_id = self.kwargs.get("pk")
@@ -309,7 +310,7 @@ class ProfileFilterListView(ListAPIView):
 
 class ProfileListView(ListAPIView):
     serializer_class = ProfileAllSerializer
-    permission_classes = [IsAuthenticated, IsEmployerPermission]
+    permission_classes = [IsAuthenticated, IsEmployerPermission | IsEmployeePermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filter_fields = ['gender_en', 'nationality_en', 'german', 'english',]
 
